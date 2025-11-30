@@ -197,7 +197,7 @@ const Upload = ({
     <>
       <Meta title={t("upload.title")} />
       <Container>
-        <div className="flex justify-end mb-5">
+        <div className="flex justify-end mb-8">
           <Button
             loading={isUploading}
             disabled={files.length <= 0}

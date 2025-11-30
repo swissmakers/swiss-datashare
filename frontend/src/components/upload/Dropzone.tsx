@@ -128,13 +128,13 @@ const Dropzone = ({
           </p>
         </div>
       </div>
-      <div className="flex justify-center -mt-6">
+      <div className="flex justify-center -mt-6 relative z-10">
         <Button
           variant="outline"
           size="sm"
           disabled={isUploading}
           onClick={openFileDialog}
-          className="rounded-full"
+          className="rounded-full bg-white dark:bg-gray-800 border-2 shadow-md hover:bg-primary-50 dark:hover:bg-primary-900/30"
         >
           <TbUpload className="mr-2" size={16} />
           <FormattedMessage id="upload.dropzone.button.select" />
