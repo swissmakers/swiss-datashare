@@ -23,6 +23,7 @@ jobs:
 
 
       - name: Build & tag
+        timeout-minutes: 60
         env:
           REG:  ${{ secrets.HARBOR_REGISTRY }}
           PROJ: ${{ secrets.HARBOR_PROJECT }}

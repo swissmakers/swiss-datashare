@@ -2,7 +2,7 @@
 FROM node:22-alpine AS frontend-dependencies
 WORKDIR /opt/app
 COPY frontend/package.json frontend/package-lock.json ./
-RUN npm ci
+RUN npm ci --prefer-offline --no-audit --progress=false
 
 # Stage 2: Build frontend
 FROM node:22-alpine AS frontend-builder
@@ -16,7 +16,8 @@ FROM node:22-alpine AS backend-dependencies
 RUN apk add --no-cache python3
 WORKDIR /opt/app
 COPY backend/package.json backend/package-lock.json ./
-RUN npm ci
+RUN npm ci --prefer-offline --no-audit --progress=false || \
+    (echo "npm ci failed, retrying without cache..." && npm ci --no-audit --progress=false)
 
 # Stage 4: Build backend
 FROM node:22-alpine AS backend-builder
