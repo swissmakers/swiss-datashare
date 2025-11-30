@@ -6,7 +6,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "format": "prettier --end-of-line=auto --write \"src/**/*.ts*\""
+    "format": "prettier --end-of-line=auto --write \"src/**/*.ts*\"",
+    "postinstall": "npx update-browserslist-db@latest"
   },
   "dependencies": {
     "@emotion/react": "^11.13.3",
@@ -18,7 +19,7 @@
     "@mantine/modals": "^6.0.21",
     "@mantine/next": "^6.0.21",
     "@mantine/notifications": "^6.0.21",
-    "axios": "^1.7.7",
+    "axios": "^1.7.9",
     "cookies-next": "^4.2.1",
     "file-saver": "^2.0.5",
     "jose": "^5.9.2",
@@ -34,21 +35,31 @@
     "react-dom": "^18.3.1",
     "react-icons": "^5.3.0",
     "react-intl": "^6.6.8",
-    "sharp": "^0.33.5",
+    "sharp": "^0.34.5",
     "yup": "^1.4.0"
   },
   "devDependencies": {
     "@types/mime-types": "^2.1.4",
-    "@types/node": "22.5.5",
-    "@types/react": "18.3.7",
-    "@types/react-dom": "18.3.0",
-    "@typescript-eslint/parser": "^8.6.0",
-    "axios": "^1.7.7",
-    "eslint": "8.57.0",
-    "eslint-config-next": "^14.2.12",
+    "@types/node": "22.14.1",
+    "@types/react": "18.3.18",
+    "@types/react-dom": "18.3.5",
+    "@typescript-eslint/parser": "^8.48.0",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "^14.2.33",
     "eslint-config-prettier": "^9.1.0",
-    "prettier": "^3.3.3",
+    "prettier": "^3.7.3",
     "tar": "^7.4.3",
-    "typescript": "^5.6.2"
+    "typescript": "^5.9.3"
+  },
+  "overrides": {
+    "rimraf": "^6.0.0",
+    "glob": "^11.0.0",
+    "sourcemap-codec": "npm:@jridgewell/sourcemap-codec@^1.5.0",
+    "@humanwhocodes/config-array": "npm:@eslint/config-array@^0.18.0",
+    "@humanwhocodes/object-schema": "npm:@eslint/object-schema@^2.1.0",
+    "del": {
+      "globby": "^11.0.0",
+      "pify": "^4.0.1"
+    }
   }
 }
