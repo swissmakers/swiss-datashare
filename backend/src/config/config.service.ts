@@ -44,7 +44,7 @@ export class ConfigService extends EventEmitter {
     let configFile: string = "";
     try {
       configFile = fs.readFileSync(CONFIG_FILE, "utf8");
-    } catch (e) {
+    } catch {
       this.logger.log(
         "Config.yaml is not set. Falling back to UI configuration.",
       );
@@ -92,6 +92,7 @@ export class ConfigService extends EventEmitter {
     });
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   get(key: `${string}.${string}`): any {
     const configVariable = this.configVariables.filter(
       (variable) => `${variable.category}.${variable.name}` == key,
@@ -217,8 +218,11 @@ export class ConfigService extends EventEmitter {
     ];
 
     const validation = validations.find((validation) => validation.key == key);
-    if (validation && !validation.condition(value as any)) {
-      throw new BadRequestException(validation.message);
+    if (validation) {
+      const numValue = typeof value === 'number' ? value : parseInt(String(value), 10);
+      if (!validation.condition(numValue)) {
+        throw new BadRequestException(validation.message);
+      }
     }
   }
 

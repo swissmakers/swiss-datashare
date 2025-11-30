@@ -54,13 +54,15 @@ export class ShareController {
   @Get(":id")
   @UseGuards(ShareSecurityGuard)
   async get(@Param("id") id: string) {
-    return new ShareDTO().from(await this.shareService.get(id));
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return new ShareDTO().from(await this.shareService.get(id) as any);
   }
 
   @Get(":id/from-owner")
   @UseGuards(ShareOwnerGuard)
   async getFromOwner(@Param("id") id: string) {
-    return new ShareDTO().from(await this.shareService.get(id));
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return new ShareDTO().from(await this.shareService.get(id) as any);
   }
 
   @Get(":id/metaData")

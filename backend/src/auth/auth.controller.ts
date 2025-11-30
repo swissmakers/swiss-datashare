@@ -179,7 +179,7 @@ export class AuthController {
     const isSecure = this.config.get("general.secureCookies");
     response.cookie("access_token", "", {
       maxAge: -1,
-      secure: isSecure,
+      secure: isSecure as boolean,
     });
     response.cookie("refresh_token", "", {
       path: "/api/auth/token",

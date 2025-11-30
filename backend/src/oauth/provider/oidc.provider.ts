@@ -31,7 +31,6 @@ export class OidcProvider extends GenericOidcProvider {
   getUserInfo(
     token: OAuthToken<OidcToken>,
     query: OAuthCallbackDto,
-    _?: string,
   ): Promise<OAuthSignInDto> {
     const claim = this.config.get("oauth.oidc-usernameClaim") || undefined;
     const rolePath = this.config.get("oauth.oidc-rolePath") || undefined;

@@ -114,23 +114,25 @@ export class UserSevice {
     const fieldNameEmail = this.configService.get("ldap.fieldNameEmail");
 
     let isAdmin = false;
-    if (fieldNameMemberOf in ldapEntry) {
-      const adminGroup = this.configService.get("ldap.adminGroups");
-      const entryGroups = Array.isArray(ldapEntry[fieldNameMemberOf])
-        ? ldapEntry[fieldNameMemberOf]
-        : [ldapEntry[fieldNameMemberOf]];
+    const fieldNameMemberOfStr = String(fieldNameMemberOf);
+    if (fieldNameMemberOfStr in ldapEntry) {
+      const adminGroup = String(this.configService.get("ldap.adminGroups"));
+      const entryGroups = Array.isArray(ldapEntry[fieldNameMemberOfStr])
+        ? ldapEntry[fieldNameMemberOfStr]
+        : [ldapEntry[fieldNameMemberOfStr]];
       isAdmin = entryGroups.includes(adminGroup) ?? false;
     } else {
       this.logger.warn(
-        `Trying to create/update a ldap user but the member field ${fieldNameMemberOf} is not present.`,
+        `Trying to create/update a ldap user but the member field ${fieldNameMemberOfStr} is not present.`,
       );
     }
 
     let userEmail: string | null = null;
-    if (fieldNameEmail in ldapEntry) {
-      const value = Array.isArray(ldapEntry[fieldNameEmail])
-        ? ldapEntry[fieldNameEmail][0]
-        : ldapEntry[fieldNameEmail];
+    const fieldNameEmailStr = String(fieldNameEmail);
+    if (fieldNameEmailStr in ldapEntry) {
+      const value = Array.isArray(ldapEntry[fieldNameEmailStr])
+        ? ldapEntry[fieldNameEmailStr][0]
+        : ldapEntry[fieldNameEmailStr];
       if (value) {
         userEmail = value.toString();
       }

@@ -26,8 +26,8 @@ export class OAuthService {
         platform,
         this.config.get(`oauth.${platform}-enabled`),
       ])
-      .filter(([_, enabled]) => enabled)
-      .map(([platform, _]) => platform);
+      .filter(([, enabled]) => enabled)
+      .map(([platform]) => platform);
   }
 
   availableProviders(): Record<string, OAuthProvider<unknown>> {
@@ -37,8 +37,8 @@ export class OAuthService {
           [providerName, provider],
           this.config.get(`oauth.${providerName}-enabled`),
         ])
-        .filter(([_, enabled]) => enabled)
-        .map(([provider, _]) => provider),
+        .filter(([, enabled]) => enabled)
+        .map(([provider]) => provider),
     );
   }
 

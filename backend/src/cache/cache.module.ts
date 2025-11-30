@@ -18,10 +18,10 @@ import { ConfigService } from "src/config/config.service";
         const ttl = configService.get("cache.ttl");
         const max = configService.get("cache.maxItems");
 
-        let config = {
+        const config = {
           ttl,
           max,
-          stores: [],
+          stores: [] as Keyv[],
         };
 
         if (useRedis) {

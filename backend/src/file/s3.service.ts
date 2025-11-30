@@ -212,7 +212,7 @@ export class S3FileService {
           Key: key,
         }),
       );
-    } catch (error) {
+    } catch {
       throw new Error("Could not delete file from S3");
     }
 
@@ -250,7 +250,7 @@ export class S3FileService {
           },
         }),
       );
-    } catch (error) {
+    } catch {
       throw new Error("Could not delete all files from S3");
     }
   }
@@ -270,7 +270,7 @@ export class S3FileService {
 
       // Return ContentLength which is the file size in bytes
       return headObjectResponse.ContentLength ?? 0;
-    } catch (error) {
+    } catch {
       throw new Error("Could not retrieve file size");
     }
   }
@@ -292,95 +292,89 @@ export class S3FileService {
     });
   }
 
-  getZip(shareId: string) {
-    return new Promise<Readable>(async (resolve, reject) => {
-      const s3Instance = this.getS3Instance();
-      const bucketName = this.config.get("s3.bucketName");
-      const compressionLevel = this.config.get("share.zipCompressionLevel");
+  async getZip(shareId: string): Promise<Readable> {
+    const s3Instance = this.getS3Instance();
+    const bucketName = this.config.get("s3.bucketName");
+    const compressionLevel = this.config.get("share.zipCompressionLevel");
 
-      const prefix = `${this.getS3Path()}${shareId}/`;
+    const prefix = `${this.getS3Path()}${shareId}/`;
 
-      try {
-        const listResponse = await s3Instance.send(
-          new ListObjectsV2Command({
-            Bucket: bucketName,
-            Prefix: prefix,
-          }),
+    try {
+      const listResponse = await s3Instance.send(
+        new ListObjectsV2Command({
+          Bucket: bucketName,
+          Prefix: prefix,
+        }),
+      );
+
+      if (!listResponse.Contents || listResponse.Contents.length === 0) {
+        throw new NotFoundException(`No files found for share ${shareId}`);
+      }
+
+      const archive = archiver("zip", {
+        zlib: { level: parseInt(compressionLevel) },
+      });
+
+      archive.on("error", (err) => {
+        this.logger.error("Archive error", err);
+        throw new InternalServerErrorException("Error creating ZIP file");
+      });
+
+      const fileKeys = listResponse.Contents.filter(
+        (object) => object.Key && object.Key !== prefix,
+      ).map((object) => object.Key as string);
+
+      if (fileKeys.length === 0) {
+        throw new NotFoundException(
+          `No valid files found for share ${shareId}`,
         );
+      }
 
-        if (!listResponse.Contents || listResponse.Contents.length === 0) {
-          throw new NotFoundException(`No files found for share ${shareId}`);
+      const processNextFile = async (index: number) => {
+        if (index >= fileKeys.length) {
+          archive.finalize();
+          return;
         }
 
-        const archive = archiver("zip", {
-          zlib: { level: parseInt(compressionLevel) },
-        });
+        const key = fileKeys[index];
+        const fileName = key.replace(prefix, "");
 
-        archive.on("error", (err) => {
-          this.logger.error("Archive error", err);
-          reject(new InternalServerErrorException("Error creating ZIP file"));
-        });
-
-        const fileKeys = listResponse.Contents.filter(
-          (object) => object.Key && object.Key !== prefix,
-        ).map((object) => object.Key as string);
-
-        if (fileKeys.length === 0) {
-          throw new NotFoundException(
-            `No valid files found for share ${shareId}`,
+        try {
+          const response = await s3Instance.send(
+            new GetObjectCommand({
+              Bucket: bucketName,
+              Key: key,
+            }),
           );
-        }
 
-        let filesAdded = 0;
+          if (response.Body instanceof Readable) {
+            const fileStream = response.Body;
 
-        const processNextFile = async (index: number) => {
-          if (index >= fileKeys.length) {
-            archive.finalize();
-            return;
-          }
-
-          const key = fileKeys[index];
-          const fileName = key.replace(prefix, "");
-
-          try {
-            const response = await s3Instance.send(
-              new GetObjectCommand({
-                Bucket: bucketName,
-                Key: key,
-              }),
-            );
-
-            if (response.Body instanceof Readable) {
-              const fileStream = response.Body;
-
-              fileStream.on("end", () => {
-                filesAdded++;
-                processNextFile(index + 1);
-              });
-
-              fileStream.on("error", (err) => {
-                this.logger.error(`Error streaming file ${fileName}`, err);
-                processNextFile(index + 1);
-              });
-
-              archive.append(fileStream, { name: fileName });
-            } else {
+            fileStream.on("end", () => {
               processNextFile(index + 1);
-            }
-          } catch (error) {
-            this.logger.error(`Error processing file ${fileName}`, error);
+            });
+
+            fileStream.on("error", (err) => {
+              this.logger.error(`Error streaming file ${fileName}`, err);
+              processNextFile(index + 1);
+            });
+
+            archive.append(fileStream, { name: fileName });
+          } else {
             processNextFile(index + 1);
           }
-        };
+        } catch (error) {
+          this.logger.error(`Error processing file ${fileName}`, error);
+          processNextFile(index + 1);
+        }
+      };
 
-        resolve(archive);
-        processNextFile(0);
-      } catch (error) {
-        this.logger.error("Error creating ZIP file", error);
-
-        reject(new InternalServerErrorException("Error creating ZIP file"));
-      }
-    });
+      processNextFile(0);
+      return archive;
+    } catch (error) {
+      this.logger.error("Error creating ZIP file", error);
+      throw new InternalServerErrorException("Error creating ZIP file");
+    }
   }
 
   getS3Path(): string {
