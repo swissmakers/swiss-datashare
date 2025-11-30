@@ -223,6 +223,7 @@ export default {
   // Dropzone.tsx
   "upload.dropzone.title": "Pilvetä tiedostoja",
   "upload.dropzone.description": "Drag'n'drop files here to start your share. We only accept files up to {maxSize} in total.",
+  "upload.dropzone.button.select": "Valitse tiedostot",
   "upload.dropzone.notify.file-too-big": "Tiedostojen enimmäiskoko ylittää {maxSize} -arvon enimmäismäärän.",
   // FileList.tsx
   "upload.filelist.name": "Nimi",

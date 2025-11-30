@@ -223,6 +223,7 @@ export default {
   // Dropzone.tsx
   "upload.dropzone.title": "Dosyaları Yükle",
   "upload.dropzone.description": "Paylaşımınızı başlatmak için dosyaları buraya sürükleyip bırakın. Toplamda en fazla {maxSize} boyutunda dosya kabul ediyoruz.",
+  "upload.dropzone.button.select": "Dosyaları seç",
   "upload.dropzone.notify.file-too-big": "Dosyalarınız maksimum paylaşım boyutu olan {maxSize} değerini aşıyor.",
   // FileList.tsx
   "upload.filelist.name": "İsim",

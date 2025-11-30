@@ -1,11 +1,10 @@
-import { LoadingOverlay } from "@mantine/core";
 import { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import SignInForm from "../../components/auth/SignInForm";
 import Meta from "../../components/Meta";
 import useUser from "../../hooks/user.hook";
-import useTranslate from "../../hooks/useTranslate.hook";
+import { LoadingSpinner } from "../../components/ui";
 
 export function getServerSideProps(context: GetServerSidePropsContext) {
   return {
@@ -16,7 +15,6 @@ export function getServerSideProps(context: GetServerSidePropsContext) {
 const SignIn = ({ redirectPath }: { redirectPath?: string }) => {
   const { refreshUser } = useUser();
   const router = useRouter();
-  const t = useTranslate();
 
   const [isLoading, setIsLoading] = useState(redirectPath ? true : false);
 
@@ -30,15 +28,22 @@ const SignIn = ({ redirectPath }: { redirectPath?: string }) => {
         setIsLoading(false);
       }
     });
-  }, []);
+  }, [refreshUser, router, redirectPath]);
 
-  if (isLoading) return <LoadingOverlay overlayOpacity={1} visible />;
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <LoadingSpinner size="lg" />
+      </div>
+    );
+  }
 
   return (
     <>
-      <Meta title={t("signin.title")} />
+      <Meta title="Sign In" />
       <SignInForm redirectPath={redirectPath ?? "/upload"} />
     </>
   );
 };
+
 export default SignIn;

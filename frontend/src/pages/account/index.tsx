@@ -1,19 +1,3 @@
-import {
-  Badge,
-  Button,
-  Center,
-  Container,
-  Group,
-  Paper,
-  PasswordInput,
-  Stack,
-  Tabs,
-  Text,
-  TextInput,
-  Title,
-} from "@mantine/core";
-import { useForm, yupResolver } from "@mantine/form";
-import { useModals } from "@mantine/modals";
 import { useEffect, useState } from "react";
 import { TbAuth2Fa } from "react-icons/tb";
 import { FormattedMessage } from "react-intl";
@@ -28,6 +12,9 @@ import authService from "../../services/auth.service";
 import userService from "../../services/user.service";
 import { getOAuthIcon, getOAuthUrl, unlinkOAuth } from "../../utils/oauth.util";
 import toast from "../../utils/toast.util";
+import { Button, Container, Input, PasswordInput, Card, Badge, Tabs } from "../../components/ui";
+import { useForm } from "../../hooks/useForm";
+import { useModals } from "../../contexts/ModalContext";
 
 const Account = () => {
   const [oauth, setOAuth] = useState<string[]>([]);
@@ -43,19 +30,43 @@ const Account = () => {
   const modals = useModals();
   const t = useTranslate();
 
+  const accountValidationSchema = yup.object().shape({
+    email: yup.string().email(t("common.error.invalid-email")),
+    username: yup
+      .string()
+      .min(3, t("common.error.too-short", { length: 3 })),
+  });
+
   const accountForm = useForm({
     initialValues: {
-      username: user?.username,
-      email: user?.email,
+      username: user?.username || "",
+      email: user?.email || "",
     },
-    validate: yupResolver(
-      yup.object().shape({
-        email: yup.string().email(t("common.error.invalid-email")),
-        username: yup
-          .string()
-          .min(3, t("common.error.too-short", { length: 3 })),
-      }),
-    ),
+    validationSchema: accountValidationSchema,
+  });
+
+  useEffect(() => {
+    if (user) {
+      accountForm.setValues({
+        username: user.username || "",
+        email: user.email || "",
+      });
+    }
+  }, [user]);
+
+  const passwordValidationSchema = yup.object().shape({
+    oldPassword: yup.string().when([], {
+      is: () => !!user?.hasPassword,
+      then: (schema) =>
+        schema
+          .min(8, t("common.error.too-short", { length: 8 }))
+          .required(t("common.error.field-required")),
+      otherwise: (schema) => schema.notRequired(),
+    }),
+    password: yup
+      .string()
+      .min(8, t("common.error.too-short", { length: 8 }))
+      .required(t("common.error.field-required")),
   });
 
   const passwordForm = useForm({
@@ -63,36 +74,30 @@ const Account = () => {
       oldPassword: "",
       password: "",
     },
-    validate: yupResolver(
-      yup.object().shape({
-        oldPassword: yup.string().when([], {
-          is: () => !!user?.hasPassword,
-          then: (schema) =>
-            schema
-              .min(8, t("common.error.too-short", { length: 8 }))
-              .required(t("common.error.field-required")),
-          otherwise: (schema) => schema.notRequired(),
-        }),
-        password: yup
-          .string()
-          .min(8, t("common.error.too-short", { length: 8 }))
-          .required(t("common.error.field-required")),
-      }),
-    ),
+    validationSchema: passwordValidationSchema,
+  });
+
+  const enableTotpValidationSchema = yup.object().shape({
+    password: yup
+      .string()
+      .min(8, t("common.error.too-short", { length: 8 }))
+      .required(t("common.error.field-required")),
   });
 
   const enableTotpForm = useForm({
     initialValues: {
       password: "",
     },
-    validate: yupResolver(
-      yup.object().shape({
-        password: yup
-          .string()
-          .min(8, t("common.error.too-short", { length: 8 }))
-          .required(t("common.error.field-required")),
-      }),
-    ),
+    validationSchema: enableTotpValidationSchema,
+  });
+
+  const disableTotpValidationSchema = yup.object().shape({
+    password: yup.string().min(8),
+    code: yup
+      .string()
+      .min(6, t("common.error.exact-length", { length: 6 }))
+      .max(6, t("common.error.exact-length", { length: 6 }))
+      .matches(/^[0-9]+$/, { message: t("common.error.invalid-number") }),
   });
 
   const disableTotpForm = useForm({
@@ -100,16 +105,7 @@ const Account = () => {
       password: "",
       code: "",
     },
-    validate: yupResolver(
-      yup.object().shape({
-        password: yup.string().min(8),
-        code: yup
-          .string()
-          .min(6, t("common.error.exact-length", { length: 6 }))
-          .max(6, t("common.error.exact-length", { length: 6 }))
-          .matches(/^[0-9]+$/, { message: t("common.error.invalid-number") }),
-      }),
-    ),
+    validationSchema: disableTotpValidationSchema,
   });
 
   const refreshOAuthStatus = () => {
@@ -135,16 +131,19 @@ const Account = () => {
     <>
       <Meta title={t("account.title")} />
       <Container size="sm">
-        <Title order={3} mb="xs">
+        <h2 className="text-2xl font-bold mb-6 text-text dark:text-text-dark">
           <FormattedMessage id="account.title" />
-        </Title>
-        <Paper withBorder p="xl">
-          <Title order={5} mb="xs">
-            <FormattedMessage id="account.card.info.title" />
-            {user?.isLdap ? (
-              <Badge style={{ marginLeft: "1em" }}>LDAP</Badge>
-            ) : null}
-          </Title>
+        </h2>
+        
+        <Card padding="lg" className="mb-6">
+          <div className="flex items-center gap-2 mb-4">
+            <h3 className="text-lg font-semibold text-text dark:text-text-dark">
+              <FormattedMessage id="account.card.info.title" />
+            </h3>
+            {user?.isLdap && (
+              <Badge variant="secondary">LDAP</Badge>
+            )}
+          </div>
           <form
             onSubmit={accountForm.onSubmit((values) =>
               userService
@@ -155,33 +154,34 @@ const Account = () => {
                 .then(() => toast.success(t("account.notify.info.success")))
                 .catch(toast.axiosError),
             )}
+            className="space-y-4"
           >
-            <Stack>
-              <TextInput
-                label={t("account.card.info.username")}
-                disabled={user?.isLdap}
-                {...accountForm.getInputProps("username")}
-              />
-              <TextInput
-                label={t("account.card.info.email")}
-                disabled={user?.isLdap}
-                {...accountForm.getInputProps("email")}
-              />
-              {!user?.isLdap && (
-                <Group position="right">
-                  <Button type="submit">
-                    <FormattedMessage id="common.button.save" />
-                  </Button>
-                </Group>
-              )}
-            </Stack>
+            <Input
+              label={t("account.card.info.username")}
+              disabled={user?.isLdap}
+              {...accountForm.getInputProps("username")}
+            />
+            <Input
+              label={t("account.card.info.email")}
+              type="email"
+              disabled={user?.isLdap}
+              {...accountForm.getInputProps("email")}
+            />
+            {!user?.isLdap && (
+              <div className="flex justify-end">
+                <Button type="submit">
+                  <FormattedMessage id="common.button.save" />
+                </Button>
+              </div>
+            )}
           </form>
-        </Paper>
-        {user?.isLdap ? null : (
-          <Paper withBorder p="xl" mt="lg">
-            <Title order={5} mb="xs">
+        </Card>
+
+        {!user?.isLdap && (
+          <Card padding="lg" className="mb-6">
+            <h3 className="text-lg font-semibold mb-4 text-text dark:text-text-dark">
               <FormattedMessage id="account.card.password.title" />
-            </Title>
+            </h3>
             <form
               onSubmit={passwordForm.onSubmit((values) =>
                 authService
@@ -193,37 +193,36 @@ const Account = () => {
                   })
                   .catch(toast.axiosError),
               )}
+              className="space-y-4"
             >
-              <Stack>
-                {user?.hasPassword ? (
-                  <PasswordInput
-                    label={t("account.card.password.old")}
-                    {...passwordForm.getInputProps("oldPassword")}
-                  />
-                ) : (
-                  <Text size="sm" color="dimmed">
-                    <FormattedMessage id="account.card.password.noPasswordSet" />
-                  </Text>
-                )}
+              {user?.hasPassword ? (
                 <PasswordInput
-                  label={t("account.card.password.new")}
-                  {...passwordForm.getInputProps("password")}
+                  label={t("account.card.password.old")}
+                  {...passwordForm.getInputProps("oldPassword")}
                 />
-                <Group position="right">
-                  <Button type="submit">
-                    <FormattedMessage id="common.button.save" />
-                  </Button>
-                </Group>
-              </Stack>
+              ) : (
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <FormattedMessage id="account.card.password.noPasswordSet" />
+                </p>
+              )}
+              <PasswordInput
+                label={t("account.card.password.new")}
+                {...passwordForm.getInputProps("password")}
+              />
+              <div className="flex justify-end">
+                <Button type="submit">
+                  <FormattedMessage id="common.button.save" />
+                </Button>
+              </div>
             </form>
-          </Paper>
+          </Card>
         )}
-        {oauth.length > 0 && (
-          <Paper withBorder p="xl" mt="lg">
-            <Title order={5} mb="xs">
-              <FormattedMessage id="account.card.oauth.title" />
-            </Title>
 
+        {oauth.length > 0 && (
+          <Card padding="lg" className="mb-6">
+            <h3 className="text-lg font-semibold mb-4 text-text dark:text-text-dark">
+              <FormattedMessage id="account.card.oauth.title" />
+            </h3>
             <Tabs defaultValue={oauth[0] || ""}>
               <Tabs.List>
                 {oauth.map((provider) => (
@@ -237,28 +236,29 @@ const Account = () => {
                 ))}
               </Tabs.List>
               {oauth.map((provider) => (
-                <Tabs.Panel value={provider} pt="xs" key={provider}>
-                  <Group position="apart">
-                    <Text>
+                <Tabs.Panel value={provider} key={provider}>
+                  <div className="flex justify-between items-center pt-4">
+                    <p className="text-gray-700 dark:text-gray-300">
                       {oauthStatus?.[provider]
                         ? oauthStatus[provider].providerUsername
                         : t("account.card.oauth.unlinked")}
-                    </Text>
+                    </p>
                     {oauthStatus?.[provider] ? (
                       <Button
+                        variant="outline"
                         onClick={() => {
                           modals.openConfirmModal({
                             title: t("account.modal.unlink.title"),
                             children: (
-                              <Text>
+                              <p>
                                 {t("account.modal.unlink.description")}
-                              </Text>
+                              </p>
                             ),
                             labels: {
                               confirm: t("account.card.oauth.unlink"),
                               cancel: t("common.button.cancel"),
                             },
-                            confirmProps: { color: "red" },
+                            confirmProps: { variant: "danger" },
                             onConfirm: () => {
                               unlinkOAuth(provider)
                                 .then(() => {
@@ -275,152 +275,137 @@ const Account = () => {
                         {t("account.card.oauth.unlink")}
                       </Button>
                     ) : (
-                      <Button
-                        component="a"
+                      <a
                         href={getOAuthUrl(window.location.origin, provider)}
+                        className="inline-flex items-center justify-center font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 bg-primary-500 text-white hover:bg-primary-600 focus:ring-primary-500 dark:bg-primary-600 dark:hover:bg-primary-700 px-4 py-2 text-base"
                       >
                         {t("account.card.oauth.link")}
-                      </Button>
+                      </a>
                     )}
-                  </Group>
+                  </div>
                 </Tabs.Panel>
               ))}
             </Tabs>
-          </Paper>
+          </Card>
         )}
-        <Paper withBorder p="xl" mt="lg">
-          <Title order={5} mb="xs">
-            <FormattedMessage id="account.card.security.title" />
-          </Title>
 
+        <Card padding="lg" className="mb-6">
+          <h3 className="text-lg font-semibold mb-4 text-text dark:text-text-dark">
+            <FormattedMessage id="account.card.security.title" />
+          </h3>
           <Tabs defaultValue="totp">
             <Tabs.List>
               <Tabs.Tab value="totp" icon={<TbAuth2Fa size={14} />}>
                 TOTP
               </Tabs.Tab>
             </Tabs.List>
-
-            <Tabs.Panel value="totp" pt="xs">
+            <Tabs.Panel value="totp">
               {user?.totpVerified ? (
-                <>
-                  <form
-                    onSubmit={disableTotpForm.onSubmit((values) => {
-                      authService
-                        .disableTOTP(values.code, values.password)
-                        .then(() => {
-                          toast.success(t("account.notify.totp.disable"));
-                          values.password = "";
-                          values.code = "";
-                          refreshUser();
-                        })
-                        .catch(toast.axiosError);
-                    })}
-                  >
-                    <Stack>
-                      <PasswordInput
-                        description={t(
-                          "account.card.security.totp.disable.description",
-                        )}
-                        label={t("account.card.password.title")}
-                        {...disableTotpForm.getInputProps("password")}
-                      />
-
-                      <TextInput
-                        variant="filled"
-                        label={t("account.modal.totp.code")}
-                        placeholder="******"
-                        {...disableTotpForm.getInputProps("code")}
-                      />
-
-                      <Group position="right">
-                        <Button color="red" type="submit">
-                          <FormattedMessage id="common.button.disable" />
-                        </Button>
-                      </Group>
-                    </Stack>
-                  </form>
-                </>
+                <form
+                  onSubmit={disableTotpForm.onSubmit((values) => {
+                    authService
+                      .disableTOTP(values.code, values.password)
+                      .then(() => {
+                        toast.success(t("account.notify.totp.disable"));
+                        disableTotpForm.reset();
+                        refreshUser();
+                      })
+                      .catch(toast.axiosError);
+                  })}
+                  className="space-y-4 pt-4"
+                >
+                  <PasswordInput
+                    label={t("account.card.password.title")}
+                    helperText={t("account.card.security.totp.disable.description")}
+                    {...disableTotpForm.getInputProps("password")}
+                  />
+                  <Input
+                    label={t("account.modal.totp.code")}
+                    placeholder="******"
+                    maxLength={6}
+                    {...disableTotpForm.getInputProps("code")}
+                  />
+                  <div className="flex justify-end">
+                    <Button variant="danger" type="submit">
+                      <FormattedMessage id="common.button.disable" />
+                    </Button>
+                  </div>
+                </form>
               ) : (
-                <>
-                  <form
-                    onSubmit={enableTotpForm.onSubmit((values) => {
-                      authService
-                        .enableTOTP(values.password)
-                        .then((result) => {
-                          showEnableTotpModal(modals, refreshUser, {
-                            qrCode: result.qrCode,
-                            secret: result.totpSecret,
-                            password: values.password,
-                          });
-                          values.password = "";
-                        })
-                        .catch(toast.axiosError);
-                    })}
-                  >
-                    <Stack>
-                      <PasswordInput
-                        label={t("account.card.password.title")}
-                        description={t(
-                          "account.card.security.totp.enable.description",
-                        )}
-                        {...enableTotpForm.getInputProps("password")}
-                      />
-                      <Group position="right">
-                        <Button type="submit">
-                          <FormattedMessage id="account.card.security.totp.button.start" />
-                        </Button>
-                      </Group>
-                    </Stack>
-                  </form>
-                </>
+                <form
+                  onSubmit={enableTotpForm.onSubmit((values) => {
+                    authService
+                      .enableTOTP(values.password)
+                      .then((result) => {
+                        showEnableTotpModal(modals, refreshUser, {
+                          qrCode: result.qrCode,
+                          secret: result.totpSecret,
+                          password: values.password,
+                        });
+                        enableTotpForm.reset();
+                      })
+                      .catch(toast.axiosError);
+                  })}
+                  className="space-y-4 pt-4"
+                >
+                  <PasswordInput
+                    label={t("account.card.password.title")}
+                    helperText={t("account.card.security.totp.enable.description")}
+                    {...enableTotpForm.getInputProps("password")}
+                  />
+                  <div className="flex justify-end">
+                    <Button type="submit">
+                      <FormattedMessage id="account.card.security.totp.button.start" />
+                    </Button>
+                  </div>
+                </form>
               )}
             </Tabs.Panel>
           </Tabs>
-        </Paper>
-        <Paper withBorder p="xl" mt="lg">
-          <Title order={5} mb="xs">
-            <FormattedMessage id="account.card.language.title" />
-          </Title>
-          <LanguagePicker />
-        </Paper>
-        <Paper withBorder p="xl" mt="lg">
-          <Title order={5} mb="xs">
-            <FormattedMessage id="account.card.color.title" />
-          </Title>
-          <ThemeSwitcher />
-        </Paper>
-        <Center mt={80} mb="lg">
-          <Stack>
-            <Button
-              variant="light"
-              color="red"
-              onClick={() =>
-                modals.openConfirmModal({
-                  title: t("account.modal.delete.title"),
-                  children: (
-                    <Text size="sm">
-                      <FormattedMessage id="account.modal.delete.description" />
-                    </Text>
-                  ),
+        </Card>
 
-                  labels: {
-                    confirm: t("common.button.delete"),
-                    cancel: t("common.button.cancel"),
-                  },
-                  confirmProps: { color: "red" },
-                  onConfirm: async () => {
-                    await userService
-                      .removeCurrentUser()
-                      .then(() => window.location.reload())
-                      .catch(toast.axiosError);
-                  },
-                })
-              }
-            >
-              <FormattedMessage id="account.button.delete" />
-            </Button>
-          </Stack>
-        </Center>
+        <Card padding="lg" className="mb-6">
+          <h3 className="text-lg font-semibold mb-4 text-text dark:text-text-dark">
+            <FormattedMessage id="account.card.language.title" />
+          </h3>
+          <LanguagePicker />
+        </Card>
+
+        <Card padding="lg" className="mb-6">
+          <h3 className="text-lg font-semibold mb-4 text-text dark:text-text-dark">
+            <FormattedMessage id="account.card.color.title" />
+          </h3>
+          <ThemeSwitcher />
+        </Card>
+
+        <div className="flex justify-center mt-20 mb-6">
+          <Button
+            variant="outline"
+            onClick={() =>
+              modals.openConfirmModal({
+                title: t("account.modal.delete.title"),
+                children: (
+                  <p className="text-sm">
+                    <FormattedMessage id="account.modal.delete.description" />
+                  </p>
+                ),
+                labels: {
+                  confirm: t("common.button.delete"),
+                  cancel: t("common.button.cancel"),
+                },
+                confirmProps: { variant: "danger" },
+                onConfirm: async () => {
+                  await userService
+                    .removeCurrentUser()
+                    .then(() => window.location.reload())
+                    .catch(toast.axiosError);
+                },
+              })
+            }
+          >
+            <FormattedMessage id="account.button.delete" />
+          </Button>
+        </div>
       </Container>
     </>
   );

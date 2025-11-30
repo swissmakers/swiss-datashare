@@ -223,6 +223,7 @@ export default {
   // Dropzone.tsx
   "upload.dropzone.title": "Subir archivos",
   "upload.dropzone.description": "Arrastra y suelta los archivos aquí para crear tu enlace compartido. Solo aceptamos archivos de hasta {maxSize} en total.",
+  "upload.dropzone.button.select": "Seleccionar archivos",
   "upload.dropzone.notify.file-too-big": "Tus archivos exceden el tamaño máximo de {maxSize}.",
   // FileList.tsx
   "upload.filelist.name": "Nombre",

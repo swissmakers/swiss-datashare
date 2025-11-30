@@ -1,11 +1,11 @@
-import { LoadingOverlay } from "@mantine/core";
-import { useModals } from "@mantine/modals";
 import { GetServerSidePropsContext } from "next";
 import { useEffect, useState } from "react";
 import Upload from ".";
 import showErrorModal from "../../components/share/showErrorModal";
 import shareService from "../../services/share.service";
 import useTranslate from "../../hooks/useTranslate.hook";
+import { LoadingSpinner } from "../../components/ui";
+import { useModals } from "../../contexts/ModalContext";
 
 export function getServerSideProps(context: GetServerSidePropsContext) {
   return {
@@ -40,7 +40,12 @@ const Share = ({ reverseShareToken }: { reverseShareToken: string }) => {
       });
   }, []);
 
-  if (isLoading) return <LoadingOverlay visible />;
+  if (isLoading)
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-white dark:bg-gray-900 z-50">
+        <LoadingSpinner size="lg" />
+      </div>
+    );
 
   return (
     <Upload

@@ -1,10 +1,11 @@
-import { ActionIcon, Table } from "@mantine/core";
 import { TbTrash } from "react-icons/tb";
 import { GrUndo } from "react-icons/gr";
 import { FileListItem } from "../../types/File.type";
 import { byteToHumanSizeString } from "../../utils/fileSize.util";
 import UploadProgressIndicator from "./UploadProgressIndicator";
 import { FormattedMessage } from "react-intl";
+import { Table } from "../ui";
+import clsx from "clsx";
 
 const FileListRow = ({
   file,
@@ -15,52 +16,49 @@ const FileListRow = ({
   onRemove?: () => void;
   onRestore?: () => void;
 }) => {
-  {
-    const uploadable = "uploadingProgress" in file;
-    const uploading = uploadable && file.uploadingProgress !== 0;
-    const removable = uploadable
-      ? file.uploadingProgress === 0
-      : onRemove && !file.deleted;
-    const restorable = onRestore && !uploadable && !!file.deleted; // maybe undefined, force boolean
-    const deleted = !uploadable && !!file.deleted;
+  const uploadable = "uploadingProgress" in file;
+  const uploading = uploadable && file.uploadingProgress !== 0;
+  const removable = uploadable
+    ? file.uploadingProgress === 0
+    : onRemove && !file.deleted;
+  const restorable = onRestore && !uploadable && !!file.deleted;
+  const deleted = !uploadable && !!file.deleted;
 
-    return (
-      <tr
-        style={{
-          color: deleted ? "rgba(120, 120, 120, 0.5)" : "inherit",
-          textDecoration: deleted ? "line-through" : "none",
-        }}
-      >
-        <td>{file.name}</td>
-        <td>{byteToHumanSizeString(+file.size)}</td>
-        <td>
+  return (
+    <Table.Row
+      className={clsx(
+        deleted && "opacity-50 line-through"
+      )}
+    >
+      <Table.Cell>{file.name}</Table.Cell>
+      <Table.Cell>{byteToHumanSizeString(+file.size)}</Table.Cell>
+      <Table.Cell>
+        <div className="flex items-center gap-2">
           {removable && (
-            <ActionIcon
-              color="red"
-              variant="light"
-              size={25}
+            <button
               onClick={onRemove}
+              className="p-1.5 text-red-600 hover:text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+              aria-label="Remove file"
             >
-              <TbTrash />
-            </ActionIcon>
+              <TbTrash size={18} />
+            </button>
           )}
           {uploading && (
             <UploadProgressIndicator progress={file.uploadingProgress} />
           )}
           {restorable && (
-            <ActionIcon
-              color="primary"
-              variant="light"
-              size={25}
+            <button
               onClick={onRestore}
+              className="p-1.5 text-primary-600 hover:text-primary-700 hover:bg-primary-50 dark:text-primary-400 dark:hover:text-primary-300 dark:hover:bg-primary-900/20 rounded-lg transition-colors"
+              aria-label="Restore file"
             >
-              <GrUndo />
-            </ActionIcon>
+              <GrUndo size={18} />
+            </button>
           )}
-        </td>
-      </tr>
-    );
-  }
+        </div>
+      </Table.Cell>
+    </Table.Row>
+  );
 };
 
 const FileList = <T extends FileListItem = FileListItem>({
@@ -68,7 +66,7 @@ const FileList = <T extends FileListItem = FileListItem>({
   setFiles,
 }: {
   files: T[];
-  setFiles: (_files: T[]) => void;
+  setFiles: (files: T[]) => void;
 }) => {
   const remove = (index: number) => {
     const file = files[index];
@@ -104,20 +102,22 @@ const FileList = <T extends FileListItem = FileListItem>({
   ));
 
   return (
-    <Table>
-      <thead>
-        <tr>
-          <th>
-            <FormattedMessage id="upload.filelist.name" />
-          </th>
-          <th>
-            <FormattedMessage id="upload.filelist.size" />
-          </th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>{rows}</tbody>
-    </Table>
+    <div className="overflow-x-auto">
+      <Table>
+        <Table.Header>
+          <Table.Row>
+            <Table.Cell header>
+              <FormattedMessage id="upload.filelist.name" />
+            </Table.Cell>
+            <Table.Cell header>
+              <FormattedMessage id="upload.filelist.size" />
+            </Table.Cell>
+            <Table.Cell header> </Table.Cell>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>{rows}</Table.Body>
+      </Table>
+    </div>
   );
 };
 

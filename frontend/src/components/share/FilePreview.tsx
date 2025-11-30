@@ -1,17 +1,10 @@
-import {
-  Button,
-  Center,
-  Stack,
-  Text,
-  Title,
-  useMantineTheme,
-} from "@mantine/core";
-import { modals } from "@mantine/modals";
 import Markdown, { MarkdownToJSX } from "markdown-to-jsx";
 import Link from "next/link";
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import api from "../../services/api.service";
+import { useModals } from "../../contexts/ModalContext";
+import { useTheme } from "../../contexts/ThemeContext";
 
 const FilePreviewContext = React.createContext<{
   shareId: string;
@@ -35,26 +28,28 @@ const FilePreview = ({
   mimeType: string;
 }) => {
   const [isNotSupported, setIsNotSupported] = useState(false);
+  const modals = useModals();
+  
   if (isNotSupported) return <UnSupportedFile />;
 
   return (
-    <Stack>
+    <div className="space-y-4">
       <FilePreviewContext.Provider
         value={{ shareId, fileId, mimeType, setIsNotSupported }}
       >
         <FileDecider />
       </FilePreviewContext.Provider>
-      <Button
-        variant="subtle"
-        component={Link}
-        onClick={() => modals.closeAll()}
-        target="_blank"
+      <Link
         href={`/api/shares/${shareId}/files/${fileId}?download=false`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center justify-center font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 text-primary-500 hover:bg-primary-50 focus:ring-primary-500 dark:text-primary-400 dark:hover:bg-primary-900/20 px-4 py-2 text-base"
+        onClick={() => modals.closeAll()}
       >
         View original file
         {/* Add translation? */}
-      </Button>
-    </Stack>
+      </Link>
+    </div>
   );
 };
 
@@ -81,16 +76,16 @@ const AudioPreview = () => {
   const { shareId, fileId, setIsNotSupported } =
     React.useContext(FilePreviewContext);
   return (
-    <Center style={{ minHeight: 200 }}>
-      <Stack align="center" spacing={10} style={{ width: "100%" }}>
-        <audio controls style={{ width: "100%" }}>
+    <div className="flex items-center justify-center min-h-[200px]">
+      <div className="flex flex-col items-center gap-2.5 w-full">
+        <audio controls className="w-full">
           <source
             src={`/api/shares/${shareId}/files/${fileId}?download=false`}
             onError={() => setIsNotSupported(true)}
           />
         </audio>
-      </Stack>
-    </Center>
+      </div>
+    </div>
   );
 };
 
@@ -115,7 +110,7 @@ const ImagePreview = () => {
     <img
       src={`/api/shares/${shareId}/files/${fileId}?download=false`}
       alt={`${fileId}_preview`}
-      width="100%"
+      className="w-full"
       onError={() => setIsNotSupported(true)}
     />
   );
@@ -124,7 +119,7 @@ const ImagePreview = () => {
 const TextPreview = () => {
   const { shareId, fileId } = React.useContext(FilePreviewContext);
   const [text, setText] = useState<string>("");
-  const { colorScheme } = useMantineTheme();
+  const { theme } = useTheme();
 
   useEffect(() => {
     api
@@ -137,14 +132,9 @@ const TextPreview = () => {
     overrides: {
       pre: {
         props: {
-          style: {
-            backgroundColor:
-              colorScheme == "dark"
-                ? "rgba(50, 50, 50, 0.5)"
-                : "rgba(220, 220, 220, 0.5)",
-            padding: "0.75em",
-            whiteSpace: "pre-wrap",
-          },
+          className: theme === "dark" 
+            ? "bg-gray-800/50 p-3 whitespace-pre-wrap rounded"
+            : "bg-gray-200/50 p-3 whitespace-pre-wrap rounded",
         },
       },
       table: {
@@ -168,16 +158,16 @@ const PdfPreview = () => {
 
 const UnSupportedFile = () => {
   return (
-    <Center style={{ minHeight: 200 }}>
-      <Stack align="center" spacing={10}>
-        <Title order={3}>
+    <div className="flex items-center justify-center min-h-[200px]">
+      <div className="flex flex-col items-center gap-2.5">
+        <h3 className="text-xl font-semibold text-text dark:text-text-dark">
           <FormattedMessage id="share.modal.file-preview.error.not-supported.title" />
-        </Title>
-        <Text>
+        </h3>
+        <p className="text-gray-700 dark:text-gray-300">
           <FormattedMessage id="share.modal.file-preview.error.not-supported.description" />
-        </Text>
-      </Stack>
-    </Center>
+        </p>
+      </div>
+    </div>
   );
 };
 

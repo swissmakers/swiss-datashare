@@ -1,14 +1,4 @@
-import {
-  ActionIcon,
-  Box,
-  Group,
-  MediaQuery,
-  Skeleton,
-  Table,
-  Text,
-} from "@mantine/core";
-import { useClipboard } from "@mantine/hooks";
-import { useModals } from "@mantine/modals";
+import { useClipboard } from "../../../hooks/useClipboard";
 import moment from "moment";
 import { TbLink, TbTrash } from "react-icons/tb";
 import { FormattedMessage } from "react-intl";
@@ -17,6 +7,8 @@ import { MyShare } from "../../../types/share.type";
 import { byteToHumanSizeString } from "../../../utils/fileSize.util";
 import toast from "../../../utils/toast.util";
 import showShareLinkModal from "../../account/showShareLinkModal";
+import { Table } from "../../../components/ui";
+import { useModals } from "../../../contexts/ModalContext";
 
 const ManageShareTable = ({
   shares,
@@ -24,7 +16,7 @@ const ManageShareTable = ({
   isLoading,
 }: {
   shares: MyShare[];
-  deleteShare: (_share: MyShare) => void;
+  deleteShare: (share: MyShare) => void;
   isLoading: boolean;
 }) => {
   const modals = useModals();
@@ -32,60 +24,57 @@ const ManageShareTable = ({
   const t = useTranslate();
 
   return (
-    <Box sx={{ display: "block", overflowX: "auto" }}>
-      <Table verticalSpacing="sm">
-        <thead>
-          <tr>
-            <th>
+    <div className="overflow-x-auto">
+      <Table>
+        <Table.Header>
+          <Table.Row>
+            <Table.Cell header>
               <FormattedMessage id="account.shares.table.id" />
-            </th>
-            <th>
+            </Table.Cell>
+            <Table.Cell header>
               <FormattedMessage id="account.shares.table.name" />
-            </th>
-            <th>
+            </Table.Cell>
+            <Table.Cell header>
               <FormattedMessage id="admin.shares.table.username" />
-            </th>
-            <th>
+            </Table.Cell>
+            <Table.Cell header>
               <FormattedMessage id="account.shares.table.visitors" />
-            </th>
-            <th>
+            </Table.Cell>
+            <Table.Cell header>
               <FormattedMessage id="account.shares.table.size" />
-            </th>
-            <th>
+            </Table.Cell>
+            <Table.Cell header>
               <FormattedMessage id="account.shares.table.expiresAt" />
-            </th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
+            </Table.Cell>
+            <Table.Cell header>{null}</Table.Cell>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
           {isLoading
             ? skeletonRows
             : shares.map((share) => (
-                <tr key={share.id}>
-                  <td>{share.id}</td>
-                  <td>{share.name}</td>
-                  <td>
+                <Table.Row key={share.id}>
+                  <Table.Cell>{share.id}</Table.Cell>
+                  <Table.Cell>{share.name}</Table.Cell>
+                  <Table.Cell>
                     {share.creator ? (
                       share.creator.username
                     ) : (
-                      <Text color="dimmed">Anonymous</Text>
+                      <span className="text-gray-500 dark:text-gray-400">Anonymous</span>
                     )}
-                  </td>
-                  <td>{share.views}</td>
-                  <td>{byteToHumanSizeString(share.size)}</td>
-                  <td>
+                  </Table.Cell>
+                  <Table.Cell>{share.views}</Table.Cell>
+                  <Table.Cell>{byteToHumanSizeString(share.size)}</Table.Cell>
+                  <Table.Cell>
                     {moment(share.expiration).unix() === 0
                       ? "Never"
                       : moment(share.expiration).format("LLL")}
-                  </td>
-                  <td>
-                    <Group position="right">
-                      <ActionIcon
-                        color="victoria"
-                        variant="light"
-                        size={25}
+                  </Table.Cell>
+                  <Table.Cell>
+                    <div className="flex items-center justify-end gap-2">
+                      <button
                         onClick={() => {
-                          if (window.isSecureContext) {
+                          if (typeof window !== "undefined" && window.isSecureContext) {
                             clipboard.copy(
                               `${window.location.origin}/s/${share.id}`,
                             );
@@ -94,50 +83,52 @@ const ManageShareTable = ({
                             showShareLinkModal(modals, share.id);
                           }
                         }}
+                        className="p-1.5 text-primary-600 hover:text-primary-700 hover:bg-primary-50 dark:text-primary-400 dark:hover:text-primary-300 dark:hover:bg-primary-900/20 rounded-lg transition-colors"
+                        aria-label="Copy share link"
                       >
-                        <TbLink />
-                      </ActionIcon>
-                      <ActionIcon
-                        variant="light"
-                        color="red"
-                        size="sm"
+                        <TbLink size={18} />
+                      </button>
+                      <button
                         onClick={() => deleteShare(share)}
+                        className="p-1.5 text-red-600 hover:text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                        aria-label="Delete share"
                       >
-                        <TbTrash />
-                      </ActionIcon>
-                    </Group>
-                  </td>
-                </tr>
+                        <TbTrash size={18} />
+                      </button>
+                    </div>
+                  </Table.Cell>
+                </Table.Row>
               ))}
-        </tbody>
+        </Table.Body>
       </Table>
-    </Box>
+    </div>
   );
 };
 
 const skeletonRows = [...Array(10)].map((v, i) => (
-  <tr key={i}>
-    <td>
-      <Skeleton key={i} height={20} />
-    </td>
-    <MediaQuery smallerThan="md" styles={{ display: "none" }}>
-      <td>
-        <Skeleton key={i} height={20} />
-      </td>
-    </MediaQuery>
-    <td>
-      <Skeleton key={i} height={20} />
-    </td>
-    <td>
-      <Skeleton key={i} height={20} />
-    </td>
-    <td>
-      <Skeleton key={i} height={20} />
-    </td>
-    <td>
-      <Skeleton key={i} height={20} />
-    </td>
-  </tr>
+  <Table.Row key={i}>
+    <Table.Cell>
+      <div className="h-5 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-24" />
+    </Table.Cell>
+    <Table.Cell>
+      <div className="h-5 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-32" />
+    </Table.Cell>
+    <Table.Cell>
+      <div className="h-5 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-24" />
+    </Table.Cell>
+    <Table.Cell>
+      <div className="h-5 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-12" />
+    </Table.Cell>
+    <Table.Cell>
+      <div className="h-5 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-20" />
+    </Table.Cell>
+    <Table.Cell>
+      <div className="h-5 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-32" />
+    </Table.Cell>
+    <Table.Cell>
+      <div className="h-6 w-6 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+    </Table.Cell>
+  </Table.Row>
 ));
 
 export default ManageShareTable;

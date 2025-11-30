@@ -223,6 +223,7 @@ export default {
   // Dropzone.tsx
   "upload.dropzone.title": "Пошаљи датотеке",
   "upload.dropzone.description": "Превуците и отпустите датотеке овде да бисте започели дељење. Прихватамо само фајлове укупне величине до {maxSize}.",
+  "upload.dropzone.button.select": "Izaberi fajlove",
   "upload.dropzone.notify.file-too-big": "Ваше датотеке премашују максималну величину дељења од {maxSize}.",
   // FileList.tsx
   "upload.filelist.name": "Назив",

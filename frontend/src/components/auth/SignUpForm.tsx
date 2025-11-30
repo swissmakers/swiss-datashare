@@ -1,14 +1,3 @@
-import {
-  Anchor,
-  Button,
-  Container,
-  Paper,
-  PasswordInput,
-  Text,
-  TextInput,
-  Title,
-} from "@mantine/core";
-import { useForm, yupResolver } from "@mantine/form";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { FormattedMessage } from "react-intl";
@@ -18,6 +7,8 @@ import useTranslate from "../../hooks/useTranslate.hook";
 import useUser from "../../hooks/user.hook";
 import authService from "../../services/auth.service";
 import toast from "../../utils/toast.util";
+import { Button, Container, Input, PasswordInput, Card } from "../ui";
+import { useForm } from "../../hooks/useForm";
 
 const SignUpForm = () => {
   const config = useConfig();
@@ -43,7 +34,7 @@ const SignUpForm = () => {
       username: "",
       password: "",
     },
-    validate: yupResolver(validationSchema),
+    validationSchema,
   });
 
   const signUp = async (email: string, username: string, password: string) => {
@@ -61,46 +52,54 @@ const SignUpForm = () => {
   };
 
   return (
-    <Container size={420} my={40}>
-      <Title order={2} align="center" weight={900}>
-        <FormattedMessage id="signup.title" />
-      </Title>
-      {config.get("share.allowRegistration") && (
-        <Text color="dimmed" size="sm" align="center" mt={5}>
-          <FormattedMessage id="signup.description" />{" "}
-          <Anchor component={Link} href={"signIn"} size="sm">
-            <FormattedMessage id="signup.button.signin" />
-          </Anchor>
-        </Text>
-      )}
-      <Paper withBorder shadow="md" p={30} mt={30} radius="md">
-        <form
-          onSubmit={form.onSubmit((values) =>
-            signUp(values.email, values.username, values.password),
-          )}
-        >
-          <TextInput
-            label={t("signup.input.username")}
-            placeholder={t("signup.input.username.placeholder")}
-            {...form.getInputProps("username")}
-          />
-          <TextInput
-            label={t("signup.input.email")}
-            placeholder={t("signup.input.email.placeholder")}
-            mt="md"
-            {...form.getInputProps("email")}
-          />
-          <PasswordInput
-            label={t("signin.input.password")}
-            placeholder={t("signin.input.password.placeholder")}
-            mt="md"
-            {...form.getInputProps("password")}
-          />
-          <Button fullWidth mt="xl" type="submit">
-            <FormattedMessage id="signup.button.submit" />
-          </Button>
-        </form>
-      </Paper>
+    <Container size="sm">
+      <div className="max-w-md mx-auto py-10">
+        <h2 className="text-3xl font-black text-center text-text dark:text-text-dark mb-2">
+          <FormattedMessage id="signup.title" />
+        </h2>
+        {config.get("share.allowRegistration") && (
+          <p className="text-sm text-gray-600 dark:text-gray-400 text-center mb-8">
+            <FormattedMessage id="signup.description" />{" "}
+            <Link
+              href="/auth/signIn"
+              className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 font-medium"
+            >
+              <FormattedMessage id="signup.button.signin" />
+            </Link>
+          </p>
+        )}
+        <Card padding="lg">
+          <form
+            onSubmit={form.onSubmit((values) =>
+              signUp(values.email, values.username, values.password),
+            )}
+            className="space-y-4"
+          >
+            <Input
+              label={t("signup.input.username")}
+              placeholder={t("signup.input.username.placeholder")}
+              autoComplete="username"
+              {...form.getInputProps("username")}
+            />
+            <Input
+              label={t("signup.input.email")}
+              placeholder={t("signup.input.email.placeholder")}
+              type="email"
+              autoComplete="email"
+              {...form.getInputProps("email")}
+            />
+            <PasswordInput
+              label={t("signin.input.password")}
+              placeholder={t("signin.input.password.placeholder")}
+              autoComplete="new-password"
+              {...form.getInputProps("password")}
+            />
+            <Button fullWidth type="submit" className="mt-6">
+              <FormattedMessage id="signup.button.submit" />
+            </Button>
+          </form>
+        </Card>
+      </div>
     </Container>
   );
 };

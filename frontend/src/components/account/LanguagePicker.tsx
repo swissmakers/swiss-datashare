@@ -1,8 +1,8 @@
-import { Select } from "@mantine/core";
 import { getCookie, setCookie } from "cookies-next";
 import { useState } from "react";
 import useTranslate from "../../hooks/useTranslate.hook";
 import { LOCALES } from "../../i18n/locales";
+import { Select } from "../ui";
 
 const LanguagePicker = () => {
   const t = useTranslate();
@@ -14,12 +14,17 @@ const LanguagePicker = () => {
     value: locale.code,
     label: locale.name,
   }));
+
   return (
     <Select
+      label={t("account.card.language.title")}
+      helperText={t("account.card.language.description")}
       value={selectedLanguage}
-      description={t("account.card.language.description")}
-      onChange={(value) => {
-        setSelectedLanguage(value ?? "en");
+      options={languages}
+      onChange={(e) => {
+        if (!e) return;
+        const value = e.target.value;
+        setSelectedLanguage(value);
         setCookie("language", value, {
           sameSite: "lax",
           expires: new Date(
@@ -28,7 +33,6 @@ const LanguagePicker = () => {
         });
         location.reload();
       }}
-      data={languages}
     />
   );
 };

@@ -223,6 +223,7 @@ export default {
   // Dropzone.tsx
   "upload.dropzone.title": "Téléverser des fichiers",
   "upload.dropzone.description": "Glisser-déposer les fichiers ici pour commencer votre partage. Nous n'acceptons que les fichiers jusqu'à {maxSize} au total.",
+  "upload.dropzone.button.select": "Sélectionner des fichiers",
   "upload.dropzone.notify.file-too-big": "Vos fichiers dépassent la taille maximale de {maxSize}.",
   // FileList.tsx
   "upload.filelist.name": "Nom",

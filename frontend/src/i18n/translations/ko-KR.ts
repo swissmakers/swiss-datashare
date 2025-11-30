@@ -223,6 +223,7 @@ export default {
   // Dropzone.tsx
   "upload.dropzone.title": "파일 업로드",
   "upload.dropzone.description": "Drag'n'drop files here to start your share. We only accept files up to {maxSize} in total.",
+  "upload.dropzone.button.select": "파일 선택",
   "upload.dropzone.notify.file-too-big": "파일이 {maxSize} 의 최대 공유 크기를 초과합니다.",
   // FileList.tsx
   "upload.filelist.name": "이름",

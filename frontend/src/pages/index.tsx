@@ -1,77 +1,15 @@
-import {
-  Button,
-  Container,
-  createStyles,
-  Group,
-  List,
-  Text,
-  ThemeIcon,
-  Title,
-} from "@mantine/core";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { TbCheck } from "react-icons/tb";
+import { TbServer, TbShieldLock, TbInfinity, TbArrowRight } from "react-icons/tb";
 import { FormattedMessage } from "react-intl";
 import Logo from "../components/Logo";
 import Meta from "../components/Meta";
 import useUser from "../hooks/user.hook";
 import useConfig from "../hooks/config.hook";
-
-const useStyles = createStyles((theme) => ({
-  inner: {
-    display: "flex",
-    justifyContent: "space-between",
-    paddingTop: `calc(${theme.spacing.md} * 4)`,
-    paddingBottom: `calc(${theme.spacing.md} * 4)`,
-  },
-
-  content: {
-    maxWidth: 480,
-    marginRight: `calc(${theme.spacing.md} * 3)`,
-
-    [theme.fn.smallerThan("md")]: {
-      maxWidth: "100%",
-      marginRight: 0,
-    },
-  },
-
-  title: {
-    color: theme.colorScheme === "dark" ? theme.white : theme.black,
-    fontSize: 44,
-    lineHeight: 1.2,
-    fontWeight: 900,
-
-    [theme.fn.smallerThan("xs")]: {
-      fontSize: 28,
-    },
-  },
-
-  control: {
-    [theme.fn.smallerThan("xs")]: {
-      flex: 1,
-    },
-  },
-
-  image: {
-    [theme.fn.smallerThan("md")]: {
-      display: "none",
-    },
-  },
-
-  highlight: {
-    position: "relative",
-    backgroundColor:
-      theme.colorScheme === "dark"
-        ? theme.fn.rgba(theme.colors[theme.primaryColor][6], 0.55)
-        : theme.colors[theme.primaryColor][0],
-    borderRadius: theme.radius.sm,
-    padding: "4px 12px",
-  },
-}));
+import { Button, Container, Card } from "../components/ui";
 
 export default function Home() {
-  const { classes } = useStyles();
   const { refreshUser } = useUser();
   const router = useRouter();
   const config = useConfig();
@@ -92,96 +30,119 @@ export default function Home() {
     } catch (error) {
       setSignupEnabled(true);
     }
-  }, [config]);
+  }, [config, refreshUser, router]);
 
   const getButtonHref = () => {
     return signupEnabled ? "/auth/signUp" : "/auth/signIn";
   };
 
+  const features = [
+    {
+      icon: TbServer,
+      name: "home.bullet.a.name",
+      description: "home.bullet.a.description",
+      color: "bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400",
+    },
+    {
+      icon: TbShieldLock,
+      name: "home.bullet.b.name",
+      description: "home.bullet.b.description",
+      color: "bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400",
+    },
+    {
+      icon: TbInfinity,
+      name: "home.bullet.c.name",
+      description: "home.bullet.c.description",
+      color: "bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400",
+    },
+  ];
+
   return (
     <>
       <Meta title="Home" />
-      <Container>
-        <div className={classes.inner}>
-          <div className={classes.content}>
-            <Title className={classes.title}>
-              <FormattedMessage
-                id="home.title"
-                values={{
-                  h: (chunks) => (
-                    <span className={classes.highlight}>{chunks}</span>
-                  ),
-                }}
-              />
-            </Title>
-            <Text color="dimmed" mt="md">
-              <FormattedMessage id="home.description" />
-            </Text>
+      <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary-50/30 dark:from-gray-900 dark:via-gray-900 dark:to-primary-900/10">
+        <Container>
+          {/* Hero Section */}
+          <div className="pt-12 pb-10 lg:pt-20 lg:pb-16">
+            <div className="text-center max-w-4xl mx-auto mb-12">
+              <div className="inline-flex items-center justify-center mb-6">
+                <div className="relative">
+                  <div className="absolute inset-0 bg-primary-500/20 blur-3xl rounded-full"></div>
+                  <div className="relative z-10">
+                    <Logo width={120} height={120} />
+                  </div>
+                </div>
+              </div>
+              
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight text-text dark:text-text-dark mb-4">
+                <FormattedMessage
+                  id="home.title"
+                  values={{
+                    h: (chunks) => (
+                      <span className="relative inline-block">
+                        <span className="relative z-10 bg-gradient-to-r from-primary-500 to-primary-600 text-white px-4 rounded-xl shadow-lg">
+                          {chunks}
+                        </span>
+                        <span className="absolute inset-0 bg-primary-500/30 blur-xl rounded-xl"></span>
+                      </span>
+                    ),
+                  }}
+                />
+              </h1>
+              
+              <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto leading-relaxed">
+                <FormattedMessage id="home.description" />
+              </p>
 
-            <List
-              mt={30}
-              spacing="sm"
-              size="sm"
-              icon={
-                <ThemeIcon size={20} radius="xl">
-                  <TbCheck size={12} />
-                </ThemeIcon>
-              }
-            >
-              <List.Item>
-                <div>
-                  <b>
-                    <FormattedMessage id="home.bullet.a.name" />
-                  </b>{" "}
-                  - <FormattedMessage id="home.bullet.a.description" />
-                </div>
-              </List.Item>
-              <List.Item>
-                <div>
-                  <b>
-                    <FormattedMessage id="home.bullet.b.name" />
-                  </b>{" "}
-                  - <FormattedMessage id="home.bullet.b.description" />
-                </div>
-              </List.Item>
-              <List.Item>
-                <div>
-                  <b>
-                    <FormattedMessage id="home.bullet.c.name" />
-                  </b>{" "}
-                  - <FormattedMessage id="home.bullet.c.description" />
-                </div>
-              </List.Item>
-            </List>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+                <Button
+                  as={Link}
+                  href={getButtonHref()}
+                  size="lg"
+                  className="w-full sm:w-auto px-8 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+                >
+                  <FormattedMessage id="home.button.start" />
+                  <TbArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+                <Button
+                  as={Link}
+                  href="https://github.com/swissmakers/swiss-datashare"
+                  target="_blank"
+                  variant="outline"
+                  size="lg"
+                  className="w-full sm:w-auto px-8 py-4 text-lg font-semibold"
+                >
+                  <FormattedMessage id="home.button.source" />
+                </Button>
+              </div>
+            </div>
 
-            <Group mt={30}>
-              <Button
-                component={Link}
-                href={getButtonHref()}
-                radius="xl"
-                size="md"
-                className={classes.control}
-              >
-                <FormattedMessage id="home.button.start" />
-              </Button>
-              <Button
-                component={Link}
-                href="https://github.com/swissmakers/swiss-datashare"
-                target="_blank"
-                variant="default"
-                radius="xl"
-                size="md"
-                className={classes.control}
-              >
-                <FormattedMessage id="home.button.source" />
-              </Button>
-            </Group>
+            {/* Features Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
+              {features.map((feature, index) => {
+                const IconComponent = feature.icon;
+                return (
+                  <Card
+                    key={index}
+                    padding="md"
+                    className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-2 hover:border-primary-200 dark:hover:border-primary-800"
+                  >
+                    <div className={`inline-flex items-center justify-center w-12 h-12 rounded-2xl mb-3 ${feature.color} group-hover:scale-110 transition-transform duration-300`}>
+                      <IconComponent className="w-6 h-6" />
+                    </div>
+                    <h3 className="text-lg font-bold text-text dark:text-text-dark mb-2">
+                      <FormattedMessage id={feature.name} />
+                    </h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                      <FormattedMessage id={feature.description} />
+                    </p>
+                  </Card>
+                );
+              })}
+            </div>
           </div>
-          <Group className={classes.image} align="center">
-            <Logo width={200} height={200} />
-          </Group>
-        </div>
-      </Container>
+        </Container>
+      </div>
     </>
   );
 }

@@ -1,25 +1,19 @@
 import React from "react";
-import { Button, createStyles, Stack, Text, Title } from "@mantine/core";
-import { GetServerSidePropsContext } from "next";
 import Meta from "../components/Meta";
 import useTranslate from "../hooks/useTranslate.hook";
 import { useRouter } from "next/router";
 import { FormattedMessage } from "react-intl";
 import { safeRedirectPath } from "../utils/router.util";
-
-const useStyle = createStyles({
-  title: {
-    fontSize: 100,
-  },
-});
+import { Button, Container } from "../components/ui";
 
 export function getServerSideProps() {
   // Make this page dynamic to avoid static generation issues
   return { props: {} };
 }
 
+export const dynamic = "force-dynamic";
+
 export default function Error() {
-  const { classes } = useStyle();
   const t = useTranslate();
   const router = useRouter();
 
@@ -32,27 +26,28 @@ export default function Error() {
   return (
     <>
       <Meta title={t("error.title")} />
-      <Stack align="center">
-        <Title order={3} className={classes.title}>
-          {t("error.description")}
-        </Title>
-        <Text mt="xl" size="lg">
-          <FormattedMessage
-            id={`error.msg.${router.query.error || "default"}`}
-            values={Object.fromEntries(
-              [params].map((value, key) => [key.toString(), value]),
-            )}
-          />
-        </Text>
-        <Button
-          mt="xl"
-          onClick={() =>
-            router.push(safeRedirectPath(router.query.redirect as string))
-          }
-        >
-          {t("error.button.back")}
-        </Button>
-      </Stack>
+      <Container>
+        <div className="flex flex-col items-center justify-center min-h-[60vh] py-20 text-center">
+          <h1 className="text-6xl sm:text-8xl font-black text-text dark:text-text-dark mb-6">
+            {t("error.description")}
+          </h1>
+          <p className="text-lg text-gray-700 dark:text-gray-300 mb-8 max-w-2xl">
+            <FormattedMessage
+              id={`error.msg.${router.query.error || "default"}`}
+              values={Object.fromEntries(
+                [params].map((value, key) => [key.toString(), value]),
+              )}
+            />
+          </p>
+          <Button
+            onClick={() =>
+              router.push(safeRedirectPath(router.query.redirect as string))
+            }
+          >
+            {t("error.button.back")}
+          </Button>
+        </div>
+      </Container>
     </>
   );
 }

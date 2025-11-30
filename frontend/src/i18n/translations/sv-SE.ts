@@ -223,6 +223,7 @@ export default {
   // Dropzone.tsx
   "upload.dropzone.title": "Ladda upp filer",
   "upload.dropzone.description": "Dra och släpp filer här för att starta din delning. Vi kan endast acceptera filer som är mindre än {maxSize} totalt.",
+  "upload.dropzone.button.select": "Välj filer",
   "upload.dropzone.notify.file-too-big": "Dina filer överskrider den maximala storleken på {maxSize}.",
   // FileList.tsx
   "upload.filelist.name": "Namn",

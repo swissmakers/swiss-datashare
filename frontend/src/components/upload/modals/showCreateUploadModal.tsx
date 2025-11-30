@@ -1,23 +1,3 @@
-import {
-  Accordion,
-  Alert,
-  Button,
-  Checkbox,
-  Col,
-  Grid,
-  Group,
-  MultiSelect,
-  NumberInput,
-  PasswordInput,
-  Select,
-  Stack,
-  Text,
-  Textarea,
-  TextInput,
-} from "@mantine/core";
-import { useForm, yupResolver } from "@mantine/form";
-import { useModals } from "@mantine/modals";
-import { ModalsContextProps } from "@mantine/modals/lib/context";
 import moment from "moment";
 import React, { useState } from "react";
 import { TbAlertCircle } from "react-icons/tb";
@@ -32,9 +12,13 @@ import { CreateShare } from "../../../types/share.type";
 import { getExpirationPreview } from "../../../utils/date.util";
 import toast from "../../../utils/toast.util";
 import { Timespan } from "../../../types/timespan.type";
+import { Alert, Button, Input, PasswordInput, NumberInput, Select, Textarea, Checkbox, Accordion, MultiSelect } from "../../../components/ui";
+import { useForm } from "../../../hooks/useForm";
+import { ModalContextType } from "../../../contexts/ModalContext";
+import clsx from "clsx";
 
 const showCreateUploadModal = (
-  modals: ModalsContextProps,
+  modals: ModalContextType,
   options: {
     isUserSignedIn: boolean;
     isReverseShare: boolean;
@@ -45,7 +29,7 @@ const showCreateUploadModal = (
     simplified: boolean;
   },
   files: FileUpload[],
-  uploadCallback: (_createShare: CreateShare, _files: FileUpload[]) => void,
+  uploadCallback: (createShare: CreateShare, files: FileUpload[]) => void,
 ) => {
   const t = translateOutsideContext();
 
@@ -57,6 +41,7 @@ const showCreateUploadModal = (
           options={options}
           files={files}
           uploadCallback={uploadCallback}
+          modals={modals}
         />
       ),
     });
@@ -64,11 +49,13 @@ const showCreateUploadModal = (
 
   return modals.openModal({
     title: t("upload.modal.title"),
+    size: "lg",
     children: (
       <CreateUploadModalBody
         options={options}
         files={files}
         uploadCallback={uploadCallback}
+        modals={modals}
       />
     ),
   });
@@ -105,9 +92,10 @@ const CreateUploadModalBody = ({
   uploadCallback,
   files,
   options,
+  modals,
 }: {
   files: FileUpload[];
-  uploadCallback: (_createShare: CreateShare, _files: FileUpload[]) => void;
+  uploadCallback: (createShare: CreateShare, files: FileUpload[]) => void;
   options: {
     isUserSignedIn: boolean;
     isReverseShare: boolean;
@@ -116,8 +104,8 @@ const CreateUploadModalBody = ({
     maxExpiration: Timespan;
     shareIdLength: number;
   };
+  modals: ModalContextType;
 }) => {
-  const modals = useModals();
   const t = useTranslate();
 
   const generatedLink = generateShareId(options.shareIdLength);
@@ -161,12 +149,12 @@ const CreateUploadModalBody = ({
       expiration_unit: "-days",
       never_expires: false,
     },
-    validate: yupResolver(validationSchema),
+    validationSchema,
   });
 
   const onSubmit = form.onSubmit(async (values) => {
     if (!(await shareService.isShareIdAvailable(values.link))) {
-      form.setFieldError("link", t("upload.modal.link.error.taken"));
+      form.setErrors({ link: t("upload.modal.link.error.taken") });
     } else {
       const expirationString = form.values.never_expires
         ? "never"
@@ -190,14 +178,13 @@ const CreateUploadModalBody = ({
             ),
           ))
       ) {
-        form.setFieldError(
-          "expiration_num",
-          t("upload.modal.expires.error.too-long", {
+        form.setErrors({
+          expiration_num: t("upload.modal.expires.error.too-long", {
             max: moment
               .duration(options.maxExpiration.value, options.maxExpiration.unit)
               .humanize(),
           }),
-        );
+        });
         return;
       }
 
@@ -228,186 +215,175 @@ const CreateUploadModalBody = ({
           icon={<TbAlertCircle size={16} />}
           title={t("upload.modal.not-signed-in")}
           color="yellow"
+          className="mb-4"
         >
           <FormattedMessage id="upload.modal.not-signed-in-description" />
         </Alert>
       )}
-      <form onSubmit={onSubmit}>
-        <Stack align="stretch">
-          <Group align={form.errors.link ? "center" : "flex-end"}>
-            <TextInput
-              style={{ flex: "1" }}
-              variant="filled"
+      <form onSubmit={onSubmit} className="space-y-4">
+        <div className={clsx("flex gap-2", form.errors.link && "items-center")}>
+          <div className="flex-1">
+            <Input
               label={t("upload.modal.link.label")}
               placeholder="myAwesomeShare"
-              {...form.getInputProps("link")}
+              value={form.values.link as string}
+              onChange={(e) => form.setValue("link", e.target.value)}
+              error={form.errors.link}
             />
-            <Button
-              style={{ flex: "0 0 auto" }}
-              variant="outline"
-              onClick={() =>
-                form.setFieldValue(
-                  "link",
-                  generateShareId(options.shareIdLength),
-                )
-              }
-            >
-              <FormattedMessage id="common.button.generate" />
-            </Button>
-          </Group>
-
-          <Text
-            truncate
-            italic
-            size="xs"
-            sx={(theme) => ({
-              color: theme.colors.gray[6],
-            })}
+          </div>
+          <Button
+            variant="outline"
+            onClick={() =>
+              form.setValue(
+                "link",
+                generateShareId(options.shareIdLength),
+              )
+            }
+            type="button"
+            className="mt-6"
           >
-            {`${window.location.origin}/s/${form.values.link}`}
-          </Text>
-          {!options.isReverseShare && (
-            <>
-              <Grid align={form.errors.expiration_num ? "center" : "flex-end"}>
-                <Col xs={6}>
-                  <NumberInput
-                    min={1}
-                    max={99999}
-                    precision={0}
-                    variant="filled"
-                    label={t("upload.modal.expires.label")}
-                    disabled={form.values.never_expires}
-                    {...form.getInputProps("expiration_num")}
-                  />
-                </Col>
-                <Col xs={6}>
-                  <Select
-                    disabled={form.values.never_expires}
-                    {...form.getInputProps("expiration_unit")}
-                    data={[
-                      {
-                        value: "-minutes",
-                        label:
-                          form.values.expiration_num == 1
-                            ? t("upload.modal.expires.minute-singular")
-                            : t("upload.modal.expires.minute-plural"),
-                      },
-                      {
-                        value: "-hours",
-                        label:
-                          form.values.expiration_num == 1
-                            ? t("upload.modal.expires.hour-singular")
-                            : t("upload.modal.expires.hour-plural"),
-                      },
-                      {
-                        value: "-days",
-                        label:
-                          form.values.expiration_num == 1
-                            ? t("upload.modal.expires.day-singular")
-                            : t("upload.modal.expires.day-plural"),
-                      },
-                      {
-                        value: "-weeks",
-                        label:
-                          form.values.expiration_num == 1
-                            ? t("upload.modal.expires.week-singular")
-                            : t("upload.modal.expires.week-plural"),
-                      },
-                      {
-                        value: "-months",
-                        label:
-                          form.values.expiration_num == 1
-                            ? t("upload.modal.expires.month-singular")
-                            : t("upload.modal.expires.month-plural"),
-                      },
-                      {
-                        value: "-years",
-                        label:
-                          form.values.expiration_num == 1
-                            ? t("upload.modal.expires.year-singular")
-                            : t("upload.modal.expires.year-plural"),
-                      },
-                    ]}
-                  />
-                </Col>
-              </Grid>
-              {options.maxExpiration.value == 0 && (
-                <Checkbox
-                  label={t("upload.modal.expires.never-long")}
-                  {...form.getInputProps("never_expires")}
-                />
-              )}
-              <Text
-                italic
-                size="xs"
-                sx={(theme) => ({
-                  color: theme.colors.gray[6],
-                })}
-              >
-                {getExpirationPreview(
+            <FormattedMessage id="common.button.generate" />
+          </Button>
+        </div>
+
+        <p className="text-xs text-gray-500 dark:text-gray-400 truncate italic">
+          {`${window.location.origin}/s/${form.values.link}`}
+        </p>
+        {!options.isReverseShare && (
+          <>
+            <div className={clsx("grid grid-cols-2 gap-4", form.errors.expiration_num && "items-center")}>
+              <NumberInput
+                min={1}
+                max={99999}
+                precision={0}
+                label={t("upload.modal.expires.label")}
+                disabled={form.values.never_expires}
+                value={form.values.expiration_num}
+                onChange={(value) => form.setValue("expiration_num", value || 1)}
+                error={form.errors.expiration_num}
+              />
+              <Select
+                disabled={form.values.never_expires}
+                value={form.values.expiration_unit}
+                onChange={(e) => form.setValue("expiration_unit", e.target.value)}
+                options={[
                   {
-                    neverExpires: t("upload.modal.completed.never-expires"),
-                    expiresOn: t("upload.modal.completed.expires-on"),
+                    value: "-minutes",
+                    label:
+                      form.values.expiration_num == 1
+                        ? t("upload.modal.expires.minute-singular")
+                        : t("upload.modal.expires.minute-plural"),
                   },
-                  form,
-                )}
-              </Text>
-            </>
-          )}
-          <Accordion>
-            <Accordion.Item value="description" sx={{ borderBottom: "none" }}>
+                  {
+                    value: "-hours",
+                    label:
+                      form.values.expiration_num == 1
+                        ? t("upload.modal.expires.hour-singular")
+                        : t("upload.modal.expires.hour-plural"),
+                  },
+                  {
+                    value: "-days",
+                    label:
+                      form.values.expiration_num == 1
+                        ? t("upload.modal.expires.day-singular")
+                        : t("upload.modal.expires.day-plural"),
+                  },
+                  {
+                    value: "-weeks",
+                    label:
+                      form.values.expiration_num == 1
+                        ? t("upload.modal.expires.week-singular")
+                        : t("upload.modal.expires.week-plural"),
+                  },
+                  {
+                    value: "-months",
+                    label:
+                      form.values.expiration_num == 1
+                        ? t("upload.modal.expires.month-singular")
+                        : t("upload.modal.expires.month-plural"),
+                  },
+                  {
+                    value: "-years",
+                    label:
+                      form.values.expiration_num == 1
+                        ? t("upload.modal.expires.year-singular")
+                        : t("upload.modal.expires.year-plural"),
+                  },
+                ]}
+                className="mt-6"
+              />
+            </div>
+            {options.maxExpiration.value == 0 && (
+              <Checkbox
+                label={t("upload.modal.expires.never-long")}
+                checked={form.values.never_expires}
+                onChange={(e) => form.setValue("never_expires", e.target.checked)}
+              />
+            )}
+            <p className="text-xs text-gray-500 dark:text-gray-400 italic">
+              {getExpirationPreview(
+                {
+                  neverExpires: t("upload.modal.completed.never-expires"),
+                  expiresOn: t("upload.modal.completed.expires-on"),
+                },
+                form,
+              )}
+            </p>
+          </>
+        )}
+        <Accordion>
+          <Accordion.Item value="description">
+            <Accordion.Control>
+              <FormattedMessage id="upload.modal.accordion.name-and-description.title" />
+            </Accordion.Control>
+            <Accordion.Panel>
+              <div className="space-y-4 pt-4">
+                <Input
+                  placeholder={t(
+                    "upload.modal.accordion.name-and-description.name.placeholder",
+                  )}
+                  value={typeof form.values.name === "string" ? form.values.name : ""}
+                  onChange={(e) => form.setValue("name", e.target.value)}
+                  error={form.errors.name}
+                />
+                <Textarea
+                  placeholder={t(
+                    "upload.modal.accordion.name-and-description.description.placeholder",
+                  )}
+                  value={typeof form.values.description === "string" ? form.values.description : ""}
+                  onChange={(e) => form.setValue("description", e.target.value)}
+                  error={form.errors.description}
+                />
+              </div>
+            </Accordion.Panel>
+          </Accordion.Item>
+          {options.enableEmailRecepients && (
+            <Accordion.Item value="recipients">
               <Accordion.Control>
-                <FormattedMessage id="upload.modal.accordion.name-and-description.title" />
+                <FormattedMessage id="upload.modal.accordion.email.title" />
               </Accordion.Control>
               <Accordion.Panel>
-                <Stack align="stretch">
-                  <TextInput
-                    variant="filled"
-                    placeholder={t(
-                      "upload.modal.accordion.name-and-description.name.placeholder",
-                    )}
-                    {...form.getInputProps("name")}
-                  />
-                  <Textarea
-                    variant="filled"
-                    placeholder={t(
-                      "upload.modal.accordion.name-and-description.description.placeholder",
-                    )}
-                    {...form.getInputProps("description")}
-                  />
-                </Stack>
-              </Accordion.Panel>
-            </Accordion.Item>
-            {options.enableEmailRecepients && (
-              <Accordion.Item value="recipients" sx={{ borderBottom: "none" }}>
-                <Accordion.Control>
-                  <FormattedMessage id="upload.modal.accordion.email.title" />
-                </Accordion.Control>
-                <Accordion.Panel>
+                <div className="pt-4">
                   <MultiSelect
-                    data={form.values.recipients}
+                    value={form.values.recipients}
+                    onChange={(value) => form.setValue("recipients", value)}
                     placeholder={t("upload.modal.accordion.email.placeholder")}
                     searchable
                     creatable
-                    id="recipient-emails"
-                    inputMode="email"
                     getCreateLabel={(query) => `+ ${query}`}
                     onCreate={(query) => {
                       if (!query.match(/^\S+@\S+\.\S+$/)) {
-                        form.setFieldError(
-                          "recipients",
-                          t("upload.modal.accordion.email.invalid-email"),
-                        );
+                        form.setErrors({
+                          recipients: t("upload.modal.accordion.email.invalid-email"),
+                        });
                       } else {
-                        form.setFieldError("recipients", null);
-                        form.setFieldValue("recipients", [
-                          ...form.values.recipients,
-                          query,
-                        ]);
+                        form.setErrors({ recipients: undefined });
+                        const newRecipients = [...form.values.recipients, query];
+                        form.setValue("recipients", newRecipients);
                         return query;
                       }
                     }}
-                    {...form.getInputProps("recipients")}
+                    inputMode="email"
                     onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
                       // Add email on comma or semicolon
                       if (e.key === "Enter" || e.key === "," || e.key === ";") {
@@ -416,10 +392,8 @@ const CreateUploadModalBody = ({
                           e.target as HTMLInputElement
                         ).value.trim();
                         if (inputValue.match(/^\S+@\S+\.\S+$/)) {
-                          form.setFieldValue("recipients", [
-                            ...form.values.recipients,
-                            inputValue,
-                          ]);
+                          const newRecipients = [...form.values.recipients, inputValue];
+                          form.setValue("recipients", newRecipients);
                           (e.target as HTMLInputElement).value = "";
                         }
                       } else if (e.key === " ") {
@@ -428,43 +402,43 @@ const CreateUploadModalBody = ({
                       }
                     }}
                   />
-                </Accordion.Panel>
-              </Accordion.Item>
-            )}
-
-            <Accordion.Item value="security" sx={{ borderBottom: "none" }}>
-              <Accordion.Control>
-                <FormattedMessage id="upload.modal.accordion.security.title" />
-              </Accordion.Control>
-              <Accordion.Panel>
-                <Stack align="stretch">
-                  <PasswordInput
-                    variant="filled"
-                    placeholder={t(
-                      "upload.modal.accordion.security.password.placeholder",
-                    )}
-                    label={t("upload.modal.accordion.security.password.label")}
-                    autoComplete="new-password"
-                    {...form.getInputProps("password")}
-                  />
-                  <NumberInput
-                    min={1}
-                    type="number"
-                    variant="filled"
-                    placeholder={t(
-                      "upload.modal.accordion.security.max-views.placeholder",
-                    )}
-                    label={t("upload.modal.accordion.security.max-views.label")}
-                    {...form.getInputProps("maxViews")}
-                  />
-                </Stack>
+                </div>
               </Accordion.Panel>
             </Accordion.Item>
-          </Accordion>
-          <Button type="submit" data-autofocus>
-            <FormattedMessage id="common.button.share" />
-          </Button>
-        </Stack>
+          )}
+
+          <Accordion.Item value="security">
+            <Accordion.Control>
+              <FormattedMessage id="upload.modal.accordion.security.title" />
+            </Accordion.Control>
+            <Accordion.Panel>
+              <div className="space-y-4 pt-4">
+                <PasswordInput
+                  placeholder={t(
+                    "upload.modal.accordion.security.password.placeholder",
+                  )}
+                  label={t("upload.modal.accordion.security.password.label")}
+                  autoComplete="new-password"
+                  value={typeof form.values.password === "string" ? form.values.password : ""}
+                  onChange={(e) => form.setValue("password", e.target.value)}
+                  error={form.errors.password}
+                />
+                <NumberInput
+                  min={1}
+                  placeholder={t(
+                    "upload.modal.accordion.security.max-views.placeholder",
+                  )}
+                  label={t("upload.modal.accordion.security.max-views.label")}
+                  value={typeof form.values.maxViews === "number" ? form.values.maxViews : undefined}
+                  onChange={(value) => form.setValue("maxViews", value || undefined)}
+                />
+              </div>
+            </Accordion.Panel>
+          </Accordion.Item>
+        </Accordion>
+        <Button type="submit" fullWidth>
+          <FormattedMessage id="common.button.share" />
+        </Button>
       </form>
     </>
   );
@@ -474,9 +448,10 @@ const SimplifiedCreateUploadModalModal = ({
   uploadCallback,
   files,
   options,
+  modals,
 }: {
   files: FileUpload[];
-  uploadCallback: (_createShare: CreateShare, _files: FileUpload[]) => void;
+  uploadCallback: (createShare: CreateShare, files: FileUpload[]) => void;
   options: {
     isUserSignedIn: boolean;
     isReverseShare: boolean;
@@ -485,8 +460,8 @@ const SimplifiedCreateUploadModalModal = ({
     maxExpiration: Timespan;
     shareIdLength: number;
   };
+  modals: ModalContextType;
 }) => {
-  const modals = useModals();
   const t = useTranslate();
 
   const [showNotSignedInAlert, setShowNotSignedInAlert] = useState(true);
@@ -504,7 +479,7 @@ const SimplifiedCreateUploadModalModal = ({
       name: undefined,
       description: undefined,
     },
-    validate: yupResolver(validationSchema),
+    validationSchema,
   });
 
   const onSubmit = form.onSubmit(async (values) => {
@@ -537,7 +512,7 @@ const SimplifiedCreateUploadModalModal = ({
   });
 
   return (
-    <Stack>
+    <div className="space-y-4">
       {showNotSignedInAlert && !options.isUserSignedIn && (
         <Alert
           withCloseButton
@@ -549,30 +524,30 @@ const SimplifiedCreateUploadModalModal = ({
           <FormattedMessage id="upload.modal.not-signed-in-description" />
         </Alert>
       )}
-      <form onSubmit={onSubmit}>
-        <Stack align="stretch">
-          <Stack align="stretch">
-            <TextInput
-              variant="filled"
-              placeholder={t(
-                "upload.modal.accordion.name-and-description.name.placeholder",
-              )}
-              {...form.getInputProps("name")}
-            />
-            <Textarea
-              variant="filled"
-              placeholder={t(
-                "upload.modal.accordion.name-and-description.description.placeholder",
-              )}
-              {...form.getInputProps("description")}
-            />
-          </Stack>
-          <Button type="submit" data-autofocus>
-            <FormattedMessage id="common.button.share" />
-          </Button>
-        </Stack>
+      <form onSubmit={onSubmit} className="space-y-4">
+        <div className="space-y-4">
+          <Input
+            placeholder={t(
+              "upload.modal.accordion.name-and-description.name.placeholder",
+            )}
+            value={typeof form.values.name === "string" ? form.values.name : ""}
+            onChange={(e) => form.setValue("name", e.target.value)}
+            error={form.errors.name}
+          />
+          <Textarea
+            placeholder={t(
+              "upload.modal.accordion.name-and-description.description.placeholder",
+            )}
+            value={typeof form.values.description === "string" ? form.values.description : ""}
+            onChange={(e) => form.setValue("description", e.target.value)}
+            error={form.errors.description}
+          />
+        </div>
+        <Button type="submit" fullWidth>
+          <FormattedMessage id="common.button.share" />
+        </Button>
       </form>
-    </Stack>
+    </div>
   );
 };
 

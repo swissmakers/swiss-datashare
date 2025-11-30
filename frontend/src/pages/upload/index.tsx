@@ -1,6 +1,3 @@
-import { Button, Group } from "@mantine/core";
-import { useModals } from "@mantine/modals";
-import { cleanNotifications } from "@mantine/notifications";
 import { AxiosError } from "axios";
 import pLimit from "p-limit";
 import { useEffect, useRef, useState } from "react";
@@ -19,6 +16,8 @@ import { FileUpload } from "../../types/File.type";
 import { CreateShare, Share } from "../../types/share.type";
 import toast from "../../utils/toast.util";
 import { useRouter } from "next/router";
+import { Button, Container } from "../../components/ui";
+import { useModals } from "../../contexts/ModalContext";
 
 const promiseLimit = pLimit(3);
 let errorToastShown = false;
@@ -170,15 +169,10 @@ const Upload = ({
       if (!errorToastShown) {
         toast.error(
           t("upload.notify.count-failed", { count: fileErrorCount }),
-          {
-            withCloseButton: false,
-            autoClose: false,
-          },
         );
       }
       errorToastShown = true;
     } else {
-      cleanNotifications();
       errorToastShown = false;
     }
 
@@ -197,34 +191,37 @@ const Upload = ({
         })
         .catch(() => toast.error(t("upload.notify.generic-error")));
     }
-  }, [files]);
+  }, [files, modals, t]);
 
   return (
     <>
       <Meta title={t("upload.title")} />
-      <Group position="right" mb={20}>
-        <Button
-          loading={isUploading}
-          disabled={files.length <= 0}
-          onClick={() => showCreateUploadModalCallback(files)}
-        >
-          <FormattedMessage id="common.button.share" />
-        </Button>
-      </Group>
-      <Dropzone
-        title={
-          !autoOpenCreateUploadModal && files.length > 0
-            ? t("share.edit.append-upload")
-            : undefined
-        }
-        maxShareSize={maxShareSize}
-        onFilesChanged={handleDropzoneFilesChanged}
-        isUploading={isUploading}
-      />
-      {files.length > 0 && (
-        <FileList<FileUpload> files={files} setFiles={setFiles} />
-      )}
+      <Container>
+        <div className="flex justify-end mb-8">
+          <Button
+            loading={isUploading}
+            disabled={files.length <= 0}
+            onClick={() => showCreateUploadModalCallback(files)}
+          >
+            <FormattedMessage id="common.button.share" />
+          </Button>
+        </div>
+        <Dropzone
+          title={
+            !autoOpenCreateUploadModal && files.length > 0
+              ? t("share.edit.append-upload")
+              : undefined
+          }
+          maxShareSize={maxShareSize}
+          onFilesChanged={handleDropzoneFilesChanged}
+          isUploading={isUploading}
+        />
+        {files.length > 0 && (
+          <FileList<FileUpload> files={files} setFiles={setFiles} />
+        )}
+      </Container>
     </>
   );
 };
+
 export default Upload;

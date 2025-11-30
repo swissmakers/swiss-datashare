@@ -1,10 +1,10 @@
-import { Button, Stack, Text, Textarea } from "@mantine/core";
-import { useModals } from "@mantine/modals";
 import { useState } from "react";
 import { FormattedMessage } from "react-intl";
 import useUser from "../../../hooks/user.hook";
 import configService from "../../../services/config.service";
 import toast from "../../../utils/toast.util";
+import { Button, Textarea } from "../../ui";
+import { useModals } from "../../../contexts/ModalContext";
 
 const TestEmailButton = ({
   configVariablesChanged,
@@ -22,25 +22,30 @@ const TestEmailButton = ({
     await configService
       .sendTestEmail(user!.email)
       .then(() => toast.success("Email sent successfully"))
-      .catch((e) =>
+      .catch((e) => {
         modals.openModal({
           title: "Failed to send email",
           children: (
-            <Stack spacing="xs">
-              <Text size="sm">
+            <div className="space-y-4">
+              <p className="text-sm text-gray-700 dark:text-gray-300">
                 While sending the test email, the following error occurred:
-              </Text>
-              <Textarea minRows={4} readOnly value={e.response.data.message} />
-            </Stack>
+              </p>
+              <Textarea
+                readOnly
+                value={e.response?.data?.message || e.message || "Unknown error"}
+                rows={4}
+                className="font-mono text-xs"
+              />
+            </div>
           ),
-        }),
-      );
+        });
+      });
   };
 
   return (
     <Button
       loading={isLoading}
-      variant="light"
+      variant="outline"
       onClick={async () => {
         if (!configVariablesChanged) {
           setIsLoading(true);
@@ -50,10 +55,10 @@ const TestEmailButton = ({
           modals.openConfirmModal({
             title: "Save configuration",
             children: (
-              <Text size="sm">
+              <p className="text-sm text-gray-700 dark:text-gray-300">
                 To continue you need to save the configuration first. Do you
                 want to save the configuration and send the test email?
-              </Text>
+              </p>
             ),
             labels: { confirm: "Save and send", cancel: "Cancel" },
             onConfirm: async () => {

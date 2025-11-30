@@ -223,6 +223,7 @@ export default {
   // Dropzone.tsx
   "upload.dropzone.title": "Carica File",
   "upload.dropzone.description": "Trascina qui i file per iniziare la tua condivisione. Possiamo accettare solo i file che sono inferiori a {maxSize} in totale.",
+  "upload.dropzone.button.select": "Seleziona file",
   "upload.dropzone.notify.file-too-big": "I tuoi file superano la dimensione massima di condivisione di {maxSize}.",
   // FileList.tsx
   "upload.filelist.name": "Nome",

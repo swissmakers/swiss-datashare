@@ -1,5 +1,3 @@
-import { Button, Group } from "@mantine/core";
-import { cleanNotifications } from "@mantine/notifications";
 import { AxiosError } from "axios";
 import { useRouter } from "next/router";
 import pLimit from "p-limit";
@@ -12,6 +10,7 @@ import useTranslate from "../../hooks/useTranslate.hook";
 import shareService from "../../services/share.service";
 import { FileListItem, FileMetaData, FileUpload } from "../../types/File.type";
 import toast from "../../utils/toast.util";
+import { Button, Container } from "../ui";
 
 const promiseLimit = pLimit(3);
 let errorToastShown = false;
@@ -194,26 +193,21 @@ const EditableUpload = ({
       if (!errorToastShown) {
         toast.error(
           t("upload.notify.count-failed", { count: fileErrorCount }),
-          {
-            withCloseButton: false,
-            autoClose: false,
-          },
         );
       }
       errorToastShown = true;
     } else {
-      cleanNotifications();
       errorToastShown = false;
     }
-  }, [uploadingFiles]);
+  }, [uploadingFiles, t]);
 
   return (
-    <>
-      <Group position="right" mb={20}>
+    <Container>
+      <div className="flex justify-end mb-5">
         <Button loading={isUploading} disabled={!dirty} onClick={() => save()}>
           <FormattedMessage id="common.button.save" />
         </Button>
-      </Group>
+      </div>
       <Dropzone
         title={t("share.edit.append-upload")}
         maxShareSize={maxShareSize}
@@ -223,7 +217,8 @@ const EditableUpload = ({
       {existingAndUploadedFiles.length > 0 && (
         <FileList files={existingAndUploadedFiles} setFiles={setFiles} />
       )}
-    </>
+    </Container>
   );
 };
+
 export default EditableUpload;

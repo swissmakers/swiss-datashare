@@ -302,6 +302,7 @@ export default {
   "upload.dropzone.title": "Upload files",
   "upload.dropzone.description":
     "Drag'n'drop files here to start your share. We only accept files up to {maxSize} in total.",
+  "upload.dropzone.button.select": "Select files",
   "upload.dropzone.notify.file-too-big":
     "Your files exceed the maximum share size of {maxSize}.",
 

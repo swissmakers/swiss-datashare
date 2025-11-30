@@ -1,6 +1,3 @@
-import { Button, Stack, Text } from "@mantine/core";
-import { useModals } from "@mantine/modals";
-import { ModalsContextProps } from "@mantine/modals/lib/context";
 import moment from "moment";
 import { useRouter } from "next/router";
 import { FormattedMessage } from "react-intl";
@@ -9,23 +6,24 @@ import useTranslate, {
 } from "../../../hooks/useTranslate.hook";
 import { CompletedShare } from "../../../types/share.type";
 import CopyTextField from "../CopyTextField";
+import { Button } from "../../../components/ui";
+import { ModalContextType } from "../../../contexts/ModalContext";
 
 const showCompletedUploadModal = (
-  modals: ModalsContextProps,
+  modals: ModalContextType,
   share: CompletedShare,
 ) => {
   const t = translateOutsideContext();
   return modals.openModal({
     closeOnClickOutside: false,
-    withCloseButton: false,
+    showCloseButton: false,
     closeOnEscape: false,
     title: t("upload.modal.completed.share-ready"),
-    children: <Body share={share} />,
+    children: <Body share={share} modals={modals} />,
   });
 };
 
-const Body = ({ share }: { share: CompletedShare }) => {
-  const modals = useModals();
+const Body = ({ share, modals }: { share: CompletedShare; modals: ModalContextType }) => {
   const router = useRouter();
   const t = useTranslate();
 
@@ -34,34 +32,21 @@ const Body = ({ share }: { share: CompletedShare }) => {
   const link = `${window.location.origin}/s/${share.id}`;
 
   return (
-    <Stack align="stretch">
+    <div className="space-y-4">
       <CopyTextField link={link} />
       {share.notifyReverseShareCreator === true && (
-        <Text
-          size="sm"
-          sx={(theme) => ({
-            color:
-              theme.colorScheme === "dark"
-                ? theme.colors.gray[3]
-                : theme.colors.dark[4],
-          })}
-        >
+        <p className="text-sm text-gray-600 dark:text-gray-400">
           {t("upload.modal.completed.notified-reverse-share-creator")}
-        </Text>
+        </p>
       )}
-      <Text
-        size="xs"
-        sx={(theme) => ({
-          color: theme.colors.gray[6],
-        })}
-      >
+      <p className="text-xs text-gray-500 dark:text-gray-500">
         {/* If our share.expiration is timestamp 0, show a different message */}
         {moment(share.expiration).unix() === 0
           ? t("upload.modal.completed.never-expires")
           : t("upload.modal.completed.expires-on", {
               expiration: moment(share.expiration).format("LLL"),
             })}
-      </Text>
+      </p>
 
       <Button
         onClick={() => {
@@ -72,10 +57,11 @@ const Body = ({ share }: { share: CompletedShare }) => {
             router.push("/upload");
           }
         }}
+        fullWidth
       >
         <FormattedMessage id="common.button.done" />
       </Button>
-    </Stack>
+    </div>
   );
 };
 

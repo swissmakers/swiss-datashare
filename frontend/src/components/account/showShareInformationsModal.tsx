@@ -1,14 +1,14 @@
-import { Divider, Flex, Progress, Stack, Text } from "@mantine/core";
-import { ModalsContextProps } from "@mantine/modals/lib/context";
 import moment from "moment";
 import { FormattedMessage } from "react-intl";
 import { translateOutsideContext } from "../../hooks/useTranslate.hook";
 import { MyShare } from "../../types/share.type";
 import { byteToHumanSizeString } from "../../utils/fileSize.util";
 import CopyTextField from "../upload/CopyTextField";
+import { Progress } from "../ui";
+import { ModalContextType } from "../../contexts/ModalContext";
 
 const showShareInformationsModal = (
-  modals: ModalsContextProps,
+  modals: ModalContextType,
   share: MyShare,
   maxShareSize: number,
 ) => {
@@ -27,71 +27,71 @@ const showShareInformationsModal = (
 
   return modals.openModal({
     title: t("account.shares.modal.share-informations"),
-
+    size: "lg",
     children: (
-      <Stack align="stretch" spacing="md">
-        <Text size="sm">
+      <div className="space-y-4">
+        <p className="text-sm">
           <b>
             <FormattedMessage id="account.shares.table.id" />:{" "}
           </b>
           {share.id}
-        </Text>
-        <Text size="sm">
+        </p>
+        <p className="text-sm">
           <b>
             <FormattedMessage id="account.shares.table.name" />:{" "}
           </b>
           {share.name || "-"}
-        </Text>
+        </p>
 
-        <Text size="sm">
+        <p className="text-sm">
           <b>
             <FormattedMessage id="account.shares.table.description" />:{" "}
           </b>
           {share.description || "-"}
-        </Text>
+        </p>
 
-        <Text size="sm">
+        <p className="text-sm">
           <b>
             <FormattedMessage id="account.shares.table.createdAt" />:{" "}
           </b>
           {formattedCreatedAt}
-        </Text>
+        </p>
 
-        <Text size="sm">
+        <p className="text-sm">
           <b>
             <FormattedMessage id="account.shares.table.expiresAt" />:{" "}
           </b>
           {formattedExpiration}
-        </Text>
-        <Divider />
+        </p>
+        <hr className="border-gray-200 dark:border-gray-700" />
         <CopyTextField link={link} />
-        <Divider />
-        <Text size="sm">
+        <hr className="border-gray-200 dark:border-gray-700" />
+        <p className="text-sm">
           <b>
             <FormattedMessage id="account.shares.table.size" />:{" "}
           </b>
           {formattedShareSize} / {formattedMaxShareSize} (
           {shareSizeProgress.toFixed(1)}%)
-        </Text>
+        </p>
 
-        <Flex align="center" justify="center">
+        <div className="flex items-center justify-center gap-1">
           {share.size / maxShareSize < 0.1 && (
-            <Text size="xs" style={{ marginRight: "4px" }}>
+            <span className="text-xs text-gray-600 dark:text-gray-400">
               {formattedShareSize}
-            </Text>
+            </span>
           )}
-          <Progress
-            value={shareSizeProgress}
-            label={share.size / maxShareSize >= 0.1 ? formattedShareSize : ""}
-            style={{ width: share.size / maxShareSize < 0.1 ? "70%" : "80%" }}
-            size="xl"
-            radius="xl"
-          />
-          <Text size="xs" style={{ marginLeft: "4px" }}>
+          <div className={share.size / maxShareSize < 0.1 ? "flex-1 max-w-[70%]" : "flex-1 max-w-[80%]"}>
+            <Progress
+              value={shareSizeProgress}
+              label={share.size / maxShareSize >= 0.1 ? formattedShareSize : undefined}
+              size="xl"
+            />
+          </div>
+          <span className="text-xs text-gray-600 dark:text-gray-400">
             {formattedMaxShareSize}
-          </Text>
-        </Flex>
-      </Stack>
+          </span>
+        </div>
+      </div>
     ),
   });
 };

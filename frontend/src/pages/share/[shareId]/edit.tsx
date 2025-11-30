@@ -1,5 +1,3 @@
-import { LoadingOverlay } from "@mantine/core";
-import { useModals } from "@mantine/modals";
 import { GetServerSidePropsContext } from "next";
 import { useEffect, useState } from "react";
 import Meta from "../../../components/Meta";
@@ -9,6 +7,8 @@ import useConfirmLeave from "../../../hooks/confirm-leave.hook";
 import useTranslate from "../../../hooks/useTranslate.hook";
 import shareService from "../../../services/share.service";
 import { Share as ShareType } from "../../../types/share.type";
+import { useModals } from "../../../contexts/ModalContext";
+import { LoadingSpinner } from "../../../components/ui";
 
 export function getServerSideProps(context: GetServerSidePropsContext) {
   return {
@@ -63,9 +63,15 @@ const Share = ({ shareId }: { shareId: string }) => {
       .finally(() => {
         setIsLoading(false);
       });
-  }, []);
+  }, [shareId, modals, t]);
 
-  if (isLoading) return <LoadingOverlay visible />;
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <LoadingSpinner size="lg" />
+      </div>
+    );
+  }
 
   return (
     <>

@@ -1,9 +1,9 @@
-import { Button } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import useTranslate from "../../hooks/useTranslate.hook";
 import shareService from "../../services/share.service";
 import toast from "../../utils/toast.util";
+import { Button } from "../ui";
 
 const DownloadAllButton = ({ shareId }: { shareId: string }) => {
   const [isZipReady, setIsZipReady] = useState(false);
@@ -35,7 +35,7 @@ const DownloadAllButton = ({ shareId }: { shareId: string }) => {
     return () => {
       clearInterval(timer);
     };
-  }, []);
+  }, [shareId]);
 
   return (
     <Button

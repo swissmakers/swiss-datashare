@@ -223,6 +223,7 @@ export default {
   // Dropzone.tsx
   "upload.dropzone.title": "ファイルをアップロード",
   "upload.dropzone.description": "共有を開始するにはここにファイルをドラッグ＆ドロップしてください。受け入れ可能なファイルの合計サイズは{maxSize}までです。",
+  "upload.dropzone.button.select": "ファイルを選択",
   "upload.dropzone.notify.file-too-big": "アップロードしようとしたファイルは、最大ファイルサイズの{maxSize} を超えています。",
   // FileList.tsx
   "upload.filelist.name": "ファイル名",
