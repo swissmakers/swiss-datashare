@@ -1,61 +1,68 @@
-import {
-  NumberInput,
-  PasswordInput,
-  Stack,
-  Switch,
-  Textarea,
-  TextInput,
-} from "@mantine/core";
-import { useForm } from "@mantine/form";
 import { AdminConfig, UpdateConfig } from "../../../types/config.type";
 import { stringToTimespan, timespanToString } from "../../../utils/date.util";
 import FileSizeInput from "../../core/FileSizeInput";
 import TimespanInput from "../../core/TimespanInput";
+import { Input, PasswordInput, Textarea, NumberInput, Switch } from "../../ui";
+import { useState, useEffect } from "react";
 
 const AdminConfigInput = ({
   configVariable,
   updateConfigVariable,
 }: {
   configVariable: AdminConfig;
-  updateConfigVariable: (_variable: UpdateConfig) => void;
+  updateConfigVariable: (variable: UpdateConfig) => void;
 }) => {
-  const form = useForm({
-    initialValues: {
-      stringValue: configVariable.value ?? configVariable.defaultValue,
-      textValue: configVariable.value ?? configVariable.defaultValue,
-      numberValue: parseInt(
-        configVariable.value ?? configVariable.defaultValue,
-      ),
-      booleanValue:
-        (configVariable.value ?? configVariable.defaultValue) == "true",
-    },
-  });
+  const [stringValue, setStringValue] = useState(
+    configVariable.value ?? configVariable.defaultValue
+  );
+  const [textValue, setTextValue] = useState(
+    configVariable.value ?? configVariable.defaultValue
+  );
+  const [numberValue, setNumberValue] = useState(
+    parseInt(configVariable.value ?? configVariable.defaultValue)
+  );
+  const [booleanValue, setBooleanValue] = useState(
+    (configVariable.value ?? configVariable.defaultValue) == "true"
+  );
+
+  useEffect(() => {
+    setStringValue(configVariable.value ?? configVariable.defaultValue);
+    setTextValue(configVariable.value ?? configVariable.defaultValue);
+    setNumberValue(parseInt(configVariable.value ?? configVariable.defaultValue));
+    setBooleanValue(
+      (configVariable.value ?? configVariable.defaultValue) == "true"
+    );
+  }, [configVariable.value, configVariable.defaultValue]);
 
   const onValueChange = (configVariable: AdminConfig, value: any) => {
-    form.setFieldValue(`${configVariable.type}Value`, value);
+    if (configVariable.type === "string") {
+      setStringValue(value);
+    } else if (configVariable.type === "text") {
+      setTextValue(value);
+    } else if (configVariable.type === "number") {
+      setNumberValue(value);
+    } else if (configVariable.type === "boolean") {
+      setBooleanValue(value);
+    }
     updateConfigVariable({ key: configVariable.key, value: value });
   };
 
   return (
-    <Stack align="end">
+    <div className="flex justify-end w-full">
       {configVariable.type == "string" &&
         (configVariable.obscured ? (
           <PasswordInput
             autoComplete="new-password"
-            style={{
-              width: "100%",
-            }}
+            className="w-full"
             disabled={!configVariable.allowEdit}
-            {...form.getInputProps("stringValue")}
+            value={stringValue}
             onChange={(e) => onValueChange(configVariable, e.target.value)}
           />
         ) : (
-          <TextInput
-            style={{
-              width: "100%",
-            }}
+          <Input
+            className="w-full"
             disabled={!configVariable.allowEdit}
-            {...form.getInputProps("stringValue")}
+            value={stringValue}
             placeholder={configVariable.defaultValue}
             onChange={(e) => onValueChange(configVariable, e.target.value)}
           />
@@ -63,42 +70,37 @@ const AdminConfigInput = ({
 
       {configVariable.type == "text" && (
         <Textarea
-          style={{
-            width: "100%",
-          }}
+          className="w-full"
           disabled={!configVariable.allowEdit}
-          autosize
-          {...form.getInputProps("textValue")}
+          value={textValue}
           placeholder={configVariable.defaultValue}
           onChange={(e) => onValueChange(configVariable, e.target.value)}
+          rows={4}
         />
       )}
       {configVariable.type == "number" && (
         <NumberInput
-          {...form.getInputProps("numberValue")}
+          value={numberValue}
           disabled={!configVariable.allowEdit}
           placeholder={configVariable.defaultValue}
           onChange={(number) => onValueChange(configVariable, number)}
-          w={201}
+          className="w-52"
         />
       )}
       {configVariable.type == "filesize" && (
         <FileSizeInput
-          {...form.getInputProps("numberValue")}
           disabled={!configVariable.allowEdit}
           value={parseInt(configVariable.value ?? configVariable.defaultValue)}
           onChange={(bytes) => onValueChange(configVariable, bytes)}
-          w={201}
+          className="w-52"
         />
       )}
       {configVariable.type == "boolean" && (
-        <>
-          <Switch
-            disabled={!configVariable.allowEdit}
-            {...form.getInputProps("booleanValue", { type: "checkbox" })}
-            onChange={(e) => onValueChange(configVariable, e.target.checked)}
-          />
-        </>
+        <Switch
+          disabled={!configVariable.allowEdit}
+          checked={booleanValue}
+          onChange={(checked) => onValueChange(configVariable, checked)}
+        />
       )}
       {configVariable.type == "timespan" && (
         <TimespanInput
@@ -107,10 +109,10 @@ const AdminConfigInput = ({
           onChange={(timespan) =>
             onValueChange(configVariable, timespanToString(timespan))
           }
-          w={201}
+          className="w-52"
         />
       )}
-    </Stack>
+    </div>
   );
 };
 

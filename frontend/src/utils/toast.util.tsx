@@ -1,40 +1,40 @@
-import { NotificationProps, showNotification } from "@mantine/notifications";
-import { TbCheck, TbX } from "react-icons/tb";
-import { FormattedMessage } from "react-intl";
+// Global toast functions - these will be set by the ToastProvider
+let globalToast: {
+  success: (_message: string, _duration?: number) => string;
+  error: (_message: string, _duration?: number) => string;
+  warning: (_message: string, _duration?: number) => string;
+  info: (_message: string, _duration?: number) => string;
+} | null = null;
 
-const error = (message: string, config?: Omit<NotificationProps, "message">) =>
-  showNotification({
-    icon: <TbX />,
-    color: "red",
-    radius: "md",
-    title: <FormattedMessage id="common.error" />,
-    message: message,
+export const setGlobalToast = (toast: typeof globalToast) => {
+  globalToast = toast;
+};
 
-    autoClose: true,
+const error = (message: string) => {
+  if (globalToast) {
+    globalToast.error(message);
+  } else {
+    console.error(message);
+  }
+};
 
-    ...config,
-  });
+const axiosError = (axiosError: any) => {
+  const message = axiosError?.response?.data?.message ?? "An unknown error occurred";
+  error(message);
+};
 
-const axiosError = (axiosError: any) =>
-  error(axiosError?.response?.data?.message ?? "An unknown error occurred");
-
-const success = (
-  message: string,
-  config?: Omit<NotificationProps, "message">,
-) =>
-  showNotification({
-    icon: <TbCheck />,
-    color: "green",
-    radius: "md",
-    title: <FormattedMessage id="common.success" />,
-    message: message,
-    autoClose: true,
-    ...config,
-  });
+const success = (message: string) => {
+  if (globalToast) {
+    globalToast.success(message);
+  } else {
+    console.log(message);
+  }
+};
 
 const toast = {
   error,
   success,
   axiosError,
 };
+
 export default toast;

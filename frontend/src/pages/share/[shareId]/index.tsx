@@ -1,5 +1,3 @@
-import { Box, Group, Text, Title } from "@mantine/core";
-import { useModals } from "@mantine/modals";
 import { GetServerSidePropsContext } from "next";
 import { useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
@@ -13,6 +11,8 @@ import shareService from "../../../services/share.service";
 import { Share as ShareType } from "../../../types/share.type";
 import toast from "../../../utils/toast.util";
 import { byteToHumanSizeString } from "../../../utils/fileSize.util";
+import { Container } from "../../../components/ui";
+import { useModals } from "../../../contexts/ModalContext";
 
 export function getServerSideProps(context: GetServerSidePropsContext) {
   return {
@@ -104,39 +104,48 @@ const Share = ({ shareId }: { shareId: string }) => {
         title={t("share.title", { shareId: share?.name || shareId })}
         description={t("share.description")}
       />
+      <Container>
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+          <div className="flex-1 max-w-[70%]">
+            <h1 className="text-2xl font-bold text-text dark:text-text-dark mb-2">
+              {share?.name || share?.id}
+            </h1>
+            {share?.description && (
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                {share.description}
+              </p>
+            )}
+            {share?.files?.length > 0 && (
+              <p className="text-sm text-gray-500 dark:text-gray-500">
+                <FormattedMessage
+                  id="share.fileCount"
+                  values={{
+                    count: share?.files?.length || 0,
+                    size: byteToHumanSizeString(
+                      share?.files?.reduce(
+                        (total: number, file: { size: string }) =>
+                          total + parseInt(file.size),
+                        0,
+                      ) || 0,
+                    ),
+                  }}
+                />
+              </p>
+            )}
+          </div>
 
-      <Group position="apart" mb="lg">
-        <Box style={{ maxWidth: "70%" }}>
-          <Title order={3}>{share?.name || share?.id}</Title>
-          <Text size="sm">{share?.description}</Text>
-          {share?.files?.length > 0 && (
-            <Text size="sm" color="dimmed" mt={5}>
-              <FormattedMessage
-                id="share.fileCount"
-                values={{
-                  count: share?.files?.length || 0,
-                  size: byteToHumanSizeString(
-                    share?.files?.reduce(
-                      (total: number, file: { size: string }) =>
-                        total + parseInt(file.size),
-                      0,
-                    ) || 0,
-                  ),
-                }}
-              />
-            </Text>
+          {share?.files.length > 1 && (
+            <DownloadAllButton shareId={shareId} />
           )}
-        </Box>
+        </div>
 
-        {share?.files.length > 1 && <DownloadAllButton shareId={shareId} />}
-      </Group>
-
-      <FileList
-        files={share?.files}
-        setShare={setShare}
-        share={share!}
-        isLoading={!share}
-      />
+        <FileList
+          files={share?.files}
+          setShare={setShare}
+          share={share!}
+          isLoading={!share}
+        />
+      </Container>
     </>
   );
 };

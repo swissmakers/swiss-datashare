@@ -1,17 +1,3 @@
-import {
-  Alert,
-  AppShell,
-  Box,
-  Button,
-  Container,
-  Group,
-  Stack,
-  Text,
-  Title,
-  useMantineTheme,
-} from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
-
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { TbInfoCircle } from "react-icons/tb";
@@ -29,14 +15,14 @@ import configService from "../../../services/config.service";
 import { AdminConfig, UpdateConfig } from "../../../types/config.type";
 import { camelToKebab } from "../../../utils/string.util";
 import toast from "../../../utils/toast.util";
+import { Container, Alert, Button } from "../../../components/ui";
+import clsx from "clsx";
 
-export default function AppShellDemo() {
-  const theme = useMantineTheme();
+export default function AdminConfigPage() {
   const router = useRouter();
   const t = useTranslate();
 
   const [isMobileNavBarOpened, setIsMobileNavBarOpened] = useState(false);
-  const isMobile = useMediaQuery("(max-width: 560px)");
   const config = useConfig();
 
   const categoryId = (router.query.category as string | undefined) ?? "general";
@@ -109,108 +95,96 @@ export default function AppShellDemo() {
   return (
     <>
       <Meta title={t("admin.config.title")} />
-      <AppShell
-        styles={{
-          main: {
-            background:
-              theme.colorScheme === "dark"
-                ? theme.colors.dark[8]
-                : theme.colors.gray[0],
-          },
-        }}
-        navbar={
-          <ConfigurationNavBar
-            categoryId={categoryId}
-            isMobileNavBarOpened={isMobileNavBarOpened}
-            setIsMobileNavBarOpened={setIsMobileNavBarOpened}
-          />
-        }
-        header={
-          <ConfigurationHeader
-            isMobileNavBarOpened={isMobileNavBarOpened}
-            setIsMobileNavBarOpened={setIsMobileNavBarOpened}
-          />
-        }
-      >
-        <Container size="lg">
-          {!configVariables ? (
-            <CenterLoader />
-          ) : (
-            <>
-              <Stack>
-                {!isEditingAllowed() && (
-                  <Alert
-                    mb={"lg"}
-                    variant="light"
-                    color="primary"
-                    title={t("admin.config.config-file-warning.title")}
-                    icon={<TbInfoCircle />}
-                  >
-                    <FormattedMessage id="admin.config.config-file-warning.description" />
-                  </Alert>
-                )}
-                <Title mb="md" order={3}>
-                  {t("admin.config.category." + categoryId)}
-                </Title>
-                {configVariables.map((configVariable) => (
-                  <Group key={configVariable.key} position="apart">
-                    <Stack
-                      style={{ maxWidth: isMobile ? "100%" : "40%" }}
-                      spacing={0}
-                    >
-                      <Title order={6}>
-                        <FormattedMessage
-                          id={`admin.config.${camelToKebab(
-                            configVariable.key,
-                          )}`}
-                        />
-                      </Title>
-
-                      <Text
-                        sx={{
-                          whiteSpace: "pre-line",
-                        }}
-                        color="dimmed"
-                        size="sm"
-                        mb="xs"
-                      >
-                        <FormattedMessage
-                          id={`admin.config.${camelToKebab(
-                            configVariable.key,
-                          )}.description`}
-                          values={{ br: <br /> }}
-                        />
-                      </Text>
-                    </Stack>
-                    <Stack></Stack>
-                    <Box style={{ width: isMobile ? "100%" : "50%" }}>
-                      <AdminConfigInput
-                        key={configVariable.key}
-                        configVariable={configVariable}
-                        updateConfigVariable={updateConfigVariable}
-                      />
-                    </Box>
-                  </Group>
-                ))}
-                {categoryId == "general" && (
-                  <LogoConfigInput logo={logo} setLogo={setLogo} />
-                )}
-              </Stack>
-              <Group mt="lg" position="right">
-                {categoryId == "smtp" && (
-                  <TestEmailButton
-                    configVariablesChanged={updatedConfigVariables.length != 0}
-                    saveConfigVariables={saveConfigVariables}
-                  />
-                )}
-                <Button onClick={saveConfigVariables}>
-                  <FormattedMessage id="common.button.save" />
-                </Button>
-              </Group>
-            </>
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+        <ConfigurationHeader
+          isMobileNavBarOpened={isMobileNavBarOpened}
+          setIsMobileNavBarOpened={setIsMobileNavBarOpened}
+        />
+        <ConfigurationNavBar
+          categoryId={categoryId}
+          isMobileNavBarOpened={isMobileNavBarOpened}
+          setIsMobileNavBarOpened={setIsMobileNavBarOpened}
+        />
+        <main
+          className={clsx(
+            "pt-16 transition-all",
+            "sm:ml-64 lg:ml-80"
           )}
-        </Container>
-      </AppShell>
+        >
+          <Container size="lg" className="py-8">
+            {!configVariables ? (
+              <CenterLoader />
+            ) : (
+              <>
+                <div className="space-y-6">
+                  {!isEditingAllowed() && (
+                    <Alert
+                      color="blue"
+                      title={t("admin.config.config-file-warning.title")}
+                      icon={<TbInfoCircle size={16} />}
+                      className="mb-6"
+                    >
+                      <FormattedMessage id="admin.config.config-file-warning.description" />
+                    </Alert>
+                  )}
+                  <h2 className="text-2xl font-bold text-text dark:text-text-dark mb-6">
+                    {t("admin.config.category." + categoryId)}
+                  </h2>
+                  {configVariables.map((configVariable) => (
+                    <div
+                      key={configVariable.key}
+                      className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 py-4 border-b border-gray-200 dark:border-gray-700 last:border-0"
+                    >
+                      <div className="flex-1 sm:max-w-[40%]">
+                        <h3 className="text-sm font-semibold text-text dark:text-text-dark mb-1">
+                          <FormattedMessage
+                            id={`admin.config.${camelToKebab(
+                              configVariable.key,
+                            )}`}
+                          />
+                        </h3>
+                        <p
+                          className="text-sm text-gray-500 dark:text-gray-400 whitespace-pre-line"
+                        >
+                          <FormattedMessage
+                            id={`admin.config.${camelToKebab(
+                              configVariable.key,
+                            )}.description`}
+                            values={{ br: <br /> }}
+                          />
+                        </p>
+                      </div>
+                      <div className="w-full sm:w-[50%]">
+                        <AdminConfigInput
+                          key={configVariable.key}
+                          configVariable={configVariable}
+                          updateConfigVariable={updateConfigVariable}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                  {categoryId == "general" && (
+                    <div className="py-4 border-b border-gray-200 dark:border-gray-700">
+                      <LogoConfigInput logo={logo} setLogo={setLogo} />
+                    </div>
+                  )}
+                </div>
+                <div className="flex justify-end gap-4 mt-8">
+                  {categoryId == "smtp" && (
+                    <TestEmailButton
+                      configVariablesChanged={updatedConfigVariables.length != 0}
+                      saveConfigVariables={saveConfigVariables}
+                    />
+                  )}
+                  <Button onClick={saveConfigVariables}>
+                    <FormattedMessage id="common.button.save" />
+                  </Button>
+                </div>
+              </>
+            )}
+          </Container>
+        </main>
+      </div>
     </>
   );
 }

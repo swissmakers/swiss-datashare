@@ -1,14 +1,4 @@
-import {
-  ColorScheme,
-  ColorSchemeProvider,
-  Container,
-  MantineProvider,
-  Stack,
-} from "@mantine/core";
-import { useColorScheme } from "@mantine/hooks";
-import { ModalsProvider } from "@mantine/modals";
-import { Notifications } from "@mantine/notifications";
-import { getCookie, setCookie } from "cookies-next";
+import { getCookie } from "cookies-next";
 import moment from "moment";
 import "moment/min/locales";
 import type { AppProps } from "next/app";
@@ -23,25 +13,32 @@ import { LOCALES } from "../i18n/locales";
 import authService from "../services/auth.service";
 import configService from "../services/config.service";
 import userService from "../services/user.service";
-import GlobalStyle from "../styles/global.style";
-import globalStyle from "../styles/mantine.style";
 import Config from "../types/config.type";
 import { CurrentUser } from "../types/user.type";
 import i18nUtil from "../utils/i18n.util";
-import userPreferences from "../utils/userPreferences.util";
 import Footer from "../components/footer/Footer";
+import { ThemeProvider } from "../contexts/ThemeContext";
+import { ModalProvider } from "../contexts/ModalContext";
+import { useToast } from "../hooks/useToast";
+import { ToastContainer } from "../components/ui";
+import { setGlobalToast } from "../utils/toast.util";
+import "../styles/globals.css";
 
 const excludeDefaultLayoutRoutes = ["/admin/config/[category]"];
 
 function App({ Component, pageProps }: AppProps) {
-  const systemTheme = useColorScheme("light");
   const router = useRouter();
+  const { toasts, removeToast, success, error, warning, info } = useToast();
 
-  const [colorScheme, setColorScheme] = useState<ColorScheme>(systemTheme);
+  // Set global toast functions
+  useEffect(() => {
+    setGlobalToast({ success, error, warning, info });
+  }, [success, error, warning, info]);
+
   const [user, setUser] = useState<CurrentUser | null>(null);
   const [route, setRoute] = useState<string>(router.pathname);
   const [configVariables, setConfigVariables] = useState<Config[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [, setIsLoading] = useState(true);
 
   useEffect(() => {
     setRoute(router.pathname);
@@ -83,22 +80,6 @@ function App({ Component, pageProps }: AppProps) {
     return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    const colorScheme =
-      userPreferences.get("colorScheme") == "system"
-        ? systemTheme
-        : userPreferences.get("colorScheme");
-
-    toggleColorScheme(colorScheme);
-  }, [systemTheme]);
-
-  const toggleColorScheme = (value: ColorScheme) => {
-    setColorScheme(value ?? "light");
-    setCookie("mantine-color-scheme", value ?? "light", {
-      sameSite: "lax",
-    });
-  };
-
   // Get language from cookie or browser
   const language = useRef(
     getCookie("language")?.toString() ||
@@ -121,63 +102,47 @@ function App({ Component, pageProps }: AppProps) {
         locale={language.current}
         defaultLocale={LOCALES.ENGLISH.code}
       >
-        <MantineProvider
-          withGlobalStyles
-          withNormalizeCSS
-          theme={{ colorScheme, ...globalStyle }}
-        >
-          <ColorSchemeProvider
-            colorScheme={colorScheme}
-            toggleColorScheme={toggleColorScheme}
+        <ThemeProvider>
+          <ModalProvider>
+            <ConfigContext.Provider
+            value={{
+              configVariables,
+              refresh: async () => {
+                setConfigVariables(await configService.list());
+              },
+            }}
           >
-            <GlobalStyle />
-            <Notifications />
-            <ModalsProvider>
-              <ConfigContext.Provider
-                value={{
-                  configVariables,
-                  refresh: async () => {
-                    setConfigVariables(await configService.list());
-                  },
-                }}
-              >
-                <UserContext.Provider
-                  value={{
-                    user,
-                    refreshUser: async () => {
-                      const user = await userService.getCurrentUser();
-                      setUser(user);
-                      return user;
-                    },
-                  }}
-                >
-                  {excludeDefaultLayoutRoutes.includes(route) ? (
-                    <Component {...pageProps} />
-                  ) : (
-                    <>
-                      <Stack
-                        justify="space-between"
-                        sx={{ minHeight: "100vh" }}
-                      >
-                        <div>
-                          <Header />
-                          <Container>
-                            <Component {...pageProps} />
-                          </Container>
-                        </div>
-                        <Footer />
-                      </Stack>
-                    </>
-                  )}
-                </UserContext.Provider>
-              </ConfigContext.Provider>
-            </ModalsProvider>
-          </ColorSchemeProvider>
-        </MantineProvider>
+            <UserContext.Provider
+              value={{
+                user,
+                refreshUser: async () => {
+                  const user = await userService.getCurrentUser();
+                  setUser(user);
+                  return user;
+                },
+              }}
+            >
+              {excludeDefaultLayoutRoutes.includes(route) ? (
+                <Component {...pageProps} />
+              ) : (
+                <div className="flex flex-col min-h-screen">
+                  <div className="flex-1">
+                    <Header />
+                    <main>
+                      <Component {...pageProps} />
+                    </main>
+                  </div>
+                  <Footer />
+                </div>
+              )}
+              <ToastContainer toasts={toasts.map(t => ({ id: t.id, message: t.message, type: t.type, duration: t.duration, onClose: removeToast }))} onClose={removeToast} />
+            </UserContext.Provider>
+          </ConfigContext.Provider>
+          </ModalProvider>
+        </ThemeProvider>
       </IntlProvider>
     </>
   );
 }
-
 
 export default App;

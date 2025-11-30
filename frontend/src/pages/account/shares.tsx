@@ -1,17 +1,5 @@
-import {
-  ActionIcon,
-  Box,
-  Button,
-  Center,
-  Group,
-  Space,
-  Stack,
-  Table,
-  Text,
-  Title,
-} from "@mantine/core";
-import { useClipboard } from "@mantine/hooks";
-import { useModals } from "@mantine/modals";
+import { useModals } from "../../contexts/ModalContext";
+import { useClipboard } from "../../hooks/useClipboard";
 import moment from "moment";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -26,6 +14,7 @@ import useTranslate from "../../hooks/useTranslate.hook";
 import shareService from "../../services/share.service";
 import { MyShare } from "../../types/share.type";
 import toast from "../../utils/toast.util";
+import { Button, Container, Table } from "../../components/ui";
 
 const MyShares = () => {
   const modals = useModals();
@@ -44,157 +33,157 @@ const MyShares = () => {
   return (
     <>
       <Meta title={t("account.shares.title")} />
-      <Title mb={30} order={3}>
-        <FormattedMessage id="account.shares.title" />
-      </Title>
-      {shares.length == 0 ? (
-        <Center style={{ height: "70vh" }}>
-          <Stack align="center" spacing={10}>
-            <Title order={3}>
+      <Container>
+        <h2 className="text-2xl font-bold mb-8 text-text dark:text-text-dark">
+          <FormattedMessage id="account.shares.title" />
+        </h2>
+        {shares.length == 0 ? (
+          <div className="flex flex-col items-center justify-center" style={{ height: "70vh" }}>
+            <h3 className="text-xl font-bold mb-2 text-text dark:text-text-dark">
               <FormattedMessage id="account.shares.title.empty" />
-            </Title>
-            <Text>
+            </h3>
+            <p className="text-gray-600 dark:text-gray-400 mb-4">
               <FormattedMessage id="account.shares.description.empty" />
-            </Text>
-            <Space h={5} />
-            <Button component={Link} href="/upload" variant="light">
+            </p>
+            <Button as={Link} href="/upload" variant="outline">
               <FormattedMessage id="account.shares.button.create" />
             </Button>
-          </Stack>
-        </Center>
-      ) : (
-        <Box sx={{ display: "block", overflowX: "auto" }}>
-          <Table>
-            <thead>
-              <tr>
-                <th>
-                  <FormattedMessage id="account.shares.table.id" />
-                </th>
-                <th>
-                  <FormattedMessage id="account.shares.table.name" />
-                </th>
-                <th>
-                  <FormattedMessage id="account.shares.table.visitors" />
-                </th>
-                <th>
-                  <FormattedMessage id="account.shares.table.expiresAt" />
-                </th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {shares.map((share) => (
-                <tr key={share.id}>
-                  <td>
-                    <Group spacing="xs">
-                      {share.id}{" "}
-                      {share.security.passwordProtected && (
-                        <TbLock
-                          color="orange"
-                          title={t("account.shares.table.password-protected")}
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <Table>
+              <Table.Header>
+                <Table.Row>
+                  <Table.Cell header>
+                    <FormattedMessage id="account.shares.table.id" />
+                  </Table.Cell>
+                  <Table.Cell header>
+                    <FormattedMessage id="account.shares.table.name" />
+                  </Table.Cell>
+                  <Table.Cell header>
+                    <FormattedMessage id="account.shares.table.visitors" />
+                  </Table.Cell>
+                  <Table.Cell header>
+                    <FormattedMessage id="account.shares.table.expiresAt" />
+                  </Table.Cell>
+                  <Table.Cell header></Table.Cell>
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+                {shares.map((share) => (
+                  <Table.Row key={share.id}>
+                    <Table.Cell>
+                      <div className="flex items-center gap-2">
+                        {share.id}{" "}
+                        {share.security.passwordProtected && (
+                          <TbLock
+                            className="text-orange-500"
+                            title={t("account.shares.table.password-protected")}
+                            size={16}
+                          />
+                        )}
+                      </div>
+                    </Table.Cell>
+                    <Table.Cell>{share.name}</Table.Cell>
+                    <Table.Cell>
+                      {share.security.maxViews ? (
+                        <FormattedMessage
+                          id="account.shares.table.visitor-count"
+                          values={{
+                            count: share.views,
+                            max: share.security.maxViews,
+                          }}
                         />
+                      ) : (
+                        share.views
                       )}
-                    </Group>
-                  </td>
-                  <td>{share.name}</td>
-                  <td>
-                    {share.security.maxViews ? (
-                      <FormattedMessage
-                        id="account.shares.table.visitor-count"
-                        values={{
-                          count: share.views,
-                          max: share.security.maxViews,
-                        }}
-                      />
-                    ) : (
-                      share.views
-                    )}
-                  </td>
-                  <td>
-                    {moment(share.expiration).unix() === 0 ? (
-                      <FormattedMessage id="account.shares.table.expiry-never" />
-                    ) : (
-                      moment(share.expiration).format("LLL")
-                    )}
-                  </td>
-                  <td>
-                    <Group position="right">
-                      <Link href={`/share/${share.id}/edit`}>
-                        <ActionIcon color="orange" variant="light" size={25}>
-                          <TbEdit />
-                        </ActionIcon>
-                      </Link>
-                      <ActionIcon
-                        color="blue"
-                        variant="light"
-                        size={25}
-                        onClick={() => {
-                          showShareInformationsModal(
-                            modals,
-                            share,
-                            parseInt(config.get("share.maxSize")),
-                          );
-                        }}
-                      >
-                        <TbInfoCircle />
-                      </ActionIcon>
-                      <ActionIcon
-                        color="victoria"
-                        variant="light"
-                        size={25}
-                        onClick={() => {
-                          if (window.isSecureContext) {
-                            clipboard.copy(
-                              `${window.location.origin}/s/${share.id}`,
+                    </Table.Cell>
+                    <Table.Cell>
+                      {moment(share.expiration).unix() === 0 ? (
+                        <FormattedMessage id="account.shares.table.expiry-never" />
+                      ) : (
+                        moment(share.expiration).format("LLL")
+                      )}
+                    </Table.Cell>
+                    <Table.Cell>
+                      <div className="flex items-center justify-end gap-2">
+                        <Link href={`/share/${share.id}/edit`}>
+                          <button
+                            className="p-1.5 text-orange-600 hover:text-orange-700 hover:bg-orange-50 dark:text-orange-400 dark:hover:text-orange-300 dark:hover:bg-orange-900/20 rounded-lg transition-colors"
+                            aria-label="Edit share"
+                          >
+                            <TbEdit size={18} />
+                          </button>
+                        </Link>
+                        <button
+                          onClick={() => {
+                            showShareInformationsModal(
+                              modals,
+                              share,
+                              parseInt(config.get("share.maxSize")),
                             );
-                            toast.success(t("common.notify.copied-link"));
-                          } else {
-                            showShareLinkModal(modals, share.id);
-                          }
-                        }}
-                      >
-                        <TbLink />
-                      </ActionIcon>
-                      <ActionIcon
-                        color="red"
-                        variant="light"
-                        size={25}
-                        onClick={() => {
-                          modals.openConfirmModal({
-                            title: t("account.shares.modal.delete.title", {
-                              share: share.id,
-                            }),
-                            children: (
-                              <Text size="sm">
-                                <FormattedMessage id="account.shares.modal.delete.description" />
-                              </Text>
-                            ),
-                            confirmProps: {
-                              color: "red",
-                            },
-                            labels: {
-                              confirm: t("common.button.delete"),
-                              cancel: t("common.button.cancel"),
-                            },
-                            onConfirm: () => {
-                              shareService.remove(share.id);
-                              setShares(
-                                shares.filter((item) => item.id !== share.id),
+                          }}
+                          className="p-1.5 text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:text-blue-400 dark:hover:text-blue-300 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
+                          aria-label="Share information"
+                        >
+                          <TbInfoCircle size={18} />
+                        </button>
+                        <button
+                          onClick={() => {
+                            if (typeof window !== "undefined" && window.isSecureContext) {
+                              clipboard.copy(
+                                `${window.location.origin}/s/${share.id}`,
                               );
-                            },
-                          });
-                        }}
-                      >
-                        <TbTrash />
-                      </ActionIcon>
-                    </Group>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        </Box>
-      )}
+                              toast.success(t("common.notify.copied-link"));
+                            } else {
+                              showShareLinkModal(modals, share.id);
+                            }
+                          }}
+                          className="p-1.5 text-primary-600 hover:text-primary-700 hover:bg-primary-50 dark:text-primary-400 dark:hover:text-primary-300 dark:hover:bg-primary-900/20 rounded-lg transition-colors"
+                          aria-label="Copy share link"
+                        >
+                          <TbLink size={18} />
+                        </button>
+                        <button
+                          onClick={() => {
+                            modals.openConfirmModal({
+                              title: t("account.shares.modal.delete.title", {
+                                share: share.id,
+                              }),
+                              children: (
+                                <p className="text-sm">
+                                  <FormattedMessage id="account.shares.modal.delete.description" />
+                                </p>
+                              ),
+                              confirmProps: {
+                                variant: "danger",
+                              },
+                              labels: {
+                                confirm: t("common.button.delete"),
+                                cancel: t("common.button.cancel"),
+                              },
+                              onConfirm: () => {
+                                shareService.remove(share.id);
+                                setShares(
+                                  shares.filter((item) => item.id !== share.id),
+                                );
+                              },
+                            });
+                          }}
+                          className="p-1.5 text-red-600 hover:text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                          aria-label="Delete share"
+                        >
+                          <TbTrash size={18} />
+                        </button>
+                      </div>
+                    </Table.Cell>
+                  </Table.Row>
+                ))}
+              </Table.Body>
+            </Table>
+          </div>
+        )}
+      </Container>
     </>
   );
 };

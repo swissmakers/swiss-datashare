@@ -1,5 +1,5 @@
-import { NativeSelect, NumberInput } from "@mantine/core";
 import { useState } from "react";
+import { NumberInput, NativeSelect } from "../ui";
 
 const multipliers = {
   B: 1,
@@ -31,7 +31,7 @@ const FileSizeInput = ({
 }: {
   label?: string;
   value: number;
-  onChange: (_number: number) => void;
+  onChange: (number: number) => void;
   [key: string]: any;
 }) => {
   const [unit, setUnit] = useState(getLargestApplicableUnit(value).value);
@@ -41,15 +41,7 @@ const FileSizeInput = ({
       data={units}
       value={unit}
       rightSectionWidth={28}
-      styles={{
-        input: {
-          fontWeight: 500,
-          borderTopLeftRadius: 0,
-          borderBottomLeftRadius: 0,
-          width: 76,
-          marginRight: -2,
-        },
-      }}
+      className="font-medium rounded-l-none border-l-0 w-20 -ml-0.5"
       onChange={(event) => {
         const unit = event.currentTarget
           .value as (typeof units)[number]["value"];

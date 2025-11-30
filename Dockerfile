@@ -7,7 +7,8 @@ WORKDIR /opt/app
 FROM build-base AS frontend-dependencies
 WORKDIR /opt/app/frontend
 COPY frontend/package.json frontend/package-lock.json ./
-RUN npm ci --prefer-offline --no-audit --progress=false
+RUN npm ci --prefer-offline --no-audit --progress=false || \
+    (echo "npm ci failed, retrying with npm install..." && npm install --no-audit --progress=false)
 
 # Frontend builder
 FROM build-base AS frontend-builder

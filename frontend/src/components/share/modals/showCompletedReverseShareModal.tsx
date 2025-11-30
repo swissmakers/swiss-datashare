@@ -1,36 +1,35 @@
-import { Button, Stack } from "@mantine/core";
-import { useModals } from "@mantine/modals";
-import { ModalsContextProps } from "@mantine/modals/lib/context";
 import { FormattedMessage } from "react-intl";
 import { translateOutsideContext } from "../../../hooks/useTranslate.hook";
 import CopyTextField from "../../upload/CopyTextField";
+import { Button } from "../../../components/ui";
+import { ModalContextType } from "../../../contexts/ModalContext";
 
 const showCompletedReverseShareModal = (
-  modals: ModalsContextProps,
+  modals: ModalContextType,
   link: string,
   getReverseShares: () => void,
 ) => {
   const t = translateOutsideContext();
   return modals.openModal({
     closeOnClickOutside: false,
-    withCloseButton: false,
+    showCloseButton: false,
     closeOnEscape: false,
     title: t("account.reverseShares.modal.reverse-share-link"),
-    children: <Body link={link} getReverseShares={getReverseShares} />,
+    children: <Body link={link} getReverseShares={getReverseShares} modals={modals} />,
   });
 };
 
 const Body = ({
   link,
   getReverseShares,
+  modals,
 }: {
   link: string;
   getReverseShares: () => void;
+  modals: ModalContextType;
 }) => {
-  const modals = useModals();
-
   return (
-    <Stack align="stretch">
+    <div className="space-y-4">
       <CopyTextField link={link} />
 
       <Button
@@ -38,10 +37,11 @@ const Body = ({
           modals.closeAll();
           getReverseShares();
         }}
+        fullWidth
       >
         <FormattedMessage id="common.button.done" />
       </Button>
-    </Stack>
+    </div>
   );
 };
 

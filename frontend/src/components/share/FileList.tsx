@@ -1,14 +1,3 @@
-import {
-  ActionIcon,
-  Box,
-  Group,
-  Skeleton,
-  Stack,
-  Table,
-  TextInput,
-} from "@mantine/core";
-import { useClipboard } from "@mantine/hooks";
-import { useModals } from "@mantine/modals";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { TbDownload, TbEye, TbLink } from "react-icons/tb";
 import { FormattedMessage } from "react-intl";
@@ -18,8 +7,11 @@ import { FileMetaData } from "../../types/File.type";
 import { Share } from "../../types/share.type";
 import { byteToHumanSizeString } from "../../utils/fileSize.util";
 import toast from "../../utils/toast.util";
+import { useClipboard } from "../../hooks/useClipboard";
+import { useModals } from "../../contexts/ModalContext";
 import TableSortIcon, { TableSort } from "../core/SortIcon";
 import showFilePreviewModal from "./modals/showFilePreviewModal";
+import { Table, Input } from "../ui";
 
 const FileList = ({
   files,
@@ -43,7 +35,7 @@ const FileList = ({
 
   const sortFiles = () => {
     if (files && sort.property) {
-      const sortedFiles = files.sort((a: any, b: any) => {
+      const sortedFiles = [...files].sort((a: any, b: any) => {
         if (sort.direction === "asc") {
           return b[sort.property!].localeCompare(a[sort.property!], undefined, {
             numeric: true,
@@ -67,16 +59,16 @@ const FileList = ({
       share.id
     }/files/${file.id}`;
 
-    if (window.isSecureContext) {
+    if (typeof window !== "undefined" && window.isSecureContext) {
       clipboard.copy(link);
       toast.success(t("common.notify.copied-link"));
     } else {
       modals.openModal({
         title: t("share.modal.file-link"),
         children: (
-          <Stack align="stretch">
-            <TextInput variant="filled" value={link} />
-          </Stack>
+          <div className="space-y-4">
+            <Input value={link} readOnly />
+          </div>
         ),
       });
     }
@@ -85,85 +77,85 @@ const FileList = ({
   useEffect(sortFiles, [sort]);
 
   return (
-    <Box sx={{ display: "block", overflowX: "auto" }}>
+    <div className="overflow-x-auto">
       <Table>
-        <thead>
-          <tr>
-            <th>
-              <Group spacing="xs">
+        <Table.Header>
+          <Table.Row>
+            <Table.Cell header>
+              <div className="flex items-center gap-2">
                 <FormattedMessage id="share.table.name" />
                 <TableSortIcon sort={sort} setSort={setSort} property="name" />
-              </Group>
-            </th>
-            <th>
-              <Group spacing="xs">
+              </div>
+            </Table.Cell>
+            <Table.Cell header>
+              <div className="flex items-center gap-2">
                 <FormattedMessage id="share.table.size" />
                 <TableSortIcon sort={sort} setSort={setSort} property="size" />
-              </Group>
-            </th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
+              </div>
+            </Table.Cell>
+            <Table.Cell header>{null}</Table.Cell>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
           {isLoading
             ? skeletonRows
             : files!.map((file) => (
-                <tr key={file.name}>
-                  <td>{file.name}</td>
-                  <td>{byteToHumanSizeString(parseInt(file.size))}</td>
-                  <td>
-                    <Group position="right">
+                <Table.Row key={file.name}>
+                  <Table.Cell>{file.name}</Table.Cell>
+                  <Table.Cell>{byteToHumanSizeString(parseInt(file.size))}</Table.Cell>
+                  <Table.Cell>
+                    <div className="flex items-center justify-end gap-2">
                       {shareService.doesFileSupportPreview(file.name) && (
-                        <ActionIcon
+                        <button
                           onClick={() =>
                             showFilePreviewModal(share.id, file, modals)
                           }
-                          size={25}
+                          className="p-1.5 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                          aria-label="Preview file"
                         >
-                          <TbEye />
-                        </ActionIcon>
+                          <TbEye size={18} />
+                        </button>
                       )}
                       {!share.hasPassword && (
-                        <ActionIcon
-                          size={25}
+                        <button
                           onClick={() => copyFileLink(file)}
+                          className="p-1.5 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                          aria-label="Copy file link"
                         >
-                          <TbLink />
-                        </ActionIcon>
+                          <TbLink size={18} />
+                        </button>
                       )}
-                      <ActionIcon
-                        size={25}
+                      <button
                         onClick={async () => {
                           await shareService.downloadFile(share.id, file.id);
                         }}
+                        className="p-1.5 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                        aria-label="Download file"
                       >
-                        <TbDownload />
-                      </ActionIcon>
-                    </Group>
-                  </td>
-                </tr>
+                        <TbDownload size={18} />
+                      </button>
+                    </div>
+                  </Table.Cell>
+                </Table.Row>
               ))}
-        </tbody>
+        </Table.Body>
       </Table>
-    </Box>
+    </div>
   );
 };
 
 const skeletonRows = [...Array(5)].map((c, i) => (
-  <tr key={i}>
-    <td>
-      <Skeleton height={30} width={30} />
-    </td>
-    <td>
-      <Skeleton height={14} />
-    </td>
-    <td>
-      <Skeleton height={14} />
-    </td>
-    <td>
-      <Skeleton height={25} width={25} />
-    </td>
-  </tr>
+  <Table.Row key={i}>
+    <Table.Cell>
+      <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-32" />
+    </Table.Cell>
+    <Table.Cell>
+      <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded animate-pulse w-20" />
+    </Table.Cell>
+    <Table.Cell>
+      <div className="h-6 w-6 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+    </Table.Cell>
+  </Table.Row>
 ));
 
 export default FileList;

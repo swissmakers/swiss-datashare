@@ -1,49 +1,45 @@
-import {
-  Anchor,
-  Button,
-  Center,
-  Container,
-  Stack,
-  Text,
-  Title,
-} from "@mantine/core";
 import Link from "next/link";
 import Logo from "../../components/Logo";
 import Meta from "../../components/Meta";
+import { Container, Button } from "../../components/ui";
 
 const Intro = () => {
   return (
     <>
       <Meta title="Intro" />
-      <Container size="xs">
-        <Stack>
-          <Center>
-            <Logo height={80} width={80} />
-          </Center>
-          <Center>
-            <Title order={2}>Welcome to Swiss DataShare</Title>
-          </Center>
-          <Text>
+      <Container size="sm">
+        <div className="flex flex-col items-center space-y-6 py-10">
+          <Logo height={80} width={80} />
+          <h2 className="text-3xl font-bold text-center text-text dark:text-text-dark">
+            Welcome to Swiss DataShare
+          </h2>
+          <p className="text-center text-gray-700 dark:text-gray-300">
             Swiss DataShare is actively maintained and developed by{" "}
-            <Anchor
+            <a
               target="_blank"
+              rel="noopener noreferrer"
               href="https://github.com/swissmakers/swiss-datashare"
+              className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 underline"
             >
               Swissmakers GmbH
-            </Anchor>
+            </a>
             . We are committed to providing a reliable, secure, and feature-rich file sharing solution.
-          </Text>
-          <Text>Enough talked, have fun with Swiss DataShare!</Text>
-          <Text mt="lg">How to you want to continue?</Text>
-          <Stack>
-            <Button href="/admin/config/general" component={Link}>
+          </p>
+          <p className="text-center text-gray-700 dark:text-gray-300">
+            Enough talked, have fun with Swiss DataShare!
+          </p>
+          <p className="text-center font-medium text-text dark:text-text-dark mt-6">
+            How do you want to continue?
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 w-full max-w-md">
+            <Button as={Link} href="/admin/config/general" fullWidth>
               Customize configuration
             </Button>
-            <Button href="/" component={Link} variant="light">
+            <Button as={Link} href="/" variant="outline" fullWidth>
               Explore Swiss DataShare
             </Button>
-          </Stack>
-        </Stack>
+          </div>
+        </div>
       </Container>
     </>
   );

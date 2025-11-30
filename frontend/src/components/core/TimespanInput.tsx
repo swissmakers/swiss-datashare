@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Timespan } from "../../types/timespan.type";
-import { NativeSelect, NumberInput } from "@mantine/core";
+import { NativeSelect, NumberInput } from "../ui";
 import useTranslate from "../../hooks/useTranslate.hook";
 
 const TimespanInput = ({
@@ -11,7 +11,7 @@ const TimespanInput = ({
 }: {
   label?: string;
   value: Timespan;
-  onChange: (_timespan: Timespan) => void;
+  onChange: (timespan: Timespan) => void;
   [key: string]: any;
 }) => {
   const [unit, setUnit] = useState(value.unit);
@@ -49,15 +49,7 @@ const TimespanInput = ({
       ]}
       value={unit}
       rightSectionWidth={28}
-      styles={{
-        input: {
-          fontWeight: 500,
-          borderTopLeftRadius: 0,
-          borderBottomLeftRadius: 0,
-          width: 120,
-          marginRight: -2,
-        },
-      }}
+      className="font-medium rounded-l-none border-l-0 w-32 -ml-0.5"
       onChange={(event) => {
         const unit = event.currentTarget.value as Timespan["unit"];
         setUnit(unit);

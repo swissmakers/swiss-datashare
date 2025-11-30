@@ -1,5 +1,3 @@
-import { Group, Space, Text, Title } from "@mantine/core";
-import { useModals } from "@mantine/modals";
 import { useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import Meta from "../../components/Meta";
@@ -8,6 +6,8 @@ import useTranslate from "../../hooks/useTranslate.hook";
 import shareService from "../../services/share.service";
 import { MyShare } from "../../types/share.type";
 import toast from "../../utils/toast.util";
+import { Container } from "../../components/ui";
+import { useModals } from "../../contexts/ModalContext";
 
 const Shares = () => {
   const [shares, setShares] = useState<MyShare[]>([]);
@@ -30,15 +30,15 @@ const Shares = () => {
         id: share.id,
       }),
       children: (
-        <Text size="sm">
+        <p className="text-sm">
           <FormattedMessage id="admin.shares.edit.delete.description" />
-        </Text>
+        </p>
       ),
       labels: {
         confirm: t("common.button.delete"),
         cancel: t("common.button.cancel"),
       },
-      confirmProps: { color: "red" },
+      confirmProps: { variant: "danger" },
       onConfirm: async () => {
         shareService
           .remove(share.id)
@@ -55,18 +55,17 @@ const Shares = () => {
   return (
     <>
       <Meta title={t("admin.shares.title")} />
-      <Group position="apart" align="baseline" mb={20}>
-        <Title mb={30} order={3}>
+      <Container>
+        <h2 className="text-2xl font-bold mb-8 text-text dark:text-text-dark">
           <FormattedMessage id="admin.shares.title" />
-        </Title>
-      </Group>
+        </h2>
 
-      <ManageShareTable
-        shares={shares}
-        deleteShare={deleteShare}
-        isLoading={isLoading}
-      />
-      <Space h="xl" />
+        <ManageShareTable
+          shares={shares}
+          deleteShare={deleteShare}
+          isLoading={isLoading}
+        />
+      </Container>
     </>
   );
 };

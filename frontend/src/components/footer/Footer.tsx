@@ -1,5 +1,4 @@
-import { Anchor, Footer as MFooter, SimpleGrid, Text } from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
+import Link from "next/link";
 import useConfig from "../../hooks/config.hook";
 import useTranslate from "../../hooks/useTranslate.hook";
 
@@ -21,41 +20,49 @@ const Footer = () => {
       config.get("legal.privacyPolicyUrl")) ||
     "/privacy";
 
-  const isMobile = useMediaQuery("(max-width: 700px)");
-
   return (
-    <MFooter height="auto" py={6} px="xl" zIndex={100}>
-      <SimpleGrid cols={isMobile ? 2 : 3} m={0}>
-        {!isMobile && <div></div>}
-        <Text size="xs" color="dimmed" align={isMobile ? "left" : "center"}>
-          Powered by{" "}
-          <Anchor
-            size="xs"
-            href="https://github.com/swissmakers/swiss-datashare"
-            target="_blank"
-          >
-            Swiss DataShare
-          </Anchor>
-        </Text>
-        <div>
-          {config.get("legal.enabled") && (
-            <Text size="xs" color="dimmed" align="right">
-              {hasImprint && (
-                <Anchor size="xs" href={imprintUrl}>
-                  {t("imprint.title")}
-                </Anchor>
-              )}
-              {hasImprint && hasPrivacy && " • "}
-              {hasPrivacy && (
-                <Anchor size="xs" href={privacyUrl}>
-                  {t("privacy.title")}
-                </Anchor>
-              )}
-            </Text>
-          )}
+    <footer className="bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 py-6 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="hidden sm:block"></div>
+          <div className="text-center">
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              Powered by{" "}
+              <Link
+                href="https://github.com/swissmakers/swiss-datashare"
+                target="_blank"
+                className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 font-medium"
+              >
+                Swiss DataShare
+              </Link>
+            </p>
+          </div>
+          <div className="text-center sm:text-right">
+            {config.get("legal.enabled") && (
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                {hasImprint && (
+                  <Link
+                    href={imprintUrl}
+                    className="hover:text-primary-600 dark:hover:text-primary-400"
+                  >
+                    {t("imprint.title")}
+                  </Link>
+                )}
+                {hasImprint && hasPrivacy && " • "}
+                {hasPrivacy && (
+                  <Link
+                    href={privacyUrl}
+                    className="hover:text-primary-600 dark:hover:text-primary-400"
+                  >
+                    {t("privacy.title")}
+                  </Link>
+                )}
+              </p>
+            )}
+          </div>
         </div>
-      </SimpleGrid>
-    </MFooter>
+      </div>
+    </footer>
   );
 };
 

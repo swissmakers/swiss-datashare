@@ -1,13 +1,3 @@
-import {
-  Button,
-  Container,
-  createStyles,
-  Group,
-  List,
-  Text,
-  ThemeIcon,
-  Title,
-} from "@mantine/core";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -17,61 +7,9 @@ import Logo from "../components/Logo";
 import Meta from "../components/Meta";
 import useUser from "../hooks/user.hook";
 import useConfig from "../hooks/config.hook";
-
-const useStyles = createStyles((theme) => ({
-  inner: {
-    display: "flex",
-    justifyContent: "space-between",
-    paddingTop: `calc(${theme.spacing.md} * 4)`,
-    paddingBottom: `calc(${theme.spacing.md} * 4)`,
-  },
-
-  content: {
-    maxWidth: 480,
-    marginRight: `calc(${theme.spacing.md} * 3)`,
-
-    [theme.fn.smallerThan("md")]: {
-      maxWidth: "100%",
-      marginRight: 0,
-    },
-  },
-
-  title: {
-    color: theme.colorScheme === "dark" ? theme.white : theme.black,
-    fontSize: 44,
-    lineHeight: 1.2,
-    fontWeight: 900,
-
-    [theme.fn.smallerThan("xs")]: {
-      fontSize: 28,
-    },
-  },
-
-  control: {
-    [theme.fn.smallerThan("xs")]: {
-      flex: 1,
-    },
-  },
-
-  image: {
-    [theme.fn.smallerThan("md")]: {
-      display: "none",
-    },
-  },
-
-  highlight: {
-    position: "relative",
-    backgroundColor:
-      theme.colorScheme === "dark"
-        ? theme.fn.rgba(theme.colors[theme.primaryColor][6], 0.55)
-        : theme.colors[theme.primaryColor][0],
-    borderRadius: theme.radius.sm,
-    padding: "4px 12px",
-  },
-}));
+import { Button, Container } from "../components/ui";
 
 export default function Home() {
-  const { classes } = useStyles();
   const { refreshUser } = useUser();
   const router = useRouter();
   const config = useConfig();
@@ -92,7 +30,7 @@ export default function Home() {
     } catch (error) {
       setSignupEnabled(true);
     }
-  }, [config]);
+  }, [config, refreshUser, router]);
 
   const getButtonHref = () => {
     return signupEnabled ? "/auth/signUp" : "/auth/signIn";
@@ -102,84 +40,92 @@ export default function Home() {
     <>
       <Meta title="Home" />
       <Container>
-        <div className={classes.inner}>
-          <div className={classes.content}>
-            <Title className={classes.title}>
+        <div className="flex flex-col lg:flex-row justify-between items-center py-16 lg:py-20 gap-12">
+          <div className="flex-1 max-w-2xl">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight text-text dark:text-text-dark mb-6">
               <FormattedMessage
                 id="home.title"
                 values={{
                   h: (chunks) => (
-                    <span className={classes.highlight}>{chunks}</span>
+                    <span className="relative inline-block">
+                      <span className="relative z-10 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 px-3 py-1 rounded-lg">
+                        {chunks}
+                      </span>
+                    </span>
                   ),
                 }}
               />
-            </Title>
-            <Text color="dimmed" mt="md">
+            </h1>
+            <p className="text-lg text-gray-600 dark:text-gray-400 mb-8">
               <FormattedMessage id="home.description" />
-            </Text>
+            </p>
 
-            <List
-              mt={30}
-              spacing="sm"
-              size="sm"
-              icon={
-                <ThemeIcon size={20} radius="xl">
-                  <TbCheck size={12} />
-                </ThemeIcon>
-              }
-            >
-              <List.Item>
-                <div>
-                  <b>
+            <ul className="space-y-4 mb-10">
+              <li className="flex items-start">
+                <div className="flex-shrink-0 mt-0.5">
+                  <div className="flex items-center justify-center w-5 h-5 rounded-full bg-primary-500 text-white">
+                    <TbCheck className="w-3 h-3" />
+                  </div>
+                </div>
+                <div className="ml-3 text-gray-700 dark:text-gray-300">
+                  <span className="font-semibold">
                     <FormattedMessage id="home.bullet.a.name" />
-                  </b>{" "}
+                  </span>{" "}
                   - <FormattedMessage id="home.bullet.a.description" />
                 </div>
-              </List.Item>
-              <List.Item>
-                <div>
-                  <b>
+              </li>
+              <li className="flex items-start">
+                <div className="flex-shrink-0 mt-0.5">
+                  <div className="flex items-center justify-center w-5 h-5 rounded-full bg-primary-500 text-white">
+                    <TbCheck className="w-3 h-3" />
+                  </div>
+                </div>
+                <div className="ml-3 text-gray-700 dark:text-gray-300">
+                  <span className="font-semibold">
                     <FormattedMessage id="home.bullet.b.name" />
-                  </b>{" "}
+                  </span>{" "}
                   - <FormattedMessage id="home.bullet.b.description" />
                 </div>
-              </List.Item>
-              <List.Item>
-                <div>
-                  <b>
+              </li>
+              <li className="flex items-start">
+                <div className="flex-shrink-0 mt-0.5">
+                  <div className="flex items-center justify-center w-5 h-5 rounded-full bg-primary-500 text-white">
+                    <TbCheck className="w-3 h-3" />
+                  </div>
+                </div>
+                <div className="ml-3 text-gray-700 dark:text-gray-300">
+                  <span className="font-semibold">
                     <FormattedMessage id="home.bullet.c.name" />
-                  </b>{" "}
+                  </span>{" "}
                   - <FormattedMessage id="home.bullet.c.description" />
                 </div>
-              </List.Item>
-            </List>
+              </li>
+            </ul>
 
-            <Group mt={30}>
+            <div className="flex flex-col sm:flex-row gap-4">
               <Button
-                component={Link}
+                as={Link}
                 href={getButtonHref()}
-                radius="xl"
-                size="md"
-                className={classes.control}
+                size="lg"
+                className="w-full sm:w-auto"
               >
                 <FormattedMessage id="home.button.start" />
               </Button>
               <Button
-                component={Link}
+                as={Link}
                 href="https://github.com/swissmakers/swiss-datashare"
                 target="_blank"
-                variant="default"
-                radius="xl"
-                size="md"
-                className={classes.control}
+                variant="outline"
+                size="lg"
+                className="w-full sm:w-auto"
               >
                 <FormattedMessage id="home.button.source" />
               </Button>
-            </Group>
+            </div>
           </div>
-          <Group className={classes.image} align="center">
+          <div className="hidden lg:flex items-center justify-center flex-1">
             <Logo width={200} height={200} />
-          </Group>
+          </div>
         </div>
       </Container>
     </>

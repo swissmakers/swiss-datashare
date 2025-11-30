@@ -1,19 +1,19 @@
-import { Button, PasswordInput, Stack, Text } from "@mantine/core";
-import { ModalsContextProps } from "@mantine/modals/lib/context";
 import { useState } from "react";
 import { FormattedMessage } from "react-intl";
 import useTranslate, {
   translateOutsideContext,
 } from "../../hooks/useTranslate.hook";
+import { useModals } from "../../contexts/ModalContext";
+import { Button, PasswordInput } from "../ui";
 
 const showEnterPasswordModal = (
-  modals: ModalsContextProps,
-  submitCallback: (_password: string) => Promise<void>,
+  modals: ReturnType<typeof useModals>,
+  submitCallback: (password: string) => Promise<void>,
 ) => {
   const t = translateOutsideContext();
   return modals.openModal({
     closeOnClickOutside: false,
-    withCloseButton: false,
+    showCloseButton: false,
     closeOnEscape: false,
     title: t("share.modal.password.title"),
     children: <Body submitCallback={submitCallback} />,
@@ -23,38 +23,40 @@ const showEnterPasswordModal = (
 const Body = ({
   submitCallback,
 }: {
-  submitCallback: (_password: string) => Promise<void>;
+  submitCallback: (password: string) => Promise<void>;
 }) => {
   const [password, setPassword] = useState("");
   const [passwordWrong, setPasswordWrong] = useState(false);
   const t = useTranslate();
+  
   return (
-    <Stack align="stretch">
-      <Text size="sm">
+    <div className="space-y-4">
+      <p className="text-sm text-gray-700 dark:text-gray-300">
         <FormattedMessage id="share.modal.password.description" />
-      </Text>
+      </p>
 
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          submitCallback(password);
+          submitCallback(password).catch(() => {
+            setPasswordWrong(true);
+          });
         }}
+        className="space-y-4"
       >
-        <Stack>
-          <PasswordInput
-            variant="filled"
-            placeholder={t("share.modal.password")}
-            error={passwordWrong && t("share.modal.error.invalid-password")}
-            onFocus={() => setPasswordWrong(false)}
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
-          />
-          <Button type="submit">
-            <FormattedMessage id="common.button.submit" />
-          </Button>
-        </Stack>
+        <PasswordInput
+          placeholder={t("share.modal.password")}
+          error={passwordWrong ? t("share.modal.error.invalid-password") : undefined}
+          onFocus={() => setPasswordWrong(false)}
+          onChange={(e) => setPassword(e.target.value)}
+          value={password}
+          autoFocus
+        />
+        <Button type="submit" fullWidth>
+          <FormattedMessage id="common.button.submit" />
+        </Button>
       </form>
-    </Stack>
+    </div>
   );
 };
 

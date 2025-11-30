@@ -1,12 +1,3 @@
-import {
-  Button,
-  Container,
-  Group,
-  Paper,
-  PinInput,
-  Title,
-} from "@mantine/core";
-import { useForm, yupResolver } from "@mantine/form";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { FormattedMessage } from "react-intl";
@@ -16,6 +7,8 @@ import useUser from "../../hooks/user.hook";
 import authService from "../../services/auth.service";
 import { safeRedirectPath } from "../../utils/router.util";
 import toast from "../../utils/toast.util";
+import { Button, Container, Card, PinInput } from "../ui";
+import { useForm } from "../../hooks/useForm";
 
 function TotpForm({ redirectPath }: { redirectPath: string }) {
   const t = useTranslate();
@@ -35,7 +28,7 @@ function TotpForm({ redirectPath }: { redirectPath: string }) {
     initialValues: {
       code: "",
     },
-    validate: yupResolver(validationSchema),
+    validationSchema,
   });
 
   const onSubmit = async () => {
@@ -50,34 +43,47 @@ function TotpForm({ redirectPath }: { redirectPath: string }) {
       await router.replace(safeRedirectPath(redirectPath));
     } catch (e) {
       toast.axiosError(e);
-      form.setFieldError("code", "error");
+      form.setErrors({ code: "error" });
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Container size={420} my={40}>
-      <Title order={2} align="center" weight={900}>
-        <FormattedMessage id="totp.title" />
-      </Title>
-      <Paper withBorder shadow="md" p={30} mt={30} radius="md">
-        <form onSubmit={form.onSubmit(onSubmit)}>
-          <Group position="center">
-            <PinInput
-              length={6}
-              oneTimeCode
-              aria-label="One time code"
-              autoFocus={true}
-              onComplete={onSubmit}
-              {...form.getInputProps("code")}
-            />
-            <Button mt="md" type="submit" loading={loading}>
+    <Container size="sm">
+      <div className="max-w-md mx-auto py-10">
+        <h2 className="text-3xl font-black text-center text-text dark:text-text-dark mb-8">
+          <FormattedMessage id="totp.title" />
+        </h2>
+        <Card padding="lg">
+          <form onSubmit={form.onSubmit(onSubmit)} className="space-y-6">
+            <div className="flex justify-center">
+              <PinInput
+                length={6}
+                oneTimeCode
+                aria-label="One time code"
+                autoFocus={true}
+                value={form.values.code}
+                onChange={(value) => {
+                  if (!value) return;
+                  form.setValue("code", value);
+                  if (value.length === 6) {
+                    onSubmit();
+                  }
+                }}
+              />
+            </div>
+            <Button
+              type="submit"
+              loading={loading}
+              fullWidth
+              className="mt-4"
+            >
               {t("totp.button.signIn")}
             </Button>
-          </Group>
-        </form>
-      </Paper>
+          </form>
+        </Card>
+      </div>
     </Container>
   );
 }

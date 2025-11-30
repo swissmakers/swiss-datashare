@@ -1,23 +1,6 @@
-import {
-  Anchor,
-  Button,
-  Container,
-  createStyles,
-  Group,
-  Loader,
-  Paper,
-  PasswordInput,
-  Stack,
-  Text,
-  TextInput,
-  Title,
-} from "@mantine/core";
-import { useForm, yupResolver } from "@mantine/form";
-import { showNotification } from "@mantine/notifications";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { TbInfoCircle } from "react-icons/tb";
 import { FormattedMessage } from "react-intl";
 import * as yup from "yup";
 import useConfig from "../../hooks/config.hook";
@@ -27,57 +10,19 @@ import authService from "../../services/auth.service";
 import { getOAuthIcon, getOAuthUrl } from "../../utils/oauth.util";
 import { safeRedirectPath } from "../../utils/router.util";
 import toast from "../../utils/toast.util";
-
-const useStyles = createStyles((theme) => ({
-  signInWith: {
-    fontWeight: 500,
-    "&:before": {
-      content: "''",
-      flex: 1,
-      display: "block",
-    },
-    "&:after": {
-      content: "''",
-      flex: 1,
-      display: "block",
-    },
-  },
-  or: {
-    "&:before": {
-      content: "''",
-      flex: 1,
-      display: "block",
-      borderTopWidth: 1,
-      borderTopStyle: "solid",
-      borderColor:
-        theme.colorScheme === "dark"
-          ? theme.colors.dark[3]
-          : theme.colors.gray[4],
-    },
-    "&:after": {
-      content: "''",
-      flex: 1,
-      display: "block",
-      borderTopWidth: 1,
-      borderTopStyle: "solid",
-      borderColor:
-        theme.colorScheme === "dark"
-          ? theme.colors.dark[3]
-          : theme.colors.gray[4],
-    },
-  },
-}));
+import { Button, Container, Input, PasswordInput, Card, LoadingSpinner } from "../ui";
+import { useForm } from "../../hooks/useForm";
+import { useToast } from "../../hooks/useToast";
 
 const SignInForm = ({ redirectPath }: { redirectPath: string }) => {
   const config = useConfig();
   const router = useRouter();
   const t = useTranslate();
   const { refreshUser } = useUser();
-  const { classes } = useStyles();
+  const { info } = useToast();
 
   const [oauthProviders, setOauthProviders] = useState<string[] | null>(null);
-  const [isRedirectingToOauthProvider, setIsRedirectingToOauthProvider] =
-    useState(false);
+  const [isRedirectingToOauthProvider, setIsRedirectingToOauthProvider] = useState(false);
 
   const validationSchema = yup.object().shape({
     emailOrUsername: yup.string().required(t("common.error.field-required")),
@@ -89,7 +34,7 @@ const SignInForm = ({ redirectPath }: { redirectPath: string }) => {
       emailOrUsername: "",
       password: "",
     },
-    validate: yupResolver(validationSchema),
+    validationSchema,
   });
 
   const signIn = async (email: string, password: string) => {
@@ -98,13 +43,7 @@ const SignInForm = ({ redirectPath }: { redirectPath: string }) => {
       .then(async (response) => {
         if (response.data["loginToken"]) {
           // Prompt the user to enter their totp code
-          showNotification({
-            icon: <TbInfoCircle />,
-            color: "blue",
-            radius: "md",
-            title: t("signIn.notify.totp-required.title"),
-            message: t("signIn.notify.totp-required.description"),
-          });
+          info(t("signIn.notify.totp-required.description"));
           router.push(
             `/auth/totp/${
               response.data["loginToken"]
@@ -132,92 +71,107 @@ const SignInForm = ({ redirectPath }: { redirectPath: string }) => {
         }
       })
       .catch(toast.axiosError);
-  }, []);
+  }, [config, router]);
 
   if (!oauthProviders) return null;
 
   if (isRedirectingToOauthProvider)
     return (
-      <Group align="center" position="center">
-        <Loader size="sm" />
-        <Text align="center">
-          <FormattedMessage id="common.text.redirecting" />
-        </Text>
-      </Group>
+      <Container size="sm">
+        <div className="flex items-center justify-center py-20">
+          <div className="flex items-center space-x-3">
+            <LoadingSpinner size="sm" />
+            <p className="text-gray-700 dark:text-gray-300">
+              <FormattedMessage id="common.text.redirecting" />
+            </p>
+          </div>
+        </div>
+      </Container>
     );
 
   return (
-    <Container size={420} my={40}>
-      <Title order={2} align="center" weight={900}>
-        <FormattedMessage id="signin.title" />
-      </Title>
-      {config.get("share.allowRegistration") && (
-        <Text color="dimmed" size="sm" align="center" mt={5}>
-          <FormattedMessage id="signin.description" />{" "}
-          <Anchor component={Link} href={"signUp"} size="sm">
-            <FormattedMessage id="signin.button.signup" />
-          </Anchor>
-        </Text>
-      )}
-      <Paper withBorder shadow="md" p={30} mt={30} radius="md">
-        {config.get("oauth.disablePassword") || (
-          <form
-            onSubmit={form.onSubmit((values) => {
-              signIn(values.emailOrUsername, values.password);
-            })}
-          >
-            <TextInput
-              label={t("signin.input.email-or-username")}
-              placeholder={t("signin.input.email-or-username.placeholder")}
-              {...form.getInputProps("emailOrUsername")}
-            />
-            <PasswordInput
-              label={t("signin.input.password")}
-              placeholder={t("signin.input.password.placeholder")}
-              mt="md"
-              {...form.getInputProps("password")}
-            />
-            {config.get("smtp.enabled") && (
-              <Group position="right" mt="xs">
-                <Anchor component={Link} href="/auth/resetPassword" size="xs">
-                  <FormattedMessage id="resetPassword.title" />
-                </Anchor>
-              </Group>
-            )}
-            <Button fullWidth mt="xl" type="submit">
-              <FormattedMessage id="signin.button.submit" />
-            </Button>
-          </form>
+    <Container size="sm">
+      <div className="max-w-md mx-auto py-10">
+        <h2 className="text-3xl font-black text-center text-text dark:text-text-dark mb-2">
+          <FormattedMessage id="signin.title" />
+        </h2>
+        {config.get("share.allowRegistration") && (
+          <p className="text-sm text-gray-600 dark:text-gray-400 text-center mb-8">
+            <FormattedMessage id="signin.description" />{" "}
+            <Link
+              href="/auth/signUp"
+              className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 font-medium"
+            >
+              <FormattedMessage id="signin.button.signup" />
+            </Link>
+          </p>
         )}
-        {oauthProviders.length > 0 && (
-          <Stack mt={config.get("oauth.disablePassword") ? undefined : "xl"}>
-            {config.get("oauth.disablePassword") ? (
-              <Group align="center" className={classes.signInWith}>
-                <Text>{t("signIn.oauth.signInWith")}</Text>
-              </Group>
-            ) : (
-              <Group align="center" className={classes.or}>
-                <Text>{t("signIn.oauth.or")}</Text>
-              </Group>
-            )}
-            <Group position="center">
-              {oauthProviders.map((provider) => (
-                <Button
-                  key={provider}
-                  component="a"
-                  title={t(`signIn.oauth.${provider}`)}
-                  href={getOAuthUrl(window.location.origin, provider)}
-                  variant="light"
-                  fullWidth
-                >
-                  {getOAuthIcon(provider)}
-                  {"\u2002" + t(`signIn.oauth.${provider}`)}
-                </Button>
-              ))}
-            </Group>
-          </Stack>
-        )}
-      </Paper>
+        <Card padding="lg">
+          {!config.get("oauth.disablePassword") && (
+            <form
+              onSubmit={form.onSubmit((values) => {
+                signIn(values.emailOrUsername, values.password);
+              })}
+              className="space-y-4"
+            >
+              <Input
+                label={t("signin.input.email-or-username")}
+                placeholder={t("signin.input.email-or-username.placeholder")}
+                {...form.getInputProps("emailOrUsername")}
+              />
+              <PasswordInput
+                label={t("signin.input.password")}
+                placeholder={t("signin.input.password.placeholder")}
+                {...form.getInputProps("password")}
+              />
+              {config.get("smtp.enabled") && (
+                <div className="flex justify-end">
+                  <Link
+                    href="/auth/resetPassword"
+                    className="text-sm text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
+                  >
+                    <FormattedMessage id="resetPassword.title" />
+                  </Link>
+                </div>
+              )}
+              <Button fullWidth type="submit" className="mt-6">
+                <FormattedMessage id="signin.button.submit" />
+              </Button>
+            </form>
+          )}
+          {oauthProviders.length > 0 && (
+            <div className={config.get("oauth.disablePassword") ? "" : "mt-8"}>
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-gray-300 dark:border-gray-600"></div>
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">
+                    {config.get("oauth.disablePassword")
+                      ? t("signIn.oauth.signInWith")
+                      : t("signIn.oauth.or")}
+                  </span>
+                </div>
+              </div>
+              <div className="mt-6 space-y-3">
+                {oauthProviders.map((provider) => (
+                  <Button
+                    key={provider}
+                    as={Link}
+                    href={getOAuthUrl(window.location.origin, provider)}
+                    variant="outline"
+                    fullWidth
+                    className="justify-center"
+                  >
+                    <span className="mr-2">{getOAuthIcon(provider)}</span>
+                    {t(`signIn.oauth.${provider}`)}
+                  </Button>
+                ))}
+              </div>
+            </div>
+          )}
+        </Card>
+      </div>
     </Container>
   );
 };
