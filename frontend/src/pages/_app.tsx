@@ -4,7 +4,7 @@ import "moment/min/locales";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import { IntlProvider } from "react-intl";
 import Header from "../components/header/Header";
 import { ConfigContext } from "../hooks/config.hook";
@@ -81,13 +81,16 @@ function App({ Component, pageProps }: AppProps) {
   }, []);
 
   // Get language from cookie or browser
-  const language = useRef(
-    getCookie("language")?.toString() ||
+  const [language, setLanguage] = useState<string>("en");
+  
+  useEffect(() => {
+    const lang = getCookie("language")?.toString() ||
       (typeof window !== "undefined"
         ? navigator.language.split("-")[0]
-        : "en"),
-  );
-  moment.locale(language.current);
+        : "en");
+    setLanguage(lang);
+    moment.locale(lang);
+  }, []);
 
   return (
     <>
@@ -98,29 +101,35 @@ function App({ Component, pageProps }: AppProps) {
         />
       </Head>
       <IntlProvider
-        messages={i18nUtil.getLocaleByCode(language.current)?.messages}
-        locale={language.current}
+        messages={i18nUtil.getLocaleByCode(language)?.messages}
+        locale={language}
         defaultLocale={LOCALES.ENGLISH.code}
       >
         <ThemeProvider>
           <ModalProvider>
             <ConfigContext.Provider
-            value={{
-              configVariables,
-              refresh: async () => {
-                setConfigVariables(await configService.list());
-              },
-            }}
+            value={useMemo(
+              () => ({
+                configVariables,
+                refresh: async () => {
+                  setConfigVariables(await configService.list());
+                },
+              }),
+              [configVariables]
+            )}
           >
             <UserContext.Provider
-              value={{
-                user,
-                refreshUser: async () => {
-                  const user = await userService.getCurrentUser();
-                  setUser(user);
-                  return user;
-                },
-              }}
+              value={useMemo(
+                () => ({
+                  user,
+                  refreshUser: async () => {
+                    const user = await userService.getCurrentUser();
+                    setUser(user);
+                    return user;
+                  },
+                }),
+                [user]
+              )}
             >
               {excludeDefaultLayoutRoutes.includes(route) ? (
                 <Component {...pageProps} />

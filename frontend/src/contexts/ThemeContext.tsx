@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, ReactNode, useMemo } from "react";
 import { getCookie, setCookie } from "cookies-next";
 
 type Theme = "light" | "dark" | "system";
@@ -37,7 +37,8 @@ interface ThemeProviderProps {
 }
 
 export const ThemeProvider = ({ children }: ThemeProviderProps) => {
-  const [theme, setThemeState] = useState<Theme>("light");
+  // Initialize with a safe default to avoid hydration mismatches
+  const [theme, setThemeState] = useState<Theme>("system");
   const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">("light");
   const [mounted, setMounted] = useState(false);
 
@@ -102,8 +103,19 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
     });
   };
 
+  // Memoize context value to prevent unnecessary re-renders
+  const contextValue = useMemo(
+    () => ({
+      theme: mounted ? theme : "system",
+      resolvedTheme: mounted ? resolvedTheme : "light",
+      setTheme,
+      toggleTheme,
+    }),
+    [theme, resolvedTheme, mounted, setTheme, toggleTheme]
+  );
+
   return (
-    <ThemeContext.Provider value={{ theme, resolvedTheme, setTheme, toggleTheme }}>
+    <ThemeContext.Provider value={contextValue}>
       {children}
     </ThemeContext.Provider>
   );
