@@ -117,11 +117,13 @@ const SignInForm = ({ redirectPath }: { redirectPath: string }) => {
               <Input
                 label={t("signin.input.email-or-username")}
                 placeholder={t("signin.input.email-or-username.placeholder")}
+                autoComplete="username"
                 {...form.getInputProps("emailOrUsername")}
               />
               <PasswordInput
                 label={t("signin.input.password")}
                 placeholder={t("signin.input.password.placeholder")}
+                autoComplete="current-password"
                 {...form.getInputProps("password")}
               />
               {config.get("smtp.enabled") && (

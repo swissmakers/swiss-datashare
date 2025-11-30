@@ -78,17 +78,20 @@ const SignUpForm = () => {
             <Input
               label={t("signup.input.username")}
               placeholder={t("signup.input.username.placeholder")}
+              autoComplete="username"
               {...form.getInputProps("username")}
             />
             <Input
               label={t("signup.input.email")}
               placeholder={t("signup.input.email.placeholder")}
               type="email"
+              autoComplete="email"
               {...form.getInputProps("email")}
             />
             <PasswordInput
               label={t("signin.input.password")}
               placeholder={t("signin.input.password.placeholder")}
+              autoComplete="new-password"
               {...form.getInputProps("password")}
             />
             <Button fullWidth type="submit" className="mt-6">

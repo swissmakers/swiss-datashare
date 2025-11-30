@@ -120,6 +120,7 @@ export const useForm = <T extends Record<string, any>>({
   const getInputProps = useCallback(
     (field: keyof T) => {
       return {
+        name: field as string,
         value: values[field] ?? "",
         onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
           setValue(field, e.target.value);
