@@ -223,6 +223,7 @@ export default {
   // Dropzone.tsx
   "upload.dropzone.title": "Laadi üles failid",
   "upload.dropzone.description": "Lohista ja aseta failid siia, et alustada jagamist. Võtame vastu ainult faile, mille kogusuurus on maksimaalselt {maxSize}.",
+  "upload.dropzone.button.select": "Vali failid",
   "upload.dropzone.notify.file-too-big": "Sinu failid ületavad lubatud suuruse {maxSize}.",
   // FileList.tsx
   "upload.filelist.name": "Nimi",

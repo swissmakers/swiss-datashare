@@ -223,6 +223,7 @@ export default {
   // Dropzone.tsx
   "upload.dropzone.title": "Fájlok feltöltése",
   "upload.dropzone.description": "Húzza ide a fájlokat a megosztás elkészítéséhez. Legfeljebb {maxSize} fájl húzható egy megosztásba.",
+  "upload.dropzone.button.select": "Fájlok kiválasztása",
   "upload.dropzone.notify.file-too-big": "A fájlok mérete meghaladja a megengedett {maxSize} méretet.",
   // FileList.tsx
   "upload.filelist.name": "Megnevezés",

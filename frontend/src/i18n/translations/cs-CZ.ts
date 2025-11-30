@@ -223,6 +223,7 @@ export default {
   // Dropzone.tsx
   "upload.dropzone.title": "Nahrát soubory",
   "upload.dropzone.description": "Pro spuštění sdílení, přetáhněte soubory sem. Můžete nahrát soubory o celkové velikosti {maxSize}.",
+  "upload.dropzone.button.select": "Vybrat soubory",
   "upload.dropzone.notify.file-too-big": "Vaše soubory přesahují maximální velikost {maxSize}.",
   // FileList.tsx
   "upload.filelist.name": "Název",

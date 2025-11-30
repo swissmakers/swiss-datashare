@@ -223,6 +223,7 @@ export default {
   // Dropzone.tsx
   "upload.dropzone.title": "Μεταφόρτωση αρχείων",
   "upload.dropzone.description": "Drag'n'drop files here to start your share. We only accept files up to {maxSize} in total.",
+  "upload.dropzone.button.select": "Επιλέξτε αρχεία",
   "upload.dropzone.notify.file-too-big": "Τα αρχεία σας υπερβαίνουν το μέγιστο μέγεθος κοινής χρήσης του {maxSize}.",
   // FileList.tsx
   "upload.filelist.name": "Όνομα",

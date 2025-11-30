@@ -223,6 +223,7 @@ export default {
   // Dropzone.tsx
   "upload.dropzone.title": "Dateien hochladen",
   "upload.dropzone.description": "Ziehe Dateien per Drag'n'Drop hierher, um deine Freigabe zu starten. Wir akzeptieren nur Dateien mit einer Gesamtgröße von bis zu {maxSize}.",
+  "upload.dropzone.button.select": "Dateien auswählen",
   "upload.dropzone.notify.file-too-big": "Ihre Dateien überschreiten die maximale Freigabegröße von {maxSize}.",
   // FileList.tsx
   "upload.filelist.name": "Name",

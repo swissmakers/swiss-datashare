@@ -223,6 +223,7 @@ export default {
   // Dropzone.tsx
   "upload.dropzone.title": "Загрузить файлы",
   "upload.dropzone.description": "Перетащите сюда файлы для начала загрузки. Размер всех файлов не должен превышать {maxSize}.",
+  "upload.dropzone.button.select": "Выбрать файлы",
   "upload.dropzone.notify.file-too-big": "Ваши файлы превышают максимальный размер {maxSize}.",
   // FileList.tsx
   "upload.filelist.name": "Название",

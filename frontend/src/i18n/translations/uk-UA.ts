@@ -223,6 +223,7 @@ export default {
   // Dropzone.tsx
   "upload.dropzone.title": "Завантажити файли",
   "upload.dropzone.description": "Перетягніть файли сюди, щоб розпочати завантаження. Ми приймаємо лише файли до {maxSize} загалом.",
+  "upload.dropzone.button.select": "Вибрати файли",
   "upload.dropzone.notify.file-too-big": "Ваші файли перевищують максимальний розмір у {maxSize}.",
   // FileList.tsx
   "upload.filelist.name": "Назва",

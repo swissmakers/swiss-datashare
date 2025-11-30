@@ -223,6 +223,7 @@ export default {
   // Dropzone.tsx
   "upload.dropzone.title": "上傳檔案",
   "upload.dropzone.description": "將檔案拖曳至此以上傳，檔案大小不能超過 {maxSize}",
+  "upload.dropzone.button.select": "選擇檔案",
   "upload.dropzone.notify.file-too-big": "您的檔案超過了最大上傳限制 {maxSize}",
   // FileList.tsx
   "upload.filelist.name": "檔案名稱",

@@ -223,6 +223,7 @@ export default {
   // Dropzone.tsx
   "upload.dropzone.title": "Naloži datoteke",
   "upload.dropzone.description": "Drag'n'drop files here to start your share. We only accept files up to {maxSize} in total.",
+  "upload.dropzone.button.select": "Izberi datoteke",
   "upload.dropzone.notify.file-too-big": "Vaše datoteke presegajo največjo dovoljeno velikost {maxSize}.",
   // FileList.tsx
   "upload.filelist.name": "Ime",
