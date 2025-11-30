@@ -16,13 +16,21 @@ const updateMany = async (data: UpdateConfig[]): Promise<AdminConfig[]> => {
 };
 
 const get = (key: string, configVariables: Config[]): any => {
-  if (!configVariables) return null;
+  if (!configVariables || configVariables.length === 0) {
+    // During static generation, config might not be loaded yet
+    // Return null instead of throwing to allow pages to be statically generated
+    return null;
+  }
 
   const configVariable = configVariables.filter(
     (variable) => variable.key == key,
   )[0];
 
-  if (!configVariable) throw new Error(`Config variable ${key} not found`);
+  if (!configVariable) {
+    // During static generation, return null instead of throwing
+    if (typeof window === "undefined") return null;
+    throw new Error(`Config variable ${key} not found`);
+  }
 
   const value = configVariable.value ?? configVariable.defaultValue;
 

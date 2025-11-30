@@ -1,5 +1,6 @@
 import React from "react";
 import { Button, createStyles, Stack, Text, Title } from "@mantine/core";
+import { GetServerSidePropsContext } from "next";
 import Meta from "../components/Meta";
 import useTranslate from "../hooks/useTranslate.hook";
 import { useRouter } from "next/router";
@@ -11,6 +12,11 @@ const useStyle = createStyles({
     fontSize: 100,
   },
 });
+
+export function getServerSideProps() {
+  // Make this page dynamic to avoid static generation issues
+  return { props: {} };
+}
 
 export default function Error() {
   const { classes } = useStyle();

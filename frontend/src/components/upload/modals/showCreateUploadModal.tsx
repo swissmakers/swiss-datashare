@@ -45,7 +45,7 @@ const showCreateUploadModal = (
     simplified: boolean;
   },
   files: FileUpload[],
-  uploadCallback: (createShare: CreateShare, files: FileUpload[]) => void,
+  uploadCallback: (_createShare: CreateShare, _files: FileUpload[]) => void,
 ) => {
   const t = translateOutsideContext();
 
@@ -107,7 +107,7 @@ const CreateUploadModalBody = ({
   options,
 }: {
   files: FileUpload[];
-  uploadCallback: (createShare: CreateShare, files: FileUpload[]) => void;
+  uploadCallback: (_createShare: CreateShare, _files: FileUpload[]) => void;
   options: {
     isUserSignedIn: boolean;
     isReverseShare: boolean;
@@ -476,7 +476,7 @@ const SimplifiedCreateUploadModalModal = ({
   options,
 }: {
   files: FileUpload[];
-  uploadCallback: (createShare: CreateShare, files: FileUpload[]) => void;
+  uploadCallback: (_createShare: CreateShare, _files: FileUpload[]) => void;
   options: {
     isUserSignedIn: boolean;
     isReverseShare: boolean;

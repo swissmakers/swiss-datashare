@@ -8,11 +8,9 @@ import {
 import { useColorScheme } from "@mantine/hooks";
 import { ModalsProvider } from "@mantine/modals";
 import { Notifications } from "@mantine/notifications";
-import axios from "axios";
 import { getCookie, setCookie } from "cookies-next";
 import moment from "moment";
 import "moment/min/locales";
-import { GetServerSidePropsContext } from "next";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -36,21 +34,45 @@ import Footer from "../components/footer/Footer";
 const excludeDefaultLayoutRoutes = ["/admin/config/[category]"];
 
 function App({ Component, pageProps }: AppProps) {
-  const systemTheme = useColorScheme(pageProps.colorScheme);
+  const systemTheme = useColorScheme("light");
   const router = useRouter();
 
   const [colorScheme, setColorScheme] = useState<ColorScheme>(systemTheme);
-
-  const [user, setUser] = useState<CurrentUser | null>(pageProps.user);
-  const [route, setRoute] = useState<string>(pageProps.route);
-
-  const [configVariables, setConfigVariables] = useState<Config[]>(
-    pageProps.configVariables,
-  );
+  const [user, setUser] = useState<CurrentUser | null>(null);
+  const [route, setRoute] = useState<string>(router.pathname);
+  const [configVariables, setConfigVariables] = useState<Config[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     setRoute(router.pathname);
   }, [router.pathname]);
+
+  // Fetch initial data on mount
+  useEffect(() => {
+    const fetchInitialData = async () => {
+      try {
+        // Fetch config variables
+        const configs = await configService.list();
+        setConfigVariables(configs);
+
+        // Fetch user data
+        try {
+          const currentUser = await userService.getCurrentUser();
+          setUser(currentUser);
+        } catch {
+          // User not authenticated, that's okay
+          setUser(null);
+        }
+
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error fetching initial data:", error);
+        setIsLoading(false);
+      }
+    };
+
+    fetchInitialData();
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(
@@ -59,15 +81,6 @@ function App({ Component, pageProps }: AppProps) {
     );
 
     return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    if (!pageProps.language) return;
-    const cookieLanguage = getCookie("language");
-    if (pageProps.language != cookieLanguage) {
-      i18nUtil.setLanguageCookie(pageProps.language);
-      if (cookieLanguage) location.reload();
-    }
   }, []);
 
   useEffect(() => {
@@ -86,7 +99,13 @@ function App({ Component, pageProps }: AppProps) {
     });
   };
 
-  const language = useRef(pageProps.language);
+  // Get language from cookie or browser
+  const language = useRef(
+    getCookie("language")?.toString() ||
+      (typeof window !== "undefined"
+        ? navigator.language.split("-")[0]
+        : "en"),
+  );
   moment.locale(language.current);
 
   return (
@@ -160,42 +179,5 @@ function App({ Component, pageProps }: AppProps) {
   );
 }
 
-// Fetch user and config variables on server side when the first request is made
-// These will get passed as a page prop to the App component and stored in the contexts
-App.getInitialProps = async ({ ctx }: { ctx: GetServerSidePropsContext }) => {
-  let pageProps: {
-    user?: CurrentUser;
-    configVariables?: Config[];
-    route?: string;
-    colorScheme: ColorScheme;
-    language?: string;
-  } = {
-    route: ctx.resolvedUrl,
-    colorScheme:
-      (getCookie("mantine-color-scheme", ctx) as ColorScheme) ?? "light",
-  };
-
-  if (ctx.req) {
-    const apiURL = process.env.API_URL || "http://localhost:8080";
-    const cookieHeader = ctx.req.headers.cookie;
-
-    pageProps.user = await axios(`${apiURL}/api/users/me`, {
-      headers: { cookie: cookieHeader },
-    })
-      .then((res) => res.data)
-      .catch(() => null);
-
-    pageProps.configVariables = (await axios(`${apiURL}/api/configs`)).data;
-
-    pageProps.route = ctx.req.url;
-
-    const requestLanguage = i18nUtil.getLanguageFromAcceptHeader(
-      ctx.req.headers["accept-language"],
-    );
-
-    pageProps.language = ctx.req.cookies["language"] ?? requestLanguage;
-  }
-  return { pageProps };
-};
 
 export default App;
