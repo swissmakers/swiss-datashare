@@ -22,11 +22,13 @@ if ! id -u swiss-datashare > /dev/null 2>&1; then
     fi
 fi
 
-# Change ownership of the data directory
-mkdir -p /opt/app/backend/data
-find /opt/app/backend/data \( ! -group "${PGID}" -o ! -user "${PUID}" \) -exec chown "${PUID}:${PGID}" {} +
-# Change ownership of the frontend public directory
-find /opt/app/frontend/public \( ! -group "${PGID}" -o ! -user "${PUID}" \) -exec chown "${PUID}:${PGID}" {} +
+# Create data directories if they don't exist (ignore errors for mounted volumes)
+mkdir -p /opt/app/backend/data /opt/app/frontend/public/img 2>/dev/null || true
+
+# Change ownership of directories (ignore errors for mounted volumes)
+# Mounted volumes will have host permissions, which is fine
+chown -R "${PUID}:${PGID}" /opt/app/backend/data 2>/dev/null || echo "Note: Could not change ownership of /opt/app/backend/data (may be a mounted volume)"
+chown -R "${PUID}:${PGID}" /opt/app/frontend/public/img 2>/dev/null || echo "Note: Could not change ownership of /opt/app/frontend/public/img (may be a mounted volume)"
 
 # Switch to the non-root user
 exec su-exec "$PUID:$PGID" "$@"
