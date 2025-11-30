@@ -14,7 +14,7 @@ export default {
   "home.title": "Une plateforme de partage de fichiers <h>autohébergée</h>.",
   "home.description": "Voulez-vous vraiment remettre vos fichiers personnels dans les mains de tiers comme WeTransfer ?",
   "home.bullet.a.name": "Auto-hébergé",
-  "home.bullet.a.description": "Hébergez Pingvin Share sur votre propre machine.",
+  "home.bullet.a.description": "Hébergez Swiss DataShare sur votre propre machine.",
   "home.bullet.b.name": "Confidentialité",
   "home.bullet.b.description": "Vos fichiers sont les vôtres et ne seront jamais consultés par des tiers.",
   "home.bullet.c.name": "Aucune rébarbative limite de taille",
@@ -304,7 +304,7 @@ export default {
   // END /privacy
   // /admin/config
   "admin.config.config-file-warning.title": "Fichier de configuration présent",
-  "admin.config.config-file-warning.description": "Puisque vous avez configuré Pingvin Share avec un fichier de configuration, vous ne pouvez pas modifier la configuration via l'interface utilisateur.",
+  "admin.config.config-file-warning.description": "Puisque vous avez configuré Swiss DataShare avec un fichier de configuration, vous ne pouvez pas modifier la configuration via l'interface utilisateur.",
   "admin.config.title": "Paramètres",
   "admin.config.category.general": "Général",
   "admin.config.category.share": "Partage",
@@ -330,7 +330,7 @@ export default {
   "admin.config.cache.max-items": "Maximum d'éléments",
   "admin.config.cache.max-items.description": "Nombre maximum d'éléments conservés en cache.",
   "admin.config.cache.redis-enabled": "Redis activé",
-  "admin.config.cache.redis-enabled.description": "Usuellement, Pingvin Share conserve les informations en mémoire vive. Si vous exécutez plusieurs instances de Pingvin Share, vous devez activer la mise en cache Redis pour partager le cache entre ces instances.",
+  "admin.config.cache.redis-enabled.description": "Usuellement, Swiss DataShare conserve les informations en mémoire vive. Si vous exécutez plusieurs instances de Swiss DataShare, vous devez activer la mise en cache Redis pour partager le cache entre ces instances.",
   "admin.config.cache.redis-url": "URL de Redis",
   "admin.config.cache.redis-url.description": "URL de connexion à l’instance de Redis pour servir de cache.",
   "admin.config.email.enable-share-email-recipients": "Activer le partage par courriel",

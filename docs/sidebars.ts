@@ -63,7 +63,7 @@ const sidebars: SidebarsConfig = {
     {
       type: "link",
       label: "Demo",
-      href: "https://pingvin-share.dev.eliasschneider.com",
+      href: "https://swiss-datashare.dev.eliasschneider.com",
     },
     {
       type: "link",

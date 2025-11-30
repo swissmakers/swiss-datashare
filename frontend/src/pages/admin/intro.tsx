@@ -21,33 +21,26 @@ const Intro = () => {
             <Logo height={80} width={80} />
           </Center>
           <Center>
-            <Title order={2}>Welcome to Pingvin Share</Title>
+            <Title order={2}>Welcome to Swiss DataShare</Title>
           </Center>
           <Text>
-            If you enjoy Pingvin Share please ⭐️ it on{" "}
+            Swiss DataShare is actively maintained and developed by{" "}
             <Anchor
               target="_blank"
-              href="https://github.com/stonith404/pingvin-share"
+              href="https://github.com/swissmakers/swiss-datashare"
             >
-              GitHub
-            </Anchor>{" "}
-            or{" "}
-            <Anchor
-              target="_blank"
-              href="https://github.com/sponsors/stonith404"
-            >
-              buy me a coffee
-            </Anchor>{" "}
-            if you want to support my work.
+              Swissmakers GmbH
+            </Anchor>
+            . We are committed to providing a reliable, secure, and feature-rich file sharing solution.
           </Text>
-          <Text>Enough talked, have fun with Pingvin Share!</Text>
+          <Text>Enough talked, have fun with Swiss DataShare!</Text>
           <Text mt="lg">How to you want to continue?</Text>
           <Stack>
             <Button href="/admin/config/general" component={Link}>
               Customize configuration
             </Button>
             <Button href="/" component={Link} variant="light">
-              Explore Pingvin Share
+              Explore Swiss DataShare
             </Button>
           </Stack>
         </Stack>

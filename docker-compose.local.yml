@@ -1,5 +1,5 @@
 services:
-  pingvin-share:
+  swiss-datashare:
     build: .
     restart: unless-stopped
     ports:

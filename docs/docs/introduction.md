@@ -3,7 +3,7 @@ id: introduction
 ---
 
 # Introduction
-Pingvin Share is self-hosted file sharing platform and an alternative for WeTransfer.
+Swiss DataShare is self-hosted file sharing platform and an alternative for WeTransfer.
 
 ## Features
 
@@ -16,9 +16,8 @@ Pingvin Share is self-hosted file sharing platform and an alternative for WeTran
 
 And more!
 
-## Get to know Pingvin Share
+## Get to know Swiss DataShare
 
-- [Demo](https://pingvin-share.dev.eliasschneider.com)
-- [Review by DB Tech](https://www.youtube.com/watch?v=rWwNeZCOPJA)
+Swiss DataShare is actively maintained and developed by Swissmakers GmbH.
 
 <img src="https://user-images.githubusercontent.com/58886915/225038319-b2ef742c-3a74-4eb6-9689-4207a36842a4.png" width="700"/>
