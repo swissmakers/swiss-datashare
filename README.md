@@ -22,10 +22,98 @@ Swiss DataShare is a self-hosted file sharing platform and an alternative for We
 
 ### Installation with Docker (recommended)
 
+#### Using Prebuilt Image
+
+We provide a prebuilt container image that you can use directly:
+
+```yaml
+services:
+  swiss-datashare:
+    image: registry.swissmakers.ch/infra/swiss-datashare:latest
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+    environment:
+      - TRUST_PROXY=false
+    volumes:
+      - "./data:/opt/app/backend/data"
+      - "./data/images:/opt/app/frontend/public/img"
+```
+
+#### Using Docker Compose
+
 1. Download the `docker-compose.yml` file
 2. Run `docker compose up -d`
 
 The website is now listening on `http://localhost:3000`, have fun with Swiss DataShare!
+
+### Manual Build
+
+If you want to build the project manually from source, follow these steps:
+
+#### Prerequisites
+
+- Node.js 22 or higher
+- npm (comes with Node.js)
+- Docker (optional, for building the container image)
+
+#### Building the Project
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/swissmakers/swiss-datashare.git
+   cd swiss-datashare
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   # Install backend dependencies
+   cd backend
+   npm install
+   
+   # Install frontend dependencies
+   cd ../frontend
+   npm install
+   ```
+
+3. **Build the backend:**
+   ```bash
+   cd backend
+   npm run build
+   ```
+   This will compile the NestJS backend and create the `dist` directory.
+
+4. **Build the frontend:**
+   ```bash
+   cd frontend
+   npm run build
+   ```
+   This will compile the Next.js frontend and create the `.next` directory.
+
+5. **Run the application:**
+   ```bash
+   # Start the backend (from backend directory)
+   npm run prod
+   
+   # In another terminal, start the frontend (from frontend directory)
+   npm run start
+   ```
+
+#### Building Docker Image
+
+To build your own Docker image:
+
+```bash
+docker build -t swiss-datashare:latest .
+```
+
+Or use the provided script:
+
+```bash
+npm run deploy:dev
+```
+
+This will build a multi-platform image (linux/amd64, linux/arm64) and push it to the registry.
 
 ## 📚 Documentation
 

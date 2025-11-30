@@ -1,6 +1,7 @@
 services:
   swiss-datashare:
-    image: swissmakers/swiss-datashare # or ghcr.io/swissmakers/swiss-datashare
+    image: registry.swissmakers.ch/infra/swiss-datashare:latest # Prebuilt image from Swissmakers GmbH
+    # Alternative: swissmakers/swiss-datashare or build from source using: docker build -t swiss-datashare .
     restart: unless-stopped
     ports:
       - 3000:3000
