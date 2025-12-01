@@ -1,14 +1,28 @@
 # Shared build base container
 FROM node:22-alpine AS build-base
 RUN npm install -g npm@latest && apk add --no-cache python3 openssl
+# Configure npm with longer timeouts and retries
+RUN npm config set fetch-timeout 600000 && \
+    npm config set fetch-retries 5 && \
+    npm config set fetch-retry-mintimeout 20000 && \
+    npm config set fetch-retry-maxtimeout 120000
 WORKDIR /opt/app
 
 # Frontend dependencies
 FROM build-base AS frontend-dependencies
 WORKDIR /opt/app/frontend
 COPY frontend/package.json frontend/package-lock.json ./
-RUN npm ci --prefer-offline --no-audit --progress=false || \
-    (echo "npm ci failed, retrying with npm install..." && npm install --no-audit --progress=false)
+# Try npm ci first (suppress errors), if it fails use npm install with retries
+RUN (npm ci --prefer-offline --no-audit --progress=false --include=optional 2>/dev/null || true) && \
+    (npm list --depth=0 >/dev/null 2>&1 || \
+     (echo "npm ci failed, using npm install (including optional dependencies)..." && \
+      npm install --no-audit --progress=false --include=optional || \
+      (echo "First npm install attempt failed, retrying..." && \
+       sleep 5 && \
+       npm install --no-audit --progress=false --include=optional || \
+       (echo "Second npm install attempt failed, retrying one more time..." && \
+        sleep 10 && \
+        npm install --no-audit --progress=false --include=optional))))
 
 # Frontend builder
 FROM build-base AS frontend-builder
@@ -21,8 +35,16 @@ RUN npm run build
 FROM build-base AS backend-dependencies
 WORKDIR /opt/app/backend
 COPY backend/package.json backend/package-lock.json ./
-RUN npm ci --prefer-offline --no-audit --progress=false || \
-    (echo "npm ci failed, retrying without cache..." && npm ci --no-audit --progress=false)
+RUN (npm ci --prefer-offline --no-audit --progress=false --include=optional 2>/dev/null || true) && \
+    (npm list --depth=0 >/dev/null 2>&1 || \
+     (echo "npm ci failed, using npm install..." && \
+      npm install --no-audit --progress=false --include=optional || \
+      (echo "First npm install attempt failed, retrying..." && \
+       sleep 5 && \
+       npm install --no-audit --progress=false --include=optional || \
+       (echo "Second npm install attempt failed, retrying one more time..." && \
+        sleep 10 && \
+        npm install --no-audit --progress=false --include=optional))))
 
 # Backend builder
 FROM build-base AS backend-builder
