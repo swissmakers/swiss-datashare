@@ -16,9 +16,9 @@ You can change the settings in the UI (`/admin/config`)
 
 You can set the configuration via a YAML file. If you choose this way, you won't be able to change the settings in the UI.
 
-If you use Docker you can create a `config.yml` file based on the [`config.example.yaml`](https://github.com/swissmakers/swiss-datashare/blob/main/config.example.yaml) and mount it to `/opt/app/config.yaml` in the container.
+If you use Docker or Podman you can create a `config.yml` file based on the [`config.example.yaml`](https://github.com/swissmakers/swiss-datashare/blob/main/config.example.yaml) and mount it to `/opt/app/config.yaml` in the container.
 
-If you run Swiss DataShare without Docker, you can create a `config.yml` file based on the [`config.example.yaml`](https://github.com/swissmakers/swiss-datashare/blob/main/config.example.yaml) in the root directory of the project.
+If you run Swiss DataShare without Docker/Podman, you can create a `config.yml` file based on the [`config.example.yaml`](https://github.com/swissmakers/swiss-datashare/blob/main/config.example.yaml) in the root directory of the project.
 
 ---
 
@@ -34,7 +34,7 @@ For installation specific configuration, you can use environment variables. The 
 | `DATABASE_URL`   | `file:../data/swiss-datashare.db?connection_limit=1` | The URL of the SQLite database.                                                                          |
 | `DATA_DIRECTORY` | `./data`                                           | The directory where data is stored.                                                                      |
 | `CONFIG_FILE`    | `../config.yaml`                                   | Path to the configuration file                                                                           |
-| `CLAMAV_HOST`    | `127.0.0.1` or `clamav` when running with Docker   | The IP address of the ClamAV server. See the [ClamAV docs](integrations.md#clamav) for more information. |
+| `CLAMAV_HOST`    | `127.0.0.1` or `clamav` when running with Docker/Podman   | The IP address of the ClamAV server. See the [ClamAV docs](integrations.md#clamav) for more information. |
 | `CLAMAV_PORT`    | `3310`                                             | The port number of the ClamAV server.                                                                    |
 
 #### Frontend
@@ -44,12 +44,13 @@ For installation specific configuration, you can use environment variables. The 
 | `PORT`    | `3000`                  | The port on which the frontend listens.  |
 | `API_URL` | `http://localhost:8080` | The URL of the backend for the frontend. |
 
-#### Docker specific
+#### Docker/Podman specific
 
-Environment variables that are only available when running Swiss DataShare with Docker.
+Environment variables that are only available when running Swiss DataShare with Docker or Podman.
 
-| Variable          | Default Value | Description                                                                                                                                                                                                                                                                                                                                                                   |
-| ----------------- | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `TRUST_PROXY`     | `false`       | Whether Swiss DataShare is behind a reverse proxy. If set to `true`, the `X-Forwarded-For` header is trusted.                                                                                                                                                                                                                                                                   |
-| `CADDY_DISABLED`  | `false`       | Configures if Swiss DataShare is starting built-in Caddy. If set to `true`, Caddy will not be started. If disabled, you must configure your reverse proxy to correctly map all paths. Refer to the [official Caddyfile](https://github.com/swissmakers/swiss-datashare/blob/main/reverse-proxy/Caddyfile) for guidance.                                                            |
-| `PUID` and `PGID` | `1000`        | The user and group ID of the user who should run Swiss DataShare inside the Docker container and owns the files that are mounted with the volume. You can get the `PUID` and `GUID` of your user on your host machine by using the command `id`. For more information see [this article](https://docs.linuxserver.io/general/understanding-puid-and-pgid/#using-the-variables). |
+| Variable                      | Default Value | Description                                                                                                                                                                                                                                                                                                                                                                   |
+| ----------------------------- | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `TRUST_PROXY`                 | `false`       | Whether Swiss DataShare is behind a reverse proxy. If set to `true`, the `X-Forwarded-For` header is trusted.                                                                                                                                                                                                                                                                   |
+| `CADDY_DISABLED`              | `false`       | Configures if Swiss DataShare is starting built-in Caddy. If set to `true`, Caddy will not be started. If disabled, you must configure your reverse proxy to correctly map all paths. Refer to the [official Caddyfile](https://github.com/swissmakers/swiss-datashare/blob/main/reverse-proxy/Caddyfile) for guidance.                                                            |
+| `PUID` and `PGID`             | `1000`        | The user and group ID of the user who should run Swiss DataShare inside the container and owns the files that are mounted with the volume. You can get the `PUID` and `GUID` of your user on your host machine by using the command `id`. For more information see [this article](https://docs.linuxserver.io/general/understanding-puid-and-pgid/#using-the-variables). |
+| `NODE_TLS_REJECT_UNAUTHORIZED` | `1` (enabled) | Controls whether Node.js should reject connections to servers with self-signed or invalid certificates. Set to `0` to allow connections to services with self-signed certificates (e.g., LDAPS, proxy). **Warning**: Only use `0` in environments where you trust the network infrastructure. In secure environments, consider using proper certificate management instead. |

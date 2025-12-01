@@ -20,7 +20,9 @@ Swiss DataShare is a self-hosted file sharing platform and an alternative for We
 
 ## 🚀 Get Started
 
-### Installation with Docker (recommended)
+> **Security Recommendation**: For production environments, we recommend using **Podman** and **Podman Compose** instead of Docker for enhanced security. Podman runs rootless by default and provides better isolation. All examples below work with both Docker and Podman, but Podman is preferred for security-conscious deployments.
+
+### Installation with Docker/Podman (recommended)
 
 #### Using Prebuilt Image
 
@@ -36,16 +38,83 @@ services:
     environment:
       - TRUST_PROXY=false
     volumes:
-      - "./data:/opt/app/backend/data"
-      - "./data/images:/opt/app/frontend/public/img"
+      - "./data:/opt/app/backend/data:Z"
+      - "./data/images:/opt/app/frontend/public/img:Z"
 ```
 
-#### Using Docker Compose
+**SELinux Note**: When using Podman on systems with SELinux enabled (e.g., RHEL, CentOS, Fedora), use the `:Z` or `:z` suffix on volume mounts:
+- `:Z` - Sets the SELinux context to be private and unshared (recommended for single-container use)
+- `:z` - Sets the SELinux context to be shared (use when multiple containers need access)
+- Without a suffix, SELinux may block container access to mounted volumes
+
+#### Using Docker Compose / Podman Compose
 
 1. Download the `docker-compose.yml` file
-2. Run `docker compose up -d`
+2. Run with Docker: `docker compose up -d` or with Podman: `podman-compose up -d`
 
-The website is now listening on `http://localhost:3000`, have fun with Swiss DataShare!
+**Note**: We recommend using `podman-compose` for better security. Podman runs rootless by default and provides enhanced isolation compared to Docker.
+
+The webapp is now listening on `http://localhost:3000`, have fun with Swiss DataShare!
+
+#### Production Setup with Systemd Service
+
+For production environments, it is recommended to use a systemd service instead of podman compose. This provides better control over container lifecycle, automatic restarts, and integration with the system's service management.
+
+**Note**: If you are running in an environment with self-signed LDAPS and proxy certificates, you will need to set the `NODE_TLS_REJECT_UNAUTHORIZED=0` environment variable to allow connections to services with self-signed certificates.
+
+Create a systemd service file at `/etc/systemd/system/swiss-datashare-container.service`:
+
+```ini
+[Unit]
+Description=Systemd controlled container
+After=network.target
+
+[Service]
+Environment="SERVICE=prod-swiss-datashare"
+Type=simple
+TimeoutStartSec=30s
+ExecStartPre=-/usr/bin/podman rm -f "$SERVICE"
+ExecStart=/usr/bin/podman run --name $SERVICE \
+  --dns=172.16.10.4 \
+  --dns=172.16.10.5 \
+  -p 127.0.0.1:3010:3000 \
+  -v /opt/podman-swiss-datashare/data:/opt/app/backend/data:Z \
+  -v /opt/podman-swiss-datashare/images:/opt/app/frontend/public/img:Z \
+  -e TRUST_PROXY=true \
+  -e NODE_TLS_REJECT_UNAUTHORIZED=0 \
+  registry.swissmakers.ch/infra/swiss-datashare:latest
+ExecReload=-/usr/bin/podman stop "$SERVICE"
+ExecReload=-/usr/bin/podman rm "$SERVICE"
+ExecStop=-/usr/bin/podman stop "$SERVICE"
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target
+```
+
+**Configuration Notes:**
+
+- **DNS servers**: Adjust the `--dns` flags to match your network's DNS servers
+- **Port binding**: The example binds to `127.0.0.1:3010:3000` (localhost only). Adjust as needed for your setup
+- **Volume mounts**: Update the volume paths (`/opt/podman-swiss-datashare/data` and `/opt/podman-swiss-datashare/images`) to match your desired data directories
+- **SELinux labels**: The `:Z` suffix on volume mounts is required on systems with SELinux enabled (e.g., RHEL, CentOS, Fedora). Use `:Z` for private unshared volumes (recommended) or `:z` for shared volumes when multiple containers need access
+- **NODE_TLS_REJECT_UNAUTHORIZED**: Set to `0` only if you need to connect to services with self-signed certificates (e.g., LDAPS, proxy). In secure environments, consider using proper certificate management instead
+- **TRUST_PROXY**: Set to `true` when running behind a reverse proxy
+
+After creating the service file, enable and start it:
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable swiss-datashare-container.service
+sudo systemctl start swiss-datashare-container.service
+```
+
+Check the status with:
+
+```bash
+sudo systemctl status swiss-datashare-container.service
+```
 
 ### Manual Build
 
@@ -99,12 +168,18 @@ If you want to build the project manually from source, follow these steps:
    npm run start
    ```
 
-#### Building Docker Image
+#### Building Container Image
 
-To build your own Docker image:
+To build your own container image with Docker:
 
 ```bash
 docker build -t swiss-datashare:latest .
+```
+
+Or with Podman (recommended for security):
+
+```bash
+podman build -t swiss-datashare:latest .
 ```
 
 Or use the provided script:

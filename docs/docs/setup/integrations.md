@@ -10,13 +10,13 @@ ClamAV is used to scan shares for malicious files and remove them if found.
 
 Please note that ClamAV needs a lot of [resources](https://docs.clamav.net/manual/Installing/Docker.html#memory-ram-requirements).
 
-### Docker
+### Docker / Podman
 
 If you are already running ClamAV elsewhere, you can specify the `CLAMAV_HOST` environment variable to point to that instance.
 
-Else you have to add the ClamAV container to the Swiss DataShare Docker Compose stack:
+Else you have to add the ClamAV container to the Swiss DataShare Docker/Podman Compose stack:
 
-1. Add the ClamAV container to the Docker Compose stack and start the container.
+1. Add the ClamAV container to the Docker/Podman Compose stack and start the container.
 
 ```diff
 services:
@@ -33,7 +33,7 @@ services:
 
 ```
 
-2. Docker will wait for ClamAV to start before starting Swiss DataShare. This may take a minute or two.
+2. Docker/Podman will wait for ClamAV to start before starting Swiss DataShare. This may take a minute or two.
 3. The Swiss DataShare logs should now log "ClamAV is active"
 
 ### Stand-Alone

@@ -8,12 +8,34 @@ id: upgrading
 
 As Swiss DataShare is in early stage, see the release notes for breaking changes before upgrading.
 
-#### Docker
+#### Docker / Podman Compose
 
+With Docker:
 ```bash
 docker compose pull
 docker compose up -d
 ```
+
+With Podman (recommended for security):
+```bash
+podman-compose pull
+podman-compose up -d
+```
+
+#### Systemd Service
+
+For systemd service installations, upgrade by pulling the latest image and restarting the service:
+
+```bash
+# Pull the latest image
+sudo podman pull registry.swissmakers.ch/infra/swiss-datashare:latest
+
+# Restart the service (this will stop the old container and start a new one)
+sudo systemctl restart swiss-datashare-container.service
+```
+
+The service will automatically recreate the container with the new image on restart.
+
 ### Portainer
 
 1. In your container page, click on Recreate.
