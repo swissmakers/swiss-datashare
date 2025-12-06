@@ -17,9 +17,10 @@ const FileListRow = ({
   onRestore?: () => void;
 }) => {
   const uploadable = "uploadingProgress" in file;
-  const uploading = uploadable && file.uploadingProgress !== 0;
+  const uploading = uploadable && file.uploadingProgress !== 0 && file.uploadingProgress < 100 && file.uploadingProgress !== -1;
+  const queued = uploadable && file.uploadingProgress === 0;
   const removable = uploadable
-    ? file.uploadingProgress === 0
+    ? file.uploadingProgress === 0 || file.uploadingProgress === -1
     : onRemove && !file.deleted;
   const restorable = onRestore && !uploadable && !!file.deleted;
   const deleted = !uploadable && !!file.deleted;
@@ -43,8 +44,19 @@ const FileListRow = ({
               <TbTrash size={18} />
             </button>
           )}
+          {queued && (
+            <span className="text-xs text-gray-500 dark:text-gray-400" title="Waiting to upload">
+              Queued
+            </span>
+          )}
           {uploading && (
             <UploadProgressIndicator progress={file.uploadingProgress} />
+          )}
+          {uploadable && file.uploadingProgress >= 100 && (
+            <UploadProgressIndicator progress={100} />
+          )}
+          {uploadable && file.uploadingProgress === -1 && (
+            <UploadProgressIndicator progress={-1} />
           )}
           {restorable && (
             <button

@@ -53,16 +53,21 @@ const Upload = ({
 
   const uploadFiles = async (share: CreateShare, files: FileUpload[]) => {
     setisUploading(true);
+    console.log(`[Upload] Starting upload of ${files.length} files`);
 
     try {
       const isReverseShare = router.pathname != "/upload";
+      console.log(`[Upload] Creating share (isReverseShare: ${isReverseShare})...`);
       createdShare = await shareService.create(share, isReverseShare);
+      console.log(`[Upload] Share created successfully: ${createdShare.id}`);
     } catch (e) {
+      console.error(`[Upload] Error creating share:`, e);
       toast.axiosError(e);
       setisUploading(false);
       return;
     }
 
+    console.log(`[Upload] Starting upload of ${files.length} files (max 3 concurrent)`);
     const fileUploadPromises = files.map(async (file, fileIndex) =>
       // Limit the number of concurrent uploads to 3
       promiseLimit(async () => {
@@ -79,6 +84,7 @@ const Upload = ({
           );
         };
 
+        console.log(`[Upload] Starting upload of file ${fileIndex + 1}/${files.length}: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`);
         setFileProgress(1);
 
         let chunks = Math.ceil(file.size / chunkSize.current);
@@ -86,11 +92,14 @@ const Upload = ({
         // If the file is 0 bytes, we still need to upload 1 chunk
         if (chunks == 0) chunks++;
 
+        console.log(`[Upload] File ${file.name} will be uploaded in ${chunks} chunks (chunk size: ${(chunkSize.current / 1024 / 1024).toFixed(2)} MB)`);
+
         for (let chunkIndex = 0; chunkIndex < chunks; chunkIndex++) {
           const from = chunkIndex * chunkSize.current;
           const to = from + chunkSize.current;
           const blob = file.slice(from, to);
           try {
+            console.log(`[Upload] Uploading chunk ${chunkIndex + 1}/${chunks} of file ${file.name}`);
             await shareService
               .uploadFile(
                 createdShare.id,
@@ -104,6 +113,7 @@ const Upload = ({
               )
               .then((response) => {
                 fileId = response.id;
+                console.log(`[Upload] Chunk ${chunkIndex + 1}/${chunks} of file ${file.name} uploaded successfully, fileId: ${fileId}`);
               });
 
             setFileProgress(((chunkIndex + 1) / chunks) * 100);
@@ -112,12 +122,23 @@ const Upload = ({
               e instanceof AxiosError &&
               e.response?.data.error == "unexpected_chunk_index"
             ) {
+              console.warn(`[Upload] Unexpected chunk index for file ${file.name}, retrying with expected index: ${e.response!.data!.expectedChunkIndex}`);
               // Retry with the expected chunk index
               chunkIndex = e.response!.data!.expectedChunkIndex - 1;
               continue;
             } else {
+              console.error(`[Upload] Error uploading chunk ${chunkIndex + 1}/${chunks} of file ${file.name}:`, e);
+              if (e instanceof AxiosError) {
+                console.error(`[Upload] Error details:`, {
+                  status: e.response?.status,
+                  statusText: e.response?.statusText,
+                  data: e.response?.data,
+                  message: e.message,
+                });
+              }
               setFileProgress(-1);
               // Retry after 5 seconds
+              console.log(`[Upload] Retrying upload of file ${file.name} in 5 seconds...`);
               await new Promise((resolve) => setTimeout(resolve, 5000));
               chunkIndex = -1;
 
@@ -125,10 +146,12 @@ const Upload = ({
             }
           }
         }
+        console.log(`[Upload] Successfully completed upload of file ${file.name}`);
       }),
     );
 
     Promise.all(fileUploadPromises);
+    console.log(`[Upload] All file upload promises initiated`);
   };
 
   const showCreateUploadModalCallback = (files: FileUpload[]) => {
