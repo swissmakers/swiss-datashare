@@ -1,4 +1,5 @@
 import { Injectable, Logger } from "@nestjs/common";
+import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
 import { PrismaClient } from "@prisma/client";
 import { DATABASE_URL } from "../constants";
 
@@ -7,12 +8,10 @@ export class PrismaService extends PrismaClient {
   private readonly logger = new Logger(PrismaService.name);
 
   constructor() {
+    const adapter = new PrismaBetterSqlite3({ url: DATABASE_URL });
+
     super({
-      datasources: {
-        db: {
-          url: DATABASE_URL,
-        },
-      },
+      adapter,
     });
     super.$connect().then(() => this.logger.log("Connected to the database"));
   }

@@ -1,7 +1,7 @@
 import { jwtDecode } from "jwt-decode";
 import { NextRequest, NextResponse } from "next/server";
 
-// This middleware redirects based on different conditions:
+// This proxy redirects based on different conditions:
 // - Authentication state
 // - Setup status
 // - Admin privileges
@@ -10,7 +10,7 @@ export const config = {
   matcher: "/((?!api|static|.*\\..*|_next).*)",
 };
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const routes = {
     unauthenticated: new Routes(["/auth/*", "/"]),
     public: new Routes([
@@ -28,7 +28,7 @@ export async function middleware(request: NextRequest) {
 
   // Get config from backend
   const apiUrl = process.env.API_URL || "http://localhost:8080";
-  const config = (await (
+  const appConfig = (await (
     await fetch(`${apiUrl}/api/configs`)
   ).json()) as Array<{
     key: string;
@@ -38,7 +38,7 @@ export async function middleware(request: NextRequest) {
   }>;
 
   const getConfig = (key: string) => {
-    const variable = config.find((entry) => entry.key === key);
+    const variable = appConfig.find((entry) => entry.key === key);
     if (!variable) return null;
 
     const value = variable.value ?? variable.defaultValue;
@@ -146,7 +146,6 @@ export async function middleware(request: NextRequest) {
 
 // Helper class to check if a route matches a list of routes
 class Routes {
-  // eslint-disable-next-line no-unused-vars
   constructor(public routes: string[]) {}
 
   contains(_route: string) {

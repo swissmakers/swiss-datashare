@@ -103,7 +103,6 @@ const Share = ({ shareId }: { shareId: string }) => {
     // Only load share once when component mounts or shareId changes
     // Don't reload when modals or t change
     loadShare();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [shareId]);
 
   if (isLoading) {

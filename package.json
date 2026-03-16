@@ -10,7 +10,7 @@
     "deploy:dev": "docker buildx build --push --tag swissmakers/swiss-datashare:development --platform linux/amd64,linux/arm64 ."
   },
   "devDependencies": {
-    "conventional-changelog-cli": "^3.0.0"
+    "conventional-changelog-cli": "^5.0.0"
   },
   "prettier": {
     "singleQuote": false,

@@ -12,5 +12,13 @@ services:
       - "./data/images:/opt/app/frontend/public/img:Z"
   #      - "./config.yaml:/opt/app/config.yaml" # Add this line, if you want to configure swiss-datashare via config file and not via UI
 
+  # Optional Redis cache backend for multi-instance deployments
+  swiss-datashare-redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - "./data/redis:/data:Z"
+
   # To add ClamAV, to scan your shares for malicious files, 
   # see https://github.com/swissmakers/swiss-datashare

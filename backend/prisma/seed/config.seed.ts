@@ -1,3 +1,4 @@
+import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
 import { Prisma, PrismaClient } from "@prisma/client";
 import * as crypto from "crypto";
 
@@ -83,7 +84,7 @@ export const configVariables = {
     },
     "redis-url": {
       type: "string",
-      defaultValue: "redis://pingvin-redis:6379",
+      defaultValue: "redis://swiss-datashare-redis:6379",
       secret: true,
     },
     ttl: {
@@ -427,13 +428,11 @@ type ConfigVariables = {
 };
 
 const prisma = new PrismaClient({
-  datasources: {
-    db: {
-      url:
-        process.env.DATABASE_URL ||
-        "file:../data/swiss-datashare.db?connection_limit=1",
-    },
-  },
+  adapter: new PrismaBetterSqlite3({
+    url:
+      process.env.DATABASE_URL ||
+      "file:../data/swiss-datashare.db?connection_limit=1",
+  }),
 });
 
 async function seedConfigVariables() {
