@@ -61,7 +61,7 @@ const FileList = ({
 
     if (typeof window !== "undefined" && window.isSecureContext) {
       clipboard.copy(link);
-      toast.success(t("common.notify.copied-link"));
+      toast.success(t("common.notify.copied"));
     } else {
       modals.openModal({
         title: t("share.modal.file-link"),

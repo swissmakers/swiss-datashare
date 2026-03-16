@@ -18,7 +18,7 @@ function CopyTextField(props: { link: string }) {
 
   const copyLink = () => {
     clipboard.copy(props.link);
-    toast.success(t("common.notify.copied-link"));
+    toast.success(t("common.notify.copied"));
     if (timerRef.current) clearTimeout(timerRef.current);
     timerRef.current = setTimeout(() => {
       setCheckState(false);

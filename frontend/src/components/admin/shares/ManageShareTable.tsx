@@ -78,7 +78,7 @@ const ManageShareTable = ({
                             clipboard.copy(
                               `${window.location.origin}/s/${share.id}`,
                             );
-                            toast.success(t("common.notify.copied-link"));
+                            toast.success(t("common.notify.copied"));
                           } else {
                             showShareLinkModal(modals, share.id);
                           }

@@ -14,21 +14,31 @@ export default {
   // END navbar
 
   // /
-  "home.title": "A <h>self-hosted</h> file sharing platform.",
+  "home.title": "Secure file sharing for teams and partners.",
 
-  "home.description":
-    "Send large files with your own secure link. Upload, create the link, and share it in seconds.",
-  "home.bullet.a.name": "Self-Hosted",
-  "home.bullet.a.description": "Host Swiss DataShare on your own machine.",
-  "home.bullet.b.name": "Privacy",
-  "home.bullet.b.description":
-    "Your files are yours and will never be accessed by third parties.",
-  "home.bullet.c.name": "No annoying file size limit",
-  "home.bullet.c.description":
-    "Upload files as big as you want. Only your hard drive will be your limit.",
+  "home.description": "Upload files, create a secure link, and send it safely.",
 
-  "home.button.start": "Start sharing",
+  "home.button.start": "Start secure data transfer",
   "home.button.source": "Source code",
+  "home.trust.title": "Why organizations trust this service",
+  "home.trust.residency.title": "Data location",
+  "home.trust.residency.swiss": "The data is stored only in Switzerland.",
+  "home.trust.residency.generic": "The data remains in the configured region and infrastructure.",
+  "home.trust.encryption.title": "Data encryption",
+  "home.trust.encryption.description": "The data is protected with encryption during transfer and storage.",
+  "home.trust.no-analysis.title": "No data analysis",
+  "home.trust.no-analysis.description": "The data is not analyzed or used for any other purpose.",
+  "home.trust.hardened.title": "Security hardened",
+  "home.trust.hardened.description": "The platform is hardened to ensure reliability.",
+  "home.trust.opensource.title": "Open-source",
+  "home.trust.opensource.description": "The source code is publicly available via GitHub, so you can review how the system works.",
+  "home.how.title": "How to use it",
+  "home.how.step1.title": "1. Upload your files",
+  "home.how.step1.description": "Drag files into the upload area or select them from your device.",
+  "home.how.step2.title": "2. Create a secure link",
+  "home.how.step2.description": "Click \"Create secure link\", choose optional settings, and create the secure link.",
+  "home.how.step3.title": "3. Share the link",
+  "home.how.step3.description": "Copy the generated link and send it to the intended recipient via email.",
   // END /
 
   // /auth/signin
@@ -301,7 +311,7 @@ export default {
   // Dropzone.tsx
   "upload.dropzone.title": "Upload files",
   "upload.dropzone.description":
-    "Drag and drop files here (or select files), then click \"Send files\" to create and send your upload link. Maximum total size: {maxSize}.",
+    "Drag and drop files here (or select files), then click \"Create secure link\" to create your upload link. Maximum total size: {maxSize}.",
   "upload.dropzone.button.select": "Select files",
   "upload.dropzone.notify.file-too-big":
     "Your files exceed the maximum share size of {maxSize}.",
@@ -737,18 +747,17 @@ export default {
   "common.button.cancel": "Cancel",
   "common.button.confirm": "Confirm",
   "common.button.disable": "Disable",
-  "common.button.share": "Send files",
+  "common.button.share": "Create secure link",
   "common.button.generate": "Generate",
   "common.button.done": "Done",
   "common.text.link": "Link",
   "common.text.navigate-to-link": "Visit link",
   "common.text.or": "or",
   "common.text.redirecting": "Redirecting...",
-  "upload.flow.hint.manual-open": "Step 1: add files. Step 2: click Send files to configure and create your upload link.",
+  "upload.flow.hint.manual-open": "Step 1: add files. Step 2: click Create secure link to configure and create your upload link.",
   "common.button.go-back": "Go back",
   "common.button.go-home": "Go home",
   "common.notify.copied": "Your link was copied to the clipboard",
-  "common.notify.copied-link": "Your link was copied to the clipboard",
   "common.success": "Success",
 
   "common.error": "Error",
