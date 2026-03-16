@@ -1,5 +1,5 @@
 # Shared build base container
-FROM node:22-alpine AS build-base
+FROM node:24-alpine AS build-base
 RUN npm install -g npm@latest && apk add --no-cache python3 openssl
 # Configure npm with longer timeouts and retries
 RUN npm config set fetch-timeout 600000 && \
@@ -55,7 +55,7 @@ RUN npx prisma generate
 RUN npm run build && npm prune --production
 
 # Final combined image
-FROM node:22-alpine AS runner
+FROM node:24-alpine AS runner
 RUN npm install -g npm@latest
 ENV NODE_ENV=docker
 
