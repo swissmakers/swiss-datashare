@@ -5,7 +5,7 @@ const lawyerOverridesByLocale: Record<string, Messages> = {
     "home.title": "<h>Rechtssichere</h> Dokumentenfreigabe für Kanzleien und Mandate.",
     "home.description":
       "Dokumente sicher hochladen, einen vertraulichen Link erstellen und kontrolliert mit Mandanten oder Gegenparteien teilen.",
-    "home.button.start": "Juristischen Datenaustausch starten",
+    "home.button.start": "Datenübertragung starten",
     "home.trust.title": "Warum Kanzleien diesem Dienst vertrauen",
     "home.trust.no-analysis.title": "Keine Inhaltsauswertung",
     "home.trust.no-analysis.description":
@@ -14,7 +14,7 @@ const lawyerOverridesByLocale: Record<string, Messages> = {
     "home.how.step3.title": "Vertraulich teilen",
     "upload.title": "Sicherer Dokumenten-Upload",
     "common.button.share": "Vertraulichen Link erstellen",
-    "account.shares.title": "Mandatsfreigaben",
+    "account.shares.title": "Freigaben",
     "account.reverseShares.title": "Externe Anfragen",
     "admin.users.title": "Benutzerverwaltung",
     "admin.shares.title": "Dokumentenfreigaben",
