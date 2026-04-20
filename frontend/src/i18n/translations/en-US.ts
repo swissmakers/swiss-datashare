@@ -309,7 +309,7 @@ export default {
   "upload.notify.count-failed": "{count} files failed to upload. Trying again.",
   "upload.reverse-share.error.invalid.title": "Invalid reverse share link",
   "upload.reverse-share.error.invalid.description":
-    "This reverse share has expired or is invalid.",
+    "If your already uploaded your files on a onetime share, this message is normal. It means this reverse share is now expired or the link is invalid.",
 
   // Dropzone.tsx
   "upload.dropzone.title": "Upload files",
@@ -373,7 +373,7 @@ export default {
   "upload.modal.completed.never-expires": "This share will never expire.",
   "upload.modal.completed.expires-on":
     "This share will expire on {expiration}.",
-  "upload.modal.completed.share-ready": "Share is ready",
+  "upload.modal.completed.share-ready": "All done!",
   "upload.modal.completed.reverse-share-finished":
     "Your files were uploaded successfully.",
   "upload.modal.completed.notified-reverse-share-creator":
