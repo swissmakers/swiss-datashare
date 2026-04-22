@@ -63,6 +63,14 @@ export class ConfigController {
     );
   }
 
+  @Post("admin/legal/resetTranslations")
+  @UseGuards(JwtGuard, AdministratorGuard)
+  async resetLegalTranslations() {
+    return new AdminConfigDTO().fromList(
+      await this.configService.resetLegalTranslationsToDefault(),
+    );
+  }
+
   @Post("admin/testEmail")
   @UseGuards(JwtGuard, AdministratorGuard)
   async testEmail(@Body() { email }: TestEmailDTO, @GetUser() user: User) {

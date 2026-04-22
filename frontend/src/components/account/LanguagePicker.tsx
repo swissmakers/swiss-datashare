@@ -53,7 +53,6 @@ const LanguagePicker = ({ compact = false }: { compact?: boolean }) => {
   return (
     <Select
       label={t("account.card.language.title")}
-      helperText={t("account.card.language.description")}
       value={selectedLanguage}
       options={languages}
       onChange={(e) => {

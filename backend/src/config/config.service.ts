@@ -17,6 +17,10 @@ import {
   EmailConfigTranslationKey,
 } from "src/email/i18n/messages";
 import {
+  buildDefaultLegalConfigTranslations,
+  LegalConfigTranslationKey,
+} from "src/legal/i18n/messages";
+import {
   configVariables,
   YamlConfig,
 } from "../../prisma/seed/config-variables";
@@ -225,6 +229,36 @@ export class ConfigService extends EventEmitter {
       });
       updated.push(configVariable);
       this.emit("update", `email.${key}`, configVariable.value);
+    }
+
+    this.configVariables = await this.prisma.config.findMany();
+    return updated;
+  }
+
+  async resetLegalTranslationsToDefault() {
+    if (!this.isEditAllowed())
+      throw new BadRequestException(
+        "You are only allowed to update config variables via the config.yaml file",
+      );
+
+    const defaults = buildDefaultLegalConfigTranslations();
+    const keys = Object.keys(defaults) as LegalConfigTranslationKey[];
+    const updated: Config[] = [];
+
+    for (const key of keys) {
+      const configVariable = await this.prisma.config.update({
+        where: {
+          name_category: {
+            category: "legal",
+            name: key,
+          },
+        },
+        data: {
+          value: JSON.stringify(defaults[key]),
+        },
+      });
+      updated.push(configVariable);
+      this.emit("update", `legal.${key}`, configVariable.value);
     }
 
     this.configVariables = await this.prisma.config.findMany();

@@ -35,6 +35,13 @@ const LOCALIZABLE_EMAIL_KEYS = [
   "email.inviteMessage",
 ] as const;
 
+const LOCALIZABLE_LEGAL_KEYS = [
+  "legal.imprintText",
+  "legal.imprintUrl",
+  "legal.privacyPolicyText",
+  "legal.privacyPolicyUrl",
+] as const;
+
 const EMAIL_KEY_TO_TRANSLATION: Record<string, string> = {
   "email.shareRecipientsSubject": "email.shareRecipientsSubject",
   "email.shareRecipientsMessage": "email.shareRecipientsMessage",
@@ -100,6 +107,8 @@ export default function AdminConfigPage() {
 
   const [logo, setLogo] = useState<File | null>(null);
   const [isResettingEmailTranslations, setIsResettingEmailTranslations] =
+    useState(false);
+  const [isResettingLegalTranslations, setIsResettingLegalTranslations] =
     useState(false);
 
   const isEditingAllowed = (): boolean => {
@@ -189,7 +198,7 @@ export default function AdminConfigPage() {
     </div>
   );
 
-  const renderLocalizedEmailBlock = (configVariable: AdminConfig) => {
+  const renderLocalizedConfigBlock = (configVariable: AdminConfig) => {
     const rawValue = getConfigValue(
       configVariable.key,
       configVariable.value ?? configVariable.defaultValue,
@@ -287,6 +296,25 @@ export default function AdminConfigPage() {
       .finally(() => setIsResettingEmailTranslations(false));
   };
 
+  const resetLegalTranslationsToDefault = async () => {
+    const shouldReset = window.confirm(
+      "Reset all legal translations to default Switzerland templates for every language?",
+    );
+    if (!shouldReset) return;
+
+    setIsResettingLegalTranslations(true);
+    await configService
+      .resetLegalTranslations()
+      .then(async () => {
+        setUpdatedConfigVariables([]);
+        const reloadedConfig = await configService.getByCategory(categoryId);
+        setConfigVariables(reloadedConfig);
+        toast.success("Legal translations reset to defaults");
+      })
+      .catch(toast.axiosError)
+      .finally(() => setIsResettingLegalTranslations(false));
+  };
+
   return (
     <>
       <Meta title={t("admin.config.title")} />
@@ -325,11 +353,10 @@ export default function AdminConfigPage() {
                   <h2 className="page-title mb-6">
                     {t("admin.config.category." + categoryId)}
                   </h2>
-                  {categoryId === "email" && (
+                  {(categoryId === "email" || categoryId === "legal") && (
                     <div className="pb-2">
                       <Select
                         label={t("account.card.language.title")}
-                        helperText={t("account.card.language.description")}
                         value={selectedEmailLocale}
                         options={Object.values(LOCALES).map((locale) => ({
                           value: locale.code,
@@ -349,7 +376,15 @@ export default function AdminConfigPage() {
                         configVariable.key as (typeof LOCALIZABLE_EMAIL_KEYS)[number],
                       )
                     ) {
-                      return renderLocalizedEmailBlock(configVariable);
+                      return renderLocalizedConfigBlock(configVariable);
+                    }
+                    if (
+                      categoryId === "legal" &&
+                      LOCALIZABLE_LEGAL_KEYS.includes(
+                        configVariable.key as (typeof LOCALIZABLE_LEGAL_KEYS)[number],
+                      )
+                    ) {
+                      return renderLocalizedConfigBlock(configVariable);
                     }
                     return renderConfigBlock(configVariable);
                   })}
@@ -368,6 +403,15 @@ export default function AdminConfigPage() {
                       loading={isResettingEmailTranslations}
                     >
                       Reset translations to default
+                    </Button>
+                  )}
+                  {categoryId == "legal" && (
+                    <Button
+                      variant="danger"
+                      onClick={resetLegalTranslationsToDefault}
+                      loading={isResettingLegalTranslations}
+                    >
+                      Reset legal translations to default
                     </Button>
                   )}
                   {categoryId == "smtp" && (

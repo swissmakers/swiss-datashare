@@ -1,6 +1,46 @@
 import Config, { AdminConfig, UpdateConfig } from "../types/config.type";
 import api from "./api.service";
 import { stringToTimespan } from "../utils/date.util";
+import { getCookie } from "cookies-next";
+
+const LOCALIZED_LEGAL_KEYS = [
+  "legal.imprintText",
+  "legal.imprintUrl",
+  "legal.privacyPolicyText",
+  "legal.privacyPolicyUrl",
+];
+
+const parseLocalizedMap = (value: string): Record<string, string> | null => {
+  try {
+    const parsed = JSON.parse(value);
+    if (typeof parsed !== "object" || parsed == null || Array.isArray(parsed))
+      return null;
+
+    return Object.entries(parsed).reduce<Record<string, string>>(
+      (acc, [key, mapValue]) => {
+        if (typeof mapValue === "string") acc[key] = mapValue;
+        return acc;
+      },
+      {},
+    );
+  } catch {
+    return null;
+  }
+};
+
+const getLocalizedValue = (value: string, locale: string): string => {
+  const map = parseLocalizedMap(value);
+  if (!map) return value;
+
+  const baseLanguage = locale.split("-")[0];
+  return (
+    map[locale] ??
+    map[baseLanguage] ??
+    map["en-US"] ??
+    map.en ??
+    ""
+  );
+};
 
 const list = async (): Promise<Config[]> => {
   return (await api.get("/configs")).data;
@@ -32,13 +72,18 @@ const get = (key: string, configVariables: Config[]): any => {
   }
 
   const value = configVariable.value ?? configVariable.defaultValue;
+  const locale = getCookie("language")?.toString() ?? "en-US";
+  const resolvedValue =
+    LOCALIZED_LEGAL_KEYS.includes(key) && typeof value === "string"
+      ? getLocalizedValue(value, locale)
+      : value;
 
   if (configVariable.type == "number" || configVariable.type == "filesize")
-    return parseInt(value);
-  if (configVariable.type == "boolean") return value == "true";
+    return parseInt(resolvedValue, 10);
+  if (configVariable.type == "boolean") return resolvedValue == "true";
   if (configVariable.type == "string" || configVariable.type == "text")
-    return value;
-  if (configVariable.type == "timespan") return stringToTimespan(value);
+    return resolvedValue;
+  if (configVariable.type == "timespan") return stringToTimespan(resolvedValue);
 };
 
 const finishSetup = async (): Promise<AdminConfig[]> => {
@@ -51,6 +96,10 @@ const sendTestEmail = async (email: string) => {
 
 const resetEmailTranslations = async (): Promise<AdminConfig[]> => {
   return (await api.post("/configs/admin/email/resetTranslations")).data;
+};
+
+const resetLegalTranslations = async (): Promise<AdminConfig[]> => {
+  return (await api.post("/configs/admin/legal/resetTranslations")).data;
 };
 
 const isNewReleaseAvailable = async () => {
@@ -76,6 +125,7 @@ export default {
   finishSetup,
   sendTestEmail,
   resetEmailTranslations,
+  resetLegalTranslations,
   isNewReleaseAvailable,
   changeLogo,
 };

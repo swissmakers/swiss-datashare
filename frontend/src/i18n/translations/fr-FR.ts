@@ -114,7 +114,6 @@ export default {
   "account.notify.totp.disable": "Double authentification (TOTP) désactivé avec succès",
   "account.notify.totp.enable": "TOTP activé avec succès",
   "account.card.language.title": "Langue",
-  "account.card.language.description": "Le projet est traduit par la communauté. Certaines traductions peuvent être incomplètes.",
   "account.card.color.title": "Thème de couleurs",
   // ThemeSwitcher.tsx
   "account.theme.dark": "Sombre",

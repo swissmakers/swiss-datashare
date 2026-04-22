@@ -255,10 +255,6 @@ export class EmailService {
       securityNotice: this.interpolate(copy.common.securityNotice, {
         appName: branding.appName,
       }),
-      detailRows: [
-        { label: copy.labels.sender, value: creatorName },
-        { label: copy.labels.senderEmail, value: creatorEmail },
-      ],
       branding,
     });
 
@@ -430,10 +426,6 @@ export class EmailService {
       securityNotice: this.interpolate(copy.common.securityNotice, {
         appName: branding.appName,
       }),
-      detailRows: [
-        { label: copy.labels.accountEmail, value: recipientEmail },
-        { label: copy.labels.temporaryPassword, value: password },
-      ],
       branding,
     });
 

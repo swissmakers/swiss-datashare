@@ -114,7 +114,6 @@ export default {
   "account.notify.totp.disable": "TOTP deshabilitado correctamente",
   "account.notify.totp.enable": "TOTP habilitado correctamente",
   "account.card.language.title": "Idioma",
-  "account.card.language.description": "El proyecto ha sido traducido por la comunidad. Algunos idiomas pueden estar incompletos.",
   "account.card.color.title": "Esquema de colores",
   // ThemeSwitcher.tsx
   "account.theme.dark": "Obscuro",

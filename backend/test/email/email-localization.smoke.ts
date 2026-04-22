@@ -19,7 +19,6 @@ function run() {
     actionLabel: "Open application",
     actionUrl: "https://example.test/app",
     securityNotice: "Security notice",
-    detailRows: [{ label: "Sender", value: "alice@example.test" }],
     branding: {
       appName: "Swiss DataShare",
       appUrl: "https://example.test",

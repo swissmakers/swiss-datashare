@@ -6,18 +6,12 @@ export type EmailBranding = {
   footerBrandUrl: string;
 };
 
-type DetailRow = {
-  label: string;
-  value: string;
-};
-
 type EmailTemplateInput = {
   preheader: string;
   title: string;
   introLines: string[];
   actionLabel: string;
   actionUrl: string;
-  detailRows?: DetailRow[];
   securityNotice: string;
   branding: EmailBranding;
 };
@@ -43,21 +37,6 @@ export function renderEmailTemplate(input: EmailTemplateInput): RenderedEmail {
         `<p style="margin:0 0 14px;color:#334155;font-size:15px;line-height:1.6;">${escapeHtml(line)}</p>`,
     )
     .join("");
-
-  const detailRows = input.detailRows ?? [];
-  const detailsHtml = detailRows.length
-    ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:20px 0 0;border-collapse:collapse;">
-${detailRows
-  .map(
-    (row) =>
-      `<tr>
-  <td style="padding:10px 14px;border:1px solid #e2e8f0;background:#f8fafc;color:#0f172a;font-size:13px;font-weight:600;width:38%;">${escapeHtml(row.label)}</td>
-  <td style="padding:10px 14px;border:1px solid #e2e8f0;background:#ffffff;color:#334155;font-size:13px;">${escapeHtml(row.value)}</td>
-</tr>`,
-  )
-  .join("")}
-</table>`
-    : "";
 
   const html = `<!doctype html>
 <html lang="en">
@@ -88,7 +67,6 @@ ${detailRows
                     </td>
                   </tr>
                 </table>
-                ${detailsHtml}
               </td>
             </tr>
             <tr>
@@ -107,14 +85,12 @@ ${detailRows
   </body>
 </html>`;
 
-  const detailText = detailRows.map((row) => `${row.label}: ${row.value}`).join("\n");
   const text = [
     input.title,
     "",
     ...input.introLines,
     "",
     `${input.actionLabel}: ${input.actionUrl}`,
-    detailText ? `\n${detailText}` : "",
     "",
     input.securityNotice,
     `${input.branding.footerBrandText} ${input.branding.footerBrandUrl}`,

@@ -42,10 +42,42 @@ export async function proxy(request: NextRequest) {
     if (!variable) return null;
 
     const value = variable.value ?? variable.defaultValue;
+    const locale =
+      request.cookies.get("language")?.value ||
+      request.headers.get("accept-language")?.split(",")[0] ||
+      "en-US";
+    const normalizedLocale = locale.split(";")[0];
+    const baseLanguage = normalizedLocale.split("-")[0];
+
+    let resolvedValue = value;
+    if (
+      [
+        "legal.imprintText",
+        "legal.imprintUrl",
+        "legal.privacyPolicyText",
+        "legal.privacyPolicyUrl",
+      ].includes(key)
+    ) {
+      try {
+        const parsed = JSON.parse(value);
+        if (typeof parsed === "object" && parsed !== null && !Array.isArray(parsed)) {
+          const map = parsed as Record<string, string>;
+          resolvedValue =
+            map[normalizedLocale] ??
+            map[baseLanguage] ??
+            map["en-US"] ??
+            map.en ??
+            "";
+        }
+      } catch {
+        resolvedValue = value;
+      }
+    }
+
     if (variable.type === "number" || variable.type === "filesize")
-      return parseInt(value, 10);
-    if (variable.type === "boolean") return value === "true";
-    return value;
+      return parseInt(resolvedValue, 10);
+    if (variable.type === "boolean") return resolvedValue === "true";
+    return resolvedValue;
   };
 
   const route = request.nextUrl.pathname;
