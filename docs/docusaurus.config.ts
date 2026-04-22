@@ -6,9 +6,9 @@ const config: Config = {
   title: "Swiss DataShare",
   tagline:
     "Swiss DataShare is self-hosted file sharing platform and an alternative for WeTransfer.",
-  favicon: "img/pingvinshare.svg",
+  favicon: "img/logo.png",
 
-  url: "https://swissmakers.github.io",
+  url: "https://github.com/swissmakers",
   baseUrl: "/swiss-datashare/",
   organizationName: "swissmakers",
   projectName: "swiss-datashare",
@@ -36,7 +36,7 @@ const config: Config = {
   ],
 
   themeConfig: {
-    image: "img/pingvinshare.svg",
+    image: "img/logo.png",
     colorMode: {
       respectPrefersColorScheme: true,
     },
@@ -44,7 +44,7 @@ const config: Config = {
       title: "Swiss DataShare",
       logo: {
         alt: "Swiss DataShare Logo",
-        src: "img/pingvinshare.svg",
+        src: "img/logo.png",
       },
       items: [
         {

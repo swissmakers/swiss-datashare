@@ -18,6 +18,68 @@ Swiss DataShare is a self-hosted file sharing platform and an alternative for We
 - Integration with ClamAV for security scans
 - Different file providers: local storage and S3
 
+## 🖼️ App Walkthrough
+
+### 1) Login
+![App login screen](docs/static/img/1-app-login.png)
+The login page where the user authenticates to access Swiss DataShare.
+
+### 2) Home
+![App home dashboard](docs/static/img/2-app-home.png)
+The main dashboard where the user lands after login and where he/she can start sharing files or requesting data.
+
+### 3) Home - Shares
+![App home with shares](docs/static/img/3-app-home-shares.png)
+Here a user can show existing shares. "My shares" are created and send data-(shares) by the user itself. "Data Requests" will be described later, but here is also the overview of past data requests.
+
+### 4) Share Data
+![Share data action](docs/static/img/4-app-share-data.png)
+Data can be shared by Drag & Drop to the marked field or selected by the "Select files" button. If all is uploaded a user clicks on "Share Data" button.
+
+### 5) Share Data Form
+![Share data form](docs/static/img/5-app-share-data-form.png)
+This will open the share configuration form where the user can enter a title and note and set the expiration and other sharing options. (e.g. password protection)
+
+### 6) Share Data Done
+![Share data completed](docs/static/img/6-app-share-data-done.png)
+After clicking "Share Data" in the form above, the secret-link with the user share is generated in the background and the link is shown to the user, which he/she can now send to the recipient -> add to the mail.
+
+### 7) Share Link Received
+![Share link received](docs/static/img/7-app-share-data-link-recived.png)
+This shows the received test share, where the recipient has opened the secure-link from his mail.
+
+### 8) Share Link Preview
+![Share link preview](docs/static/img/8-app-share-data-link-recived-preview.png)
+He can now all download or before download also open up the preview.
+
+### 9) Own Shares
+![Own shares listing](docs/static/img/9-app-shares-own-shares.png)
+This is the user's own shares list where he can track and manage what was shared.
+
+### 10) Request Data
+![Request data action](docs/static/img/10-app-request-data.png)
+The request-data flow is if you need files / data from a client that does not have a account on Swiss DataShare. By clicking "Create" on the "Data Requests" page the following form is opened, where the user can configure his data request and then click "Create" to generate the data-request-link.
+
+### 11) Request Link Received - Upload
+![Request link upload page](docs/static/img/11-app-request-data-link-recived-upload.png)
+The recipient that opens the link, can directly start uploading his data and also add a optional message to the request owner. As soon as all is done the client only needs to click on "Finish upload".
+
+### 12) Request Link Received - Done
+![Request upload completed](docs/static/img/12-app-request-data-link-recived-done.png)
+A upload completion should be shown, that confirms that all went well.
+
+### 13) Requested Data Received
+![Requested data received](docs/static/img/13-app-request-data-recived.png)
+If the requester configered to recive a mail, as soon as the "upload finishes" he will get a message with the new secure-link where he can access the data. (login needed). If not configured he can check the "Data Requests" overview (see 15).
+
+### 14) Requested Data Preview
+![Requested data preview](docs/static/img/14-app-request-data-recived-preview.png)
+Here as well a preview is possible before downloading.
+
+### 15) Request Data Shares
+![Request data shares overview](docs/static/img/15-app-request-data-shares.png)
+The mentioned request-share overview where the user can monitors all request-based data exchanges.
+
 ## 🚀 Get Started
 
 > **Security Recommendation**: For production environments, we recommend using **Podman** and **Podman Compose** instead of Docker for enhanced security. Podman runs rootless by default and provides better isolation. All examples below work with both Docker and Podman, but Podman is preferred for security-conscious deployments.
