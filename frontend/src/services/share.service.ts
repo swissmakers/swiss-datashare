@@ -11,6 +11,12 @@ import {
 } from "../types/share.type";
 import api from "./api.service";
 
+const REVERSE_SHARE_TOKEN_PATTERN = /^[A-Za-z0-9_-]{1,256}$/;
+
+const isValidReverseShareToken = (token: string): boolean => {
+  return REVERSE_SHARE_TOKEN_PATTERN.test(token);
+};
+
 const list = async (): Promise<MyShare[]> => {
   return (await api.get(`shares/all`)).data;
 };
@@ -134,7 +140,12 @@ const getMyReverseShares = async (): Promise<MyReverseShare[]> => {
 };
 
 const setReverseShare = async (reverseShareToken: string) => {
-  const { data } = await api.get(`/reverseShares/${reverseShareToken}`);
+  if (!isValidReverseShareToken(reverseShareToken)) {
+    throw new Error("Invalid reverse share token format");
+  }
+
+  const safeReverseShareToken = encodeURIComponent(reverseShareToken);
+  const { data } = await api.get(`/reverseShares/${safeReverseShareToken}`);
   setCookie("reverse_share_token", reverseShareToken);
   return data;
 };
