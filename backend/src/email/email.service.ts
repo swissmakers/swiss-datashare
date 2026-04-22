@@ -258,8 +258,6 @@ export class EmailService {
       detailRows: [
         { label: copy.labels.sender, value: creatorName },
         { label: copy.labels.senderEmail, value: creatorEmail },
-        { label: copy.labels.availability, value: expiresAt },
-        { label: copy.labels.message, value: shareDescription },
       ],
       branding,
     });
@@ -321,7 +319,6 @@ export class EmailService {
       securityNotice: this.interpolate(copy.common.securityNotice, {
         appName: branding.appName,
       }),
-      detailRows: [{ label: copy.labels.message, value: senderNote }],
       branding,
     });
 
