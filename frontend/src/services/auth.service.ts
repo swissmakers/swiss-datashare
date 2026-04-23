@@ -1,5 +1,6 @@
 import { getCookie } from "cookies-next";
 import * as jose from "jose";
+import { encodePathSegment } from "../utils/url.util";
 import api from "./api.service";
 
 const signIn = async (emailOrUsername: string, password: string) => {
@@ -53,7 +54,8 @@ const refreshAccessToken = async () => {
 };
 
 const requestResetPassword = async (email: string) => {
-  await api.post(`/auth/resetPassword/${email}`);
+  const safeEmail = encodePathSegment(email);
+  await api.post(`/auth/resetPassword/${safeEmail}`);
 };
 
 const resetPassword = async (token: string, password: string) => {

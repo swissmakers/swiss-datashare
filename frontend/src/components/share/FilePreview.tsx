@@ -5,6 +5,7 @@ import { FormattedMessage } from "react-intl";
 import api from "../../services/api.service";
 import { useModals } from "../../contexts/ModalContext";
 import { useTheme } from "../../contexts/ThemeContext";
+import { encodePathSegment } from "../../utils/url.util";
 
 const FilePreviewContext = React.createContext<{
   shareId: string;
@@ -29,6 +30,8 @@ const FilePreview = ({
 }) => {
   const [isNotSupported, setIsNotSupported] = useState(false);
   const modals = useModals();
+  const safeShareId = encodePathSegment(shareId);
+  const safeFileId = encodePathSegment(fileId);
   
   if (isNotSupported) return <UnSupportedFile />;
 
@@ -40,7 +43,7 @@ const FilePreview = ({
         <FileDecider />
       </FilePreviewContext.Provider>
       <Link
-        href={`/api/shares/${shareId}/files/${fileId}?download=false`}
+        href={`/api/shares/${safeShareId}/files/${safeFileId}?download=false`}
         target="_blank"
         rel="noopener noreferrer"
         className="inline-flex items-center justify-center font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 text-primary-500 hover:bg-primary-50 focus:ring-primary-500 dark:text-primary-400 dark:hover:bg-primary-900/20 px-4 py-2 text-base"
@@ -75,12 +78,14 @@ const FileDecider = () => {
 const AudioPreview = () => {
   const { shareId, fileId, setIsNotSupported } =
     React.useContext(FilePreviewContext);
+  const safeShareId = encodePathSegment(shareId);
+  const safeFileId = encodePathSegment(fileId);
   return (
     <div className="flex items-center justify-center min-h-[200px]">
       <div className="flex flex-col items-center gap-2.5 w-full">
         <audio controls className="w-full">
           <source
-            src={`/api/shares/${shareId}/files/${fileId}?download=false`}
+            src={`/api/shares/${safeShareId}/files/${safeFileId}?download=false`}
             onError={() => setIsNotSupported(true)}
           />
         </audio>
@@ -92,10 +97,12 @@ const AudioPreview = () => {
 const VideoPreview = () => {
   const { shareId, fileId, setIsNotSupported } =
     React.useContext(FilePreviewContext);
+  const safeShareId = encodePathSegment(shareId);
+  const safeFileId = encodePathSegment(fileId);
   return (
     <video width="100%" controls>
       <source
-        src={`/api/shares/${shareId}/files/${fileId}?download=false`}
+        src={`/api/shares/${safeShareId}/files/${safeFileId}?download=false`}
         onError={() => setIsNotSupported(true)}
       />
     </video>
@@ -105,9 +112,11 @@ const VideoPreview = () => {
 const ImagePreview = () => {
   const { shareId, fileId, setIsNotSupported } =
     React.useContext(FilePreviewContext);
+  const safeShareId = encodePathSegment(shareId);
+  const safeFileId = encodePathSegment(fileId);
   return (
     <img
-      src={`/api/shares/${shareId}/files/${fileId}?download=false`}
+      src={`/api/shares/${safeShareId}/files/${safeFileId}?download=false`}
       alt={`${fileId}_preview`}
       className="w-full"
       onError={() => setIsNotSupported(true)}
@@ -119,12 +128,14 @@ const TextPreview = () => {
   const { shareId, fileId } = React.useContext(FilePreviewContext);
   const [text, setText] = useState<string>("");
   const { theme } = useTheme();
+  const safeShareId = encodePathSegment(shareId);
+  const safeFileId = encodePathSegment(fileId);
 
   useEffect(() => {
     api
-      .get(`/shares/${shareId}/files/${fileId}?download=false`)
+      .get(`/shares/${safeShareId}/files/${safeFileId}?download=false`)
       .then((res) => setText(res.data ?? "Preview couldn't be fetched."));
-  }, [shareId, fileId]);
+  }, [safeShareId, safeFileId]);
 
   const options: MarkdownToJSX.Options = {
     disableParsingRawHTML: true,
@@ -149,8 +160,10 @@ const TextPreview = () => {
 
 const PdfPreview = () => {
   const { shareId, fileId } = React.useContext(FilePreviewContext);
+  const safeShareId = encodePathSegment(shareId);
+  const safeFileId = encodePathSegment(fileId);
   if (typeof window !== "undefined") {
-    window.location.href = `/api/shares/${shareId}/files/${fileId}?download=false`;
+    window.location.href = `/api/shares/${safeShareId}/files/${safeFileId}?download=false`;
   }
   return null;
 };

@@ -9,7 +9,14 @@ import {
   Share,
   ShareMetaData,
 } from "../types/share.type";
+import { encodePathSegment } from "../utils/url.util";
 import api from "./api.service";
+
+const REVERSE_SHARE_TOKEN_PATTERN = /^[A-Za-z0-9_-]{1,256}$/;
+
+const isValidReverseShareToken = (token: string): boolean => {
+  return REVERSE_SHARE_TOKEN_PATTERN.test(token);
+};
 
 const list = async (): Promise<MyShare[]> => {
   return (await api.get(`shares/all`)).data;
@@ -23,29 +30,35 @@ const create = async (share: CreateShare, isReverseShare = false) => {
 };
 
 const completeShare = async (id: string) => {
-  const response = (await api.post(`shares/${id}/complete`)).data;
+  const safeId = encodePathSegment(id);
+  const response = (await api.post(`shares/${safeId}/complete`)).data;
   deleteCookie("reverse_share_token");
   return response;
 };
 
 const revertComplete = async (id: string) => {
-  return (await api.delete(`shares/${id}/complete`)).data;
+  const safeId = encodePathSegment(id);
+  return (await api.delete(`shares/${safeId}/complete`)).data;
 };
 
 const get = async (id: string): Promise<Share> => {
-  return (await api.get(`shares/${id}`)).data;
+  const safeId = encodePathSegment(id);
+  return (await api.get(`shares/${safeId}`)).data;
 };
 
 const getFromOwner = async (id: string): Promise<Share> => {
-  return (await api.get(`shares/${id}/from-owner`)).data;
+  const safeId = encodePathSegment(id);
+  return (await api.get(`shares/${safeId}/from-owner`)).data;
 };
 
 const getMetaData = async (id: string): Promise<ShareMetaData> => {
-  return (await api.get(`shares/${id}/metaData`)).data;
+  const safeId = encodePathSegment(id);
+  return (await api.get(`shares/${safeId}/metaData`)).data;
 };
 
 const remove = async (id: string) => {
-  await api.delete(`shares/${id}`);
+  const safeId = encodePathSegment(id);
+  await api.delete(`shares/${safeId}`);
 };
 
 const getMyShares = async (): Promise<MyShare[]> => {
@@ -53,11 +66,13 @@ const getMyShares = async (): Promise<MyShare[]> => {
 };
 
 const getShareToken = async (id: string, password?: string) => {
-  await api.post(`/shares/${id}/token`, { password });
+  const safeId = encodePathSegment(id);
+  await api.post(`/shares/${safeId}/token`, { password });
 };
 
 const isShareIdAvailable = async (id: string): Promise<boolean> => {
-  return (await api.get(`/shares/isShareIdAvailable/${id}`)).data.isAvailable;
+  const safeId = encodePathSegment(id);
+  return (await api.get(`/shares/isShareIdAvailable/${safeId}`)).data.isAvailable;
 };
 
 const doesFileSupportPreview = (fileName: string) => {
@@ -77,11 +92,15 @@ const doesFileSupportPreview = (fileName: string) => {
 };
 
 const downloadFile = async (shareId: string, fileId: string) => {
-  window.location.href = `${window.location.origin}/api/shares/${shareId}/files/${fileId}`;
+  const safeShareId = encodePathSegment(shareId);
+  const safeFileId = encodePathSegment(fileId);
+  window.location.href = `${window.location.origin}/api/shares/${safeShareId}/files/${safeFileId}`;
 };
 
 const removeFile = async (shareId: string, fileId: string) => {
-  await api.delete(`shares/${shareId}/files/${fileId}`);
+  const safeShareId = encodePathSegment(shareId);
+  const safeFileId = encodePathSegment(fileId);
+  await api.delete(`shares/${safeShareId}/files/${safeFileId}`);
 };
 
 const uploadFile = async (
@@ -94,8 +113,9 @@ const uploadFile = async (
   chunkIndex: number,
   totalChunks: number,
 ): Promise<FileUploadResponse> => {
+  const safeShareId = encodePathSegment(shareId);
   return (
-    await api.post(`shares/${shareId}/files`, chunk, {
+    await api.post(`shares/${safeShareId}/files`, chunk, {
       headers: { "Content-Type": "application/octet-stream" },
       params: {
         id: file.id,
@@ -134,13 +154,19 @@ const getMyReverseShares = async (): Promise<MyReverseShare[]> => {
 };
 
 const setReverseShare = async (reverseShareToken: string) => {
-  const { data } = await api.get(`/reverseShares/${reverseShareToken}`);
+  if (!isValidReverseShareToken(reverseShareToken)) {
+    throw new Error("Invalid reverse share token format");
+  }
+
+  const safeReverseShareToken = encodePathSegment(reverseShareToken);
+  const { data } = await api.get(`/reverseShares/${safeReverseShareToken}`);
   setCookie("reverse_share_token", reverseShareToken);
   return data;
 };
 
 const removeReverseShare = async (id: string) => {
-  await api.delete(`/reverseShares/${id}`);
+  const safeId = encodePathSegment(id);
+  await api.delete(`/reverseShares/${safeId}`);
 };
 
 export default {

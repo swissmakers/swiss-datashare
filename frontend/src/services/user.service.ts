@@ -5,6 +5,7 @@ import {
   UpdateUser,
 } from "../types/user.type";
 import { getCookie } from "cookies-next";
+import { encodePathSegment } from "../utils/url.util";
 import api from "./api.service";
 import authService from "./auth.service";
 
@@ -17,11 +18,13 @@ const create = async (user: CreateUser) => {
 };
 
 const update = async (id: string, user: UpdateUser) => {
-  return (await api.patch(`/users/${id}`, user)).data;
+  const safeId = encodePathSegment(id);
+  return (await api.patch(`/users/${safeId}`, user)).data;
 };
 
 const remove = async (id: string) => {
-  await api.delete(`/users/${id}`);
+  const safeId = encodePathSegment(id);
+  await api.delete(`/users/${safeId}`);
 };
 
 const updateCurrentUser = async (user: UpdateCurrentUser) => {

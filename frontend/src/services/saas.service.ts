@@ -1,4 +1,5 @@
 import { BillingStatus, ExemptUser, SaasPaymentHistoryResponse } from "../types/saas.type";
+import { encodePathSegment } from "../utils/url.util";
 import api from "./api.service";
 
 const getStatus = async (): Promise<BillingStatus> => {
@@ -18,11 +19,13 @@ const getExemptUsers = async (search?: string): Promise<ExemptUser[]> => {
 };
 
 const addExemptUser = async (userId: string) => {
-  return (await api.post(`/saas/admin/exempt-users/${userId}`)).data;
+  const safeUserId = encodePathSegment(userId);
+  return (await api.post(`/saas/admin/exempt-users/${safeUserId}`)).data;
 };
 
 const removeExemptUser = async (userId: string) => {
-  return (await api.delete(`/saas/admin/exempt-users/${userId}`)).data;
+  const safeUserId = encodePathSegment(userId);
+  return (await api.delete(`/saas/admin/exempt-users/${safeUserId}`)).data;
 };
 
 const getPayments = async (): Promise<SaasPaymentHistoryResponse> => {

@@ -2,6 +2,7 @@ import Config, { AdminConfig, UpdateConfig } from "../types/config.type";
 import api from "./api.service";
 import { stringToTimespan } from "../utils/date.util";
 import { getCookie } from "cookies-next";
+import { encodePathSegment } from "../utils/url.util";
 
 const LOCALIZED_LEGAL_KEYS = [
   "legal.imprintText",
@@ -47,7 +48,8 @@ const list = async (): Promise<Config[]> => {
 };
 
 const getByCategory = async (category: string): Promise<AdminConfig[]> => {
-  return (await api.get(`/configs/admin/${category}`)).data;
+  const safeCategory = encodePathSegment(category);
+  return (await api.get(`/configs/admin/${safeCategory}`)).data;
 };
 
 const updateMany = async (data: UpdateConfig[]): Promise<AdminConfig[]> => {

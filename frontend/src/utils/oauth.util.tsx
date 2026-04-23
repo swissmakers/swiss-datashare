@@ -7,9 +7,20 @@ import {
 import { FaMicrosoft } from "react-icons/fa";
 import React from "react";
 import api from "../services/api.service";
+import { encodePathSegment } from "./url.util";
+
+const OAUTH_PROVIDERS = ["google", "microsoft", "github", "discord", "oidc"] as const;
+type OAuthProvider = (typeof OAUTH_PROVIDERS)[number];
+
+const isOAuthProvider = (provider: string): provider is OAuthProvider => {
+  return OAUTH_PROVIDERS.includes(provider as OAuthProvider);
+};
 
 const getOAuthUrl = (appUrl: string, provider: string) => {
-  return `${appUrl}/api/oauth/auth/${provider}`;
+  if (!isOAuthProvider(provider)) {
+    throw new Error("Invalid OAuth provider");
+  }
+  return `${appUrl}/api/oauth/auth/${encodePathSegment(provider)}`;
 };
 
 const getOAuthIcon = (provider: string) => {
@@ -23,7 +34,10 @@ const getOAuthIcon = (provider: string) => {
 };
 
 const unlinkOAuth = (provider: string) => {
-  return api.post(`/oauth/unlink/${provider}`);
+  if (!isOAuthProvider(provider)) {
+    throw new Error("Invalid OAuth provider");
+  }
+  return api.post(`/oauth/unlink/${encodePathSegment(provider)}`);
 };
 
 export { getOAuthUrl, getOAuthIcon, unlinkOAuth };
