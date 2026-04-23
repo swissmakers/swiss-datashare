@@ -4,6 +4,8 @@ export type EmailBranding = {
   logoUrl: string;
   footerBrandText: string;
   footerBrandUrl: string;
+  logoMaxWidthPx: number;
+  logoMaxHeightPx: number;
 };
 
 type EmailTemplateInput = {
@@ -52,12 +54,18 @@ export function renderEmailTemplate(input: EmailTemplateInput): RenderedEmail {
         <td align="center">
           <table role="presentation" width="640" cellpadding="0" cellspacing="0" style="width:100%;max-width:640px;background:#ffffff;border-radius:14px;overflow:hidden;border:1px solid #e2e8f0;">
             <tr>
-              <td style="padding:24px 28px;background:linear-gradient(120deg,#0f172a 0%,#1d4ed8 100%);">
-                <img src="${escapeHtml(input.branding.logoUrl)}" alt="${escapeHtml(input.branding.appName)}" style="max-height:34px;display:block;" />
+              <td align="center" style="padding:22px 24px;background:linear-gradient(120deg,#0f172a 0%,#1d4ed8 100%);">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td align="center" style="padding:0;">
+                      <img src="${escapeHtml(input.branding.logoUrl)}" alt="${escapeHtml(input.branding.appName)}" width="${input.branding.logoMaxWidthPx}" style="max-width:${input.branding.logoMaxWidthPx}px;width:80%;height:auto;max-height:${input.branding.logoMaxHeightPx}px;display:block;margin:0 auto;border:0;line-height:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic;" />
+                    </td>
+                  </tr>
+                </table>
               </td>
             </tr>
             <tr>
-              <td style="padding:30px 28px 24px;">
+              <td style="padding:15px 28px 24px;">
                 <h1 style="margin:0 0 16px;color:#0f172a;font-size:25px;line-height:1.35;">${escapeHtml(input.title)}</h1>
                 ${introHtml}
                 <table role="presentation" cellpadding="0" cellspacing="0" style="margin:22px 0 0;">
