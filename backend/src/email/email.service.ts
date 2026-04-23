@@ -3,13 +3,24 @@ import {
   InternalServerErrorException,
   Logger,
 } from "@nestjs/common";
-import { User } from "@prisma/client";
 import * as nodemailer from "nodemailer";
 import { ConfigService } from "src/config/config.service";
 import { PrismaService } from "src/prisma/prisma.service";
 import { getEmailCopy } from "./i18n/messages";
 import { normalizeEmailLocale } from "./i18n/locales";
 import { EmailBranding, renderEmailTemplate } from "./template/email-template.renderer";
+
+type ShareNotificationCreator = {
+  username?: string | null;
+  email?: string | null;
+  locale?: string | null;
+};
+
+type PrismaUserDelegate = {
+  findUnique(args: {
+    where: { email: string };
+  }): Promise<{ locale: string | null } | null>;
+};
 
 @Injectable()
 export class EmailService {
@@ -125,6 +136,16 @@ export class EmailService {
     return appUrl.replace(/\/+$/, "");
   }
 
+  private resolveLogoScalePercent(): number {
+    const raw = this.config.get("general.logoScalePercent");
+    const n =
+      typeof raw === "number" && Number.isFinite(raw)
+        ? raw
+        : parseInt(String(raw ?? "100"), 10);
+    if (!Number.isFinite(n)) return 100;
+    return Math.min(250, Math.max(25, n));
+  }
+
   private buildBranding(footerPrefix: string): EmailBranding {
     const appName = this.config.get("general.appName")?.toString().trim();
     const appUrl = this.getAppUrl();
@@ -137,6 +158,10 @@ export class EmailService {
       ?.toString()
       .trim();
 
+    const scale = this.resolveLogoScalePercent() / 100;
+    const logoMaxWidthPx = Math.round(520 * scale);
+    const logoMaxHeightPx = Math.round(48 * scale);
+
     return {
       appName: appName || "Swiss DataShare",
       appUrl,
@@ -144,11 +169,17 @@ export class EmailService {
       footerBrandText: `${footerPrefix} ${footerBrandText || "Swissmakers GmbH"}`,
       footerBrandUrl:
         footerBrandUrl || "https://github.com/swissmakers/swiss-datashare",
+      logoMaxWidthPx,
+      logoMaxHeightPx,
     };
   }
 
+  private prismaUser(): PrismaUserDelegate {
+    return (this.prisma as unknown as { user: PrismaUserDelegate }).user;
+  }
+
   private async resolveLocale(recipientEmail: string, senderLocale?: string) {
-    const recipient = (await this.prisma.user
+    const recipient = (await this.prismaUser()
       .findUnique({
         where: { email: recipientEmail },
       })
@@ -191,7 +222,7 @@ export class EmailService {
   async sendMailToShareRecipients(
     recipientEmail: string,
     shareId: string,
-    creator?: User & { locale?: string },
+    creator?: ShareNotificationCreator,
     description?: string,
     expiration?: Date,
   ) {

@@ -517,8 +517,15 @@ export default {
     "Active use case for design and wording variants (e.g. \"lawyer\").",
   "admin.config.general.logo": "Logo",
   "admin.config.general.logo.description":
-    "Change your logo by uploading a new image. The image must be a PNG and should have the format 1:1.",
+    "Upload a PNG logo. Square, wide, or tall images are supported; use size and header options below so it fits the bar, home page, and emails.",
   "admin.config.general.logo.placeholder": "Pick image",
+  "admin.config.general.logo-scale-percent": "Logo size",
+  "admin.config.general.logo-scale-percent.description":
+    "Relative scale (25-250%) for the logo in the main header, home page, admin bar, and outgoing emails. Wide logos are limited by max width; tall logos by max height.",
+  "admin.config.general.header-show-app-name": "Show application name in header",
+  "admin.config.general.header-show-app-name.description":
+    "When disabled, only the logo is shown in the top bar (main site and admin). Page titles and the home headline are unchanged.",
+  "admin.config.general.logo.preview-header": "Preview (admin header bar)",
 
   "admin.config.cache.ttl": "TTL",
   "admin.config.cache.ttl.description":
@@ -730,12 +737,12 @@ export default {
   "admin.config.oauth.oidc-role-general-access":
     "OpenID Connect role for general access",
   "admin.config.oauth.oidc-role-general-access.description":
-    "Role required for general access. Must be present in a user’s roles for them to log in. " +
+    "Role required for general access. Must be present in a user's roles for them to log in. " +
     "Leave it blank if you don't know what this config is.",
   "admin.config.oauth.oidc-role-admin-access":
     "OpenID Connect role for admin access",
   "admin.config.oauth.oidc-role-admin-access.description":
-    "Role required for administrative access. Must be present in a user’s roles for them to access the admin panel. " +
+    "Role required for administrative access. Must be present in a user's roles for them to access the admin panel. " +
     "Leave it blank if you don't know what this config is.",
   "admin.config.oauth.oidc-client-id": "OpenID Connect Client ID",
   "admin.config.oauth.oidc-client-id.description":

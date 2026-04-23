@@ -344,8 +344,16 @@ export default {
   "admin.config.general.use-case": "Caso d'uso",
   "admin.config.general.use-case.description": "Caso d'uso attivo per varianti di design e testi (es. \"lawyer\").",
   "admin.config.general.logo": "Logo",
-  "admin.config.general.logo.description": "Cambia il tuo logo caricando una nuova immagine. L'immagine deve essere un PNG e dovrebbe avere il formato 1:1.",
+  "admin.config.general.logo.description":
+    "Carica un logo PNG. Sono supportate immagini quadrate, larghe o alte; usa dimensione e opzioni intestazione sotto per adattarle alla barra, alla home e alle e-mail.",
   "admin.config.general.logo.placeholder": "Scegli un'immagine",
+  "admin.config.general.logo-scale-percent": "Dimensione logo",
+  "admin.config.general.logo-scale-percent.description":
+    "Scala relativa (25-250 %) per il logo nell'intestazione principale, home, barra admin ed e-mail in uscita. Loghi larghi sono limitati in larghezza; quelli alti in altezza.",
+  "admin.config.general.header-show-app-name": "Mostra il nome dell'applicazione nell'intestazione",
+  "admin.config.general.header-show-app-name.description":
+    "Se disattivato, nella barra superiore (sito principale e admin) viene mostrato solo il logo. Titoli di pagina e titolo home restano invariati.",
+  "admin.config.general.logo.preview-header": "Anteprima (barra admin)",
   "admin.config.cache.ttl": "TTL",
   "admin.config.cache.ttl.description": "Tempo (in secondi) di mantenimento delle informazioni all'interno della cache.",
   "admin.config.cache.max-items": "Numero massimo di elementi",
@@ -473,7 +481,7 @@ export default {
   "admin.config.ldap.search-query": "Interrogazione utente",
   "admin.config.ldap.search-query.description": "La query utente verrà utilizzata per cercare la 'base utente' per l'utente LDAP. %username% può essere usato come segnaposto per l'input dato dall'utente.",
   "admin.config.ldap.admin-groups": "Gruppo di amministrazione",
-  "admin.config.ldap.admin-groups.description": "Gruppo richiesto per l’accesso amministrativo.",
+  "admin.config.ldap.admin-groups.description": "Gruppo richiesto per l'accesso amministrativo.",
   "admin.config.ldap.field-name-member-of": "Nome dell'attributo per il gruppo utenti",
   "admin.config.ldap.field-name-member-of.description": "Nome attributo LDAP per i gruppi, di cui un utente è membro. Questo viene utilizzato per controllare il gruppo amministratore.",
   "admin.config.ldap.field-name-email": "Nome dell'attributo email dell'utente",

@@ -9,7 +9,7 @@ const Intro = () => {
       <Meta title="Intro" />
       <Container size="sm">
         <div className="flex flex-col items-center space-y-6 py-10">
-          <Logo height={80} width={80} />
+          <Logo placement="adminIntro" />
           <h2 className="text-3xl font-bold text-center text-text dark:text-text-dark">
             Welcome to Swiss DataShare
           </h2>

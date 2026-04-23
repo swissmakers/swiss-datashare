@@ -5,7 +5,6 @@ import {
   Logger,
   NotFoundException,
 } from "@nestjs/common";
-import { Config } from "@prisma/client";
 import * as argon from "argon2";
 import { EventEmitter } from "events";
 import * as fs from "fs";
@@ -26,6 +25,31 @@ import {
 } from "../../prisma/seed/config-variables";
 import { CONFIG_FILE } from "src/constants";
 
+type ConfigRow = {
+  category: string;
+  name: string;
+  value: string | null;
+  defaultValue: string;
+  type: string;
+  order: number;
+  secret: boolean;
+  locked: boolean;
+  obscured: boolean;
+};
+
+type PrismaConfigDelegate = {
+  findMany(): Promise<ConfigRow[]>;
+  findUnique(args: unknown): Promise<ConfigRow | null>;
+  create(args: unknown): Promise<ConfigRow>;
+  updateMany(args: unknown): Promise<unknown>;
+  update(args: unknown): Promise<ConfigRow>;
+};
+
+type PrismaUserDelegate = {
+  count(args: unknown): Promise<number>;
+  create(args: unknown): Promise<unknown>;
+};
+
 /**
  * ConfigService extends EventEmitter to allow listening for config updates,
  * now only `update` event will be emitted.
@@ -36,16 +60,24 @@ export class ConfigService extends EventEmitter {
   logger = new Logger(ConfigService.name);
 
   constructor(
-    @Inject("CONFIG_VARIABLES") private configVariables: Config[],
+    @Inject("CONFIG_VARIABLES") private configVariables: ConfigRow[],
     private prisma: PrismaService,
   ) {
     super();
   }
 
+  private prismaConfig(): PrismaConfigDelegate {
+    return (this.prisma as unknown as { config: PrismaConfigDelegate }).config;
+  }
+
+  private prismaUser(): PrismaUserDelegate {
+    return (this.prisma as unknown as { user: PrismaUserDelegate }).user;
+  }
+
   // Initialize gets called by the ConfigModule
   async initialize() {
     await this.ensureSchemaConfigRows();
-    this.configVariables = await this.prisma.config.findMany();
+    this.configVariables = await this.prismaConfig().findMany();
     await this.loadYamlConfig();
 
     if (this.yamlConfig) {
@@ -65,12 +97,12 @@ export class ConfigService extends EventEmitter {
       for (const [name, properties] of Object.entries(
         configVariablesOfCategory,
       )) {
-        const existing = await this.prisma.config.findUnique({
+        const existing = await this.prismaConfig().findUnique({
           where: { name_category: { name, category } },
         });
 
         if (!existing) {
-          await this.prisma.config.create({
+          await this.prismaConfig().create({
             data: {
               order,
               name,
@@ -86,7 +118,7 @@ export class ConfigService extends EventEmitter {
     for (const [category, vars] of Object.entries(configVariables)) {
       const keys = Object.keys(vars);
       for (let i = 0; i < keys.length; i++) {
-        await this.prisma.config.updateMany({
+        await this.prismaConfig().updateMany({
           where: { name: keys[i], category },
           data: { order: i },
         });
@@ -125,7 +157,7 @@ export class ConfigService extends EventEmitter {
   private async migrateInitUser(): Promise<void> {
     if (!this.yamlConfig.initUser.enabled) return;
 
-    const userCount = await this.prisma.user.count({
+    const userCount = await this.prismaUser().count({
       where: { isAdmin: true },
     });
     if (userCount === 1) {
@@ -134,7 +166,7 @@ export class ConfigService extends EventEmitter {
       );
       return;
     }
-    await this.prisma.user.create({
+    await this.prismaUser().create({
       data: {
         email: this.yamlConfig.initUser.email,
         username: this.yamlConfig.initUser.username,
@@ -196,7 +228,7 @@ export class ConfigService extends EventEmitter {
         "You are only allowed to update config variables via the config.yaml file",
       );
 
-    const response: Config[] = [];
+    const response: ConfigRow[] = [];
 
     for (const variable of data) {
       response.push(await this.update(variable.key, variable.value));
@@ -213,10 +245,10 @@ export class ConfigService extends EventEmitter {
 
     const defaults = buildDefaultEmailConfigTranslations();
     const keys = Object.keys(defaults) as EmailConfigTranslationKey[];
-    const updated: Config[] = [];
+    const updated: ConfigRow[] = [];
 
     for (const key of keys) {
-      const configVariable = await this.prisma.config.update({
+      const configVariable = await this.prismaConfig().update({
         where: {
           name_category: {
             category: "email",
@@ -231,7 +263,7 @@ export class ConfigService extends EventEmitter {
       this.emit("update", `email.${key}`, configVariable.value);
     }
 
-    this.configVariables = await this.prisma.config.findMany();
+    this.configVariables = await this.prismaConfig().findMany();
     return updated;
   }
 
@@ -243,10 +275,10 @@ export class ConfigService extends EventEmitter {
 
     const defaults = buildDefaultLegalConfigTranslations();
     const keys = Object.keys(defaults) as LegalConfigTranslationKey[];
-    const updated: Config[] = [];
+    const updated: ConfigRow[] = [];
 
     for (const key of keys) {
-      const configVariable = await this.prisma.config.update({
+      const configVariable = await this.prismaConfig().update({
         where: {
           name_category: {
             category: "legal",
@@ -261,7 +293,7 @@ export class ConfigService extends EventEmitter {
       this.emit("update", `legal.${key}`, configVariable.value);
     }
 
-    this.configVariables = await this.prisma.config.findMany();
+    this.configVariables = await this.prismaConfig().findMany();
     return updated;
   }
 
@@ -271,7 +303,7 @@ export class ConfigService extends EventEmitter {
         "You are only allowed to update config variables via the config.yaml file",
       );
 
-    const configVariable = await this.prisma.config.findUnique({
+    const configVariable = await this.prismaConfig().findUnique({
       where: {
         name_category: {
           category: key.split(".")[0],
@@ -298,7 +330,7 @@ export class ConfigService extends EventEmitter {
 
     this.validateConfigVariable(key, value);
 
-    const updatedVariable = await this.prisma.config.update({
+    const updatedVariable = await this.prismaConfig().update({
       where: {
         name_category: {
           category: key.split(".")[0],
@@ -308,7 +340,7 @@ export class ConfigService extends EventEmitter {
       data: { value: value === null ? null : value.toString() },
     });
 
-    this.configVariables = await this.prisma.config.findMany();
+    this.configVariables = await this.prismaConfig().findMany();
 
     this.emit("update", key, value);
 
@@ -336,6 +368,11 @@ export class ConfigService extends EventEmitter {
         key: "saas.graceDays",
         condition: (value: number) => value >= 0 && value <= 365,
         message: "SaaS grace days must be between 0 and 365",
+      },
+      {
+        key: "general.logoScalePercent",
+        condition: (value: number) => value >= 25 && value <= 250,
+        message: "Logo scale must be between 25 and 250 (percent)",
       },
       // TODO add validation for timespan type
     ];

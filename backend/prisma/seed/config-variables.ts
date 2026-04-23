@@ -69,6 +69,16 @@ export const configVariables = {
       defaultValue: "default",
       secret: false,
     },
+    logoScalePercent: {
+      type: "number",
+      defaultValue: "100",
+      secret: false,
+    },
+    headerShowAppName: {
+      type: "boolean",
+      defaultValue: "true",
+      secret: false,
+    },
   },
   share: {
     allowRegistration: {

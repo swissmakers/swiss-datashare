@@ -48,7 +48,7 @@ const lawyerOverridesByLocale: Record<string, Messages> = {
     "home.trust.title": "Pourquoi les cabinets font confiance à ce service",
     "home.trust.no-analysis.title": "Aucune analyse du contenu",
     "home.trust.no-analysis.description":
-      "Le contenu reste confidentiel et n’est ni analysé ni utilisé pour entraîner des modèles.",
+      "Le contenu reste confidentiel et n'est ni analysé ni utilisé pour entraîner des modèles.",
     "home.how.step2.title": "Créer un lien confidentiel",
     "home.how.step3.title": "Partager de manière confidentielle",
     "upload.title": "Téléversement sécurisé de documents",

@@ -1,11 +1,13 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { TbInfoCircle } from "react-icons/tb";
 import { FormattedMessage } from "react-intl";
 import { getCookie } from "cookies-next";
 import Meta from "../../../components/Meta";
 import AdminConfigInput from "../../../components/admin/configuration/AdminConfigInput";
-import ConfigurationHeader from "../../../components/admin/configuration/ConfigurationHeader";
+import ConfigurationHeader, {
+  AdminHeaderBrandingPreview,
+} from "../../../components/admin/configuration/ConfigurationHeader";
 import ConfigurationNavBar from "../../../components/admin/configuration/ConfigurationNavBar";
 import LogoConfigInput from "../../../components/admin/configuration/LogoConfigInput";
 import TestEmailButton from "../../../components/admin/configuration/TestEmailButton";
@@ -34,6 +36,11 @@ const LOCALIZABLE_EMAIL_KEYS = [
   "email.inviteSubject",
   "email.inviteMessage",
 ] as const;
+
+const LOGO_SECTION_CONFIG_KEYS = new Set([
+  "general.logoScalePercent",
+  "general.headerShowAppName",
+]);
 
 const LOCALIZABLE_LEGAL_KEYS = [
   "legal.imprintText",
@@ -127,22 +134,57 @@ export default function AdminConfigPage() {
     }
 
     if (updatedConfigVariables.length > 0) {
-      await configService
-        .updateMany(updatedConfigVariables)
-        .then(() => {
-          setUpdatedConfigVariables([]);
-          toast.success(t("admin.config.notify.success"));
-        })
-        .catch(toast.axiosError);
+      try {
+        const pendingByKey = new Map(
+          updatedConfigVariables.map((item) => [item.key, item.value]),
+        );
+        const savedRows = await configService.updateMany(updatedConfigVariables);
+        setConfigVariables((prev) => {
+          if (!prev) return prev;
+          const byKey = new Map(savedRows.map((row) => [row.key, row]));
+          return prev.map((row) => {
+            const pendingValue = pendingByKey.get(row.key);
+            if (pendingValue !== undefined) {
+              return {
+                ...row,
+                value:
+                  pendingValue === null || pendingValue === ""
+                    ? ""
+                    : String(pendingValue),
+              };
+            }
+            const saved = byKey.get(row.key);
+            if (!saved) return row;
+            return {
+              ...row,
+              value: saved.value ?? saved.defaultValue,
+            };
+          });
+        });
+        const refreshedCategoryConfig =
+          await configService.getByCategory(categoryId);
+        setConfigVariables(refreshedCategoryConfig);
+        setUpdatedConfigVariables([]);
+        toast.success(t("admin.config.notify.success"));
+      } catch (e) {
+        toast.axiosError(e);
+        return;
+      }
       void config.refresh();
-    } else {
+    } else if (!logo) {
       toast.success(t("admin.config.notify.no-changes"));
     }
   };
 
   const updateConfigVariable = (configVariable: UpdateConfig) => {
-    if (configVariable.key === "general.appUrl") {
-      configVariable.value = sanitizeUrl(configVariable.value);
+    if (
+      configVariable.key === "general.appUrl" &&
+      typeof configVariable.value === "string"
+    ) {
+      configVariable = {
+        ...configVariable,
+        value: sanitizeUrl(configVariable.value),
+      };
     }
 
     const index = updatedConfigVariables.findIndex(
@@ -165,9 +207,10 @@ export default function AdminConfigPage() {
     return url.endsWith("/") ? url.slice(0, -1) : url;
   };
 
-  const getConfigValue = (key: string, fallback: string) => {
+  const getConfigValue = (key: string, fallback: string): string => {
     const updated = updatedConfigVariables.find((item) => item.key === key);
-    return updated?.value ?? fallback;
+    if (updated?.value === undefined || updated?.value === null) return fallback;
+    return String(updated.value);
   };
 
   const renderConfigBlock = (configVariable: AdminConfig) => (
@@ -277,6 +320,22 @@ export default function AdminConfigPage() {
     if (user?.locale) setSelectedEmailLocale(user.locale);
   }, [user?.locale]);
 
+  const generalHeaderPreview = useMemo((): AdminHeaderBrandingPreview | undefined => {
+    if (!configVariables || categoryId !== "general") return undefined;
+    const pick = (key: string) => {
+      const updated = updatedConfigVariables.find((i) => i.key === key);
+      if (updated?.value !== undefined && updated?.value !== null && updated?.value !== "")
+        return String(updated.value);
+      const row = configVariables.find((c) => c.key === key);
+      return String(row?.value ?? row?.defaultValue ?? "");
+    };
+    const scaleStr = pick("general.logoScalePercent") || "100";
+    const scale = Math.min(250, Math.max(25, parseInt(scaleStr, 10) || 100));
+    const showStr = pick("general.headerShowAppName") || "true";
+    const headerShowAppName = showStr === "true";
+    return { logoScalePercent: scale, headerShowAppName };
+  }, [categoryId, configVariables, updatedConfigVariables]);
+
   const resetEmailTranslationsToDefault = async () => {
     const shouldReset = window.confirm(
       "Reset all email translations to default templates for every language?",
@@ -322,6 +381,7 @@ export default function AdminConfigPage() {
         <ConfigurationHeader
           isMobileNavBarOpened={isMobileNavBarOpened}
           setIsMobileNavBarOpened={setIsMobileNavBarOpened}
+          headerPreview={generalHeaderPreview}
         />
         <ConfigurationNavBar
           categoryId={categoryId}
@@ -369,7 +429,15 @@ export default function AdminConfigPage() {
                       />
                     </div>
                   )}
-                  {configVariables.map((configVariable) => {
+                  {configVariables
+                    .filter(
+                      (configVariable) =>
+                        !(
+                          categoryId === "general" &&
+                          LOGO_SECTION_CONFIG_KEYS.has(configVariable.key)
+                        ),
+                    )
+                    .map((configVariable) => {
                     if (
                       categoryId === "email" &&
                       LOCALIZABLE_EMAIL_KEYS.includes(
@@ -388,9 +456,16 @@ export default function AdminConfigPage() {
                     }
                     return renderConfigBlock(configVariable);
                   })}
-                  {categoryId == "general" && (
+                  {categoryId == "general" && generalHeaderPreview && (
                     <div className="py-4 border-b border-gray-200 dark:border-gray-700">
-                      <LogoConfigInput logo={logo} setLogo={setLogo} />
+                      <LogoConfigInput
+                        logo={logo}
+                        setLogo={setLogo}
+                        logoScalePercent={generalHeaderPreview.logoScalePercent}
+                        headerShowAppName={generalHeaderPreview.headerShowAppName}
+                        updateConfigVariable={updateConfigVariable}
+                        allowEdit={isEditingAllowed()}
+                      />
                     </div>
                   )}
                   {categoryId == "saas" && <SaasAdminPanel />}

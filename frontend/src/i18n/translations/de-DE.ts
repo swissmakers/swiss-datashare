@@ -344,8 +344,16 @@ export default {
   "admin.config.general.use-case": "Use Case",
   "admin.config.general.use-case.description": "Aktiver Anwendungsfall für Design- und Textvarianten (z. B. \"lawyer\").",
   "admin.config.general.logo": "Logo",
-  "admin.config.general.logo.description": "Ändere dein Logo durch Hochladen eines Bildes. Das Bild muss im PNG-Format vorliegen und sollte mit Seitenverhältnis 1:1 sein.",
+  "admin.config.general.logo.description":
+    "PNG-Logo hochladen. Quadratische, breite oder hohe Bilder werden unterstützt; Grösse und Kopfzeilen-Optionen unten steuern die Darstellung in Leiste, Startseite und E-Mails.",
   "admin.config.general.logo.placeholder": "Bild auswählen",
+  "admin.config.general.logo-scale-percent": "Logogrösse",
+  "admin.config.general.logo-scale-percent.description":
+    "Skalierung (25-250 %) für Logo in Hauptleiste, Startseite, Admin-Leiste und E-Mails. Breite Logos werden über die max. Breite begrenzt, hohe über die max. Höhe.",
+  "admin.config.general.header-show-app-name": "Anwendungsname in der Kopfzeile",
+  "admin.config.general.header-show-app-name.description":
+    "Wenn deaktiviert, erscheint in der oberen Leiste (Hauptseite und Admin) nur das Logo. Seitentitel und Startseiten-Überschrift bleiben unverändert.",
+  "admin.config.general.logo.preview-header": "Vorschau (Admin-Kopfzeile)",
   "admin.config.cache.ttl": "TTL",
   "admin.config.cache.ttl.description": "Zeit in Sekunden, wie lange Informationen im Cache gespeichert bleiben.",
   "admin.config.cache.max-items": "Maximale Anzahl Einträge",

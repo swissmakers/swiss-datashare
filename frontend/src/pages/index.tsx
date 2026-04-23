@@ -125,7 +125,7 @@ export default function Home() {
                 <div className="relative">
                   <div className="absolute inset-0 bg-primary-500/20 blur-3xl rounded-full"></div>
                   <div className="relative z-10">
-                    <Logo width={120} height={120} />
+                    <Logo placement="home" />
                   </div>
                 </div>
               </div>

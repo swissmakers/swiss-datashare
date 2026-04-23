@@ -25,6 +25,8 @@ function run() {
       logoUrl: "https://example.test/img/logo.png",
       footerBrandText: "Powered by Swissmakers",
       footerBrandUrl: "https://swissmakers.ch",
+      logoMaxWidthPx: 520,
+      logoMaxHeightPx: 48,
     },
   });
 

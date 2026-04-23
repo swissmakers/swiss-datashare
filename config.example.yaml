@@ -14,6 +14,10 @@ general:
   sessionDuration: 3 months
   #Use-case flags, comma-separated. Examples: default | lawyer | default,saas | lawyer,saas
   useCase: default
+  #Logo scale (25-250 percent). Applies to main header, home page, admin bar, and HTML emails.
+  logoScalePercent: "100"
+  #Show the application name next to the logo in the top bar (main app and admin).
+  headerShowAppName: "true"
 share:
   #Whether registration is allowed
   allowRegistration: "true"
@@ -214,9 +218,9 @@ oauth:
   oidc-usernameClaim: ""
   #Must be a valid JMES path referencing an array of roles. Managing access rights using OpenID Connect roles is only recommended if no other identity provider is configured and password login is disabled. Leave it blank if you don't know what this config is.
   oidc-rolePath: ""
-  #Role required for general access. Must be present in a user’s roles for them to log in. Leave it blank if you don't know what this config is.
+  #Role required for general access. Must be present in a user's roles for them to log in. Leave it blank if you don't know what this config is.
   oidc-roleGeneralAccess: ""
-  #Role required for administrative access. Must be present in a user’s roles for them to access the admin panel. Leave it blank if you don't know what this config is.
+  #Role required for administrative access. Must be present in a user's roles for them to access the admin panel. Leave it blank if you don't know what this config is.
   oidc-roleAdminAccess: ""
   #Client ID of the OpenID Connect OAuth app
   oidc-clientId: ""
