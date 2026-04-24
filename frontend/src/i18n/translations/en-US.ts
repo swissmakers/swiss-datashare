@@ -1,23 +1,15 @@
 export default {
-  // Navbar
   "navbar.upload": "Upload",
   "navbar.signin": "Sign in",
   "navbar.home": "Home",
   "navbar.signup": "Sign up",
-
   "navbar.links.shares": "My shares",
   "navbar.links.reverse": "Data Requests",
-
   "navbar.avatar.account": "My account",
   "navbar.avatar.admin": "Administration",
   "navbar.avatar.signout": "Sign out",
-  // END navbar
-
-  // /
   "home.title": "Send and request files with clear, secure links.",
-
   "home.description": "Create a share link to send files, or create a data request link so recipients can upload files back to you.",
-
   "home.button.start": "Start sharing files",
   "home.button.source": "Source code",
   "home.trust.title": "Why organizations trust this service",
@@ -39,9 +31,6 @@ export default {
   "home.how.step2.description": "Click \"{actionLabel}\", choose options like expiration and recipients, then create the link.",
   "home.how.step3.title": "3. Send it to recipients",
   "home.how.step3.description": "Share the generated link manually, or email recipients directly from Swiss DataShare when enabled.",
-  // END /
-
-  // /auth/signin
   "signin.title": "Welcome back",
   "signin.description": "You don't have an account yet?",
   "signin.button.signup": "Sign up",
@@ -58,10 +47,6 @@ export default {
   "signIn.oauth.microsoft": "Microsoft",
   "signIn.oauth.discord": "Discord",
   "signIn.oauth.oidc": "OpenID",
-
-  // END /auth/signin
-
-  // /auth/signup
   "signup.title": "Create an account",
   "signup.description": "Already have an account?",
   "signup.button.signin": "Sign in",
@@ -70,16 +55,8 @@ export default {
   "signup.input.email": "Email",
   "signup.input.email.placeholder": "Your email",
   "signup.button.submit": "Let's get started",
-
-  // END /auth/signup
-
-  // /auth/totp
   "totp.title": "TOTP Authentication",
   "totp.button.signIn": "Sign in",
-
-  // END /auth/totp
-
-  // /auth/reset-password
   "resetPassword.title": "Forgot your password?",
   "resetPassword.description": "Enter your email to reset your password.",
   "resetPassword.notify.success": "A message with a link to reset your password has been sent if the provided email exists.",
@@ -88,21 +65,16 @@ export default {
   "resetPassword.text.enterNewPassword": "Enter your new password",
   "resetPassword.input.password": "New password",
   "resetPassword.notify.passwordReset": "Your password has been successfully reset.",
-
-  // /account
   "account.title": "My account",
-
   "account.card.info.title": "Account info",
   "account.card.info.username": "Username",
   "account.card.info.email": "Email",
   "account.notify.info.success": "Account updated successfully",
-
   "account.card.password.title": "Password",
   "account.card.password.old": "Old password",
   "account.card.password.new": "New password",
   "account.card.password.noPasswordSet": "You do not have a password set. To sign in using your email and password, you need to create a password.",
   "account.notify.password.success": "Password changed successfully",
-
   "account.card.oauth.title": "Social login",
   "account.card.oauth.github": "GitHub",
   "account.card.oauth.google": "Google",
@@ -115,7 +87,6 @@ export default {
   "account.modal.unlink.title": "Unlink account",
   "account.modal.unlink.description": "Unlinking your social accounts may cause you to lose your account if you don't remember your login credentials",
   "account.notify.oauth.unlinked.success": "Unlinked successfully",
-
   "account.card.security.title": "Security",
   "account.card.security.totp.enable.description": "Enter your current password to start enabling TOTP",
   "account.card.security.totp.disable.description": "Enter your current password to disable TOTP",
@@ -128,7 +99,6 @@ export default {
   "account.modal.totp.verify": "Verify",
   "account.notify.totp.disable": "TOTP disabled successfully",
   "account.notify.totp.enable": "TOTP enabled successfully",
-
   "account.card.language.title": "Language",
   "account.card.color.title": "Color scheme",
   "account.card.billing.title": "Billing",
@@ -150,23 +120,16 @@ export default {
   "account.card.billing.subscribe-yearly": "Subscribe yearly",
   "account.card.billing.subscribe-locked": "Subscription options are disabled while your current subscription is still active.",
   "account.card.billing.manage": "Manage billing",
-
-  // ThemeSwitcher.tsx
   "account.theme.dark": "Dark",
   "account.theme.light": "Light",
   "account.theme.system": "System",
-
   "account.button.delete": "Delete Account",
   "account.modal.delete.title": "Delete Account",
   "account.modal.delete.description": "Do you really want to delete your account including all your active shares?",
-  // END /account
-
-  // /account/shares
   "account.shares.title": "File shares",
   "account.shares.title.empty": "It's empty here 👀",
   "account.shares.description.empty": "You don't have any shares.",
   "account.shares.button.create": "Create one",
-
   "account.shares.table.id": "ID",
   "account.shares.table.name": "Name",
   "account.shares.table.description": "Description",
@@ -177,44 +140,29 @@ export default {
   "account.shares.table.password-protected": "Password protected",
   "account.shares.table.visitor-count": "{count} of {max}",
   "account.shares.table.expiry-never": "Never",
-
   "account.shares.modal.share-informations": "Share information",
   "account.shares.modal.share-link": "Share link",
-
   "account.shares.modal.delete.title": "Delete share: {share}",
   "account.shares.modal.delete.description": "Do you really want to delete this share?",
-
-  // END /account/shares
-
-  // /account/reverseShares
   "account.reverseShares.title": "Data Requests",
   "account.reverseShares.description": "Create a request link so recipients can upload files to you.",
-
   "account.reverseShares.title.empty": "It's empty here 👀",
   "account.reverseShares.description.empty": "You don't have any data requests yet.",
-
-  // showCreateReverseShareModal.tsx
   "account.reverseShares.modal.title": "Create data request link",
   "account.reverseShares.modal.name.label": "Name",
   "account.reverseShares.modal.name.placeholder": "Optional name for this data request",
   "account.reverseShares.modal.expiration.label": "Expiration",
-
   "account.reverseShares.modal.max-size.label": "Maximum allowed to upload",
-
   "account.reverseShares.modal.send-email": "Email me when completed",
   "account.reverseShares.modal.send-email.description": "Receive an email when someone finishes uploading files with this request link.",
-
   "account.reverseShares.modal.simplified": "Simple recipient flow",
   "account.reverseShares.modal.simplified.description": "Recipients can upload files and finish. They do not need to configure a separate share.",
-
   "account.reverseShares.modal.public-access": "Allow public access to uploaded share",
   "account.reverseShares.modal.public-access.description": "If disabled, only you and the uploader can open the resulting share.",
-
   "account.reverseShares.modal.max-use.label": "Max uses",
   "account.reverseShares.modal.max-use.description": "How many times this request link can be used.",
   "account.reverseShare.never-expires": "This reverse share will never expire.",
   "account.reverseShare.expires-on": "This reverse share will expire on {expiration}.",
-
   "account.reverseShares.table.no-shares": "No uploads received yet",
   "account.reverseShares.table.name": "Name",
   "account.reverseShares.table.count.singular": "upload",
@@ -223,22 +171,13 @@ export default {
   "account.reverseShares.table.remaining": "Uses left",
   "account.reverseShares.table.max-size": "Max upload size",
   "account.reverseShares.table.expires": "Expires at",
-
   "account.reverseShares.modal.reverse-share-link": "Data request link",
-
   "account.reverseShares.modal.delete.title": "Delete data request link",
   "account.reverseShares.modal.delete.description": "Do you really want to delete this data request link? Uploaded shares linked to it will also be deleted.",
-
-  // END /account/reverseShares
-
-  // /admin
   "admin.title": "Administration",
   "admin.button.users": "User management",
   "admin.button.shares": "Share management",
   "admin.button.config": "System settings",
-  // END /admin
-
-  // /admin/users
   "admin.users.title": "User management",
   "admin.users.table.username": "Username",
   "admin.users.table.email": "Email",
@@ -247,18 +186,14 @@ export default {
   "admin.users.table.subscription.invalid": "Not valid",
   "admin.users.table.subscription.exempt": "Exempt",
   "admin.users.table.admin": "Admin",
-
   "admin.users.edit.update.title": "Edit user: {username}",
   "admin.users.edit.update.admin-privileges": "Admin privileges",
   "admin.users.edit.update.change-password.title": "Change password",
   "admin.users.edit.update.change-password.field": "New password",
   "admin.users.edit.update.change-password.button": "Save new password",
   "admin.users.edit.update.notify.password.success": "Password changed successfully",
-
   "admin.users.edit.delete.title": "Delete user: {username} ?",
   "admin.users.edit.delete.description": "Do you really want to delete this user and all their shares?",
-
-  // showCreateUserModal.tsx
   "admin.users.modal.create.title": "Create user",
   "admin.users.modal.create.username": "Username",
   "admin.users.modal.create.email": "Email",
@@ -267,48 +202,30 @@ export default {
   "admin.users.modal.create.manual-password.description": "If not checked, the user will receive an email with a link to set their password.",
   "admin.users.modal.create.admin": "Admin privileges",
   "admin.users.modal.create.admin.description": "If checked, the user will be able to access the admin panel.",
-
-  // END /admin/users
-
-  // /admin/shares
   "admin.shares.title": "Share management",
   "admin.shares.table.username": "Creator",
-
   "admin.shares.edit.delete.title": "Delete share: {id}",
   "admin.shares.edit.delete.description": "Do you really want to delete this share?",
-
-  // END /admin/shares
-
-  // /upload
   "upload.title": "Share Data",
-
   "upload.notify.confirm-leave": "Are you sure you want to leave this page? Your upload will be canceled.",
   "upload.notify.generic-error": "Something went wrong while finishing this share.",
   "upload.notify.count-failed": "{count} files failed to upload. Trying again.",
   "upload.reverse-share.error.invalid.title": "Invalid reverse share link",
   "upload.reverse-share.error.invalid.description": "If your already uploaded your files on a onetime share, this message is normal. It means this reverse share is now expired or the link is invalid.",
-
-  // Dropzone.tsx
   "upload.dropzone.title": "Upload files",
   "upload.dropzone.description": "Drag and drop files here (or select files), then click \"{actionLabel}\" to continue. Maximum total size: {maxSize}.",
   "upload.dropzone.button.select": "Select files",
   "upload.dropzone.notify.file-too-big": "Your files exceed the maximum share size of {maxSize}.",
-
-  // FileList.tsx
   "upload.filelist.name": "Name",
   "upload.filelist.size": "Size",
-
-  // showCreateUploadModal.tsx
   "upload.modal.title": "Share Data",
   "upload.modal.link.error.invalid": "Can only contain letters, numbers, underscores, and hyphens",
   "upload.modal.link.error.taken": "This link is already in use",
   "upload.modal.not-signed-in": "You're not signed in",
   "upload.modal.not-signed-in-description": "Sign in to manage this share later. Without sign-in, you cannot delete it manually or see view count.",
-
   "upload.modal.expires.never": "never",
   "upload.modal.expires.never-long": "Never expires",
   "upload.modal.expires.error.too-long": "Expiration date exceeds the maximum of {max}.",
-
   "upload.modal.link.label": "Link ID",
   "upload.modal.expires.label": "Expiration",
   "upload.modal.expires.minute-singular": "Minute",
@@ -323,28 +240,22 @@ export default {
   "upload.modal.expires.month-plural": "Months",
   "upload.modal.expires.year-singular": "Year",
   "upload.modal.expires.year-plural": "Years",
-
   "upload.modal.accordion.name-and-description.title": "Title and note",
   "upload.modal.accordion.name-and-description.name.placeholder": "Name",
   "upload.modal.accordion.name-and-description.description.placeholder": "Optional note for recipients",
-
   "upload.modal.accordion.email.placeholder": "Enter recipient email addresses (confirm with Enter)",
   "upload.modal.accordion.email.invalid-email": "Invalid email address",
   "upload.modal.accordion.email.helper": "Leave this empty if you want to send your data link yourself or add recipients here to send the link directly by email.",
-
   "upload.modal.accordion.security.title": "Access restrictions",
   "upload.modal.accordion.security.password.label": "Required password (if not set, no password is required)",
   "upload.modal.accordion.security.password.placeholder": "No password",
   "upload.modal.accordion.security.max-views.label": "Maximum allowed views",
   "upload.modal.accordion.security.max-views.placeholder": "No limit",
-
-  // showCompletedUploadModal.tsx
   "upload.modal.completed.never-expires": "This share will never expire.",
   "upload.modal.completed.expires-on": "This share will expire on {expiration}.",
   "upload.modal.completed.share-ready": "All done!",
   "upload.modal.completed.reverse-share-finished": "Your files were uploaded successfully.",
   "upload.modal.completed.notified-reverse-share-creator": "The data request creator has been notified. You can still copy and send the link manually if needed.",
-
   "upload.reverse-share.title": "Upload your files here",
   "upload.reverse-share.description": "Drag and drop your files or select them from your device. You can also add an optional note, then click \"Finish upload\" to securely send your files to the request owner.",
   "upload.reverse-share.dropzone.title": "Upload your files",
@@ -353,10 +264,6 @@ export default {
   "upload.reverse-share.note.placeholder": "Add context for the files you are sending",
   "upload.reverse-share.note.helper": "Your message will be shown to the request owner when they are notified.",
   "upload.reverse-share.button.finish": "Finish upload",
-
-  // END /upload
-
-  // /share/[id]
   "share.title": "Share {shareId}",
   "share.description": "Look what I've shared with you!",
   "share.fileCount": "{count, plural, =1 {# file} other {# files}} · {size} (zip file may be smaller due to compression)",
@@ -367,43 +274,25 @@ export default {
   "share.error.not-found.description": "The share you're looking for doesn't exist.",
   "share.error.access-denied.title": "Private share",
   "share.error.access-denied.description": "The current account does not have permission to access this share",
-
   "share.modal.password.title": "Password required",
   "share.modal.password.description": "Please enter the password to access this share.",
   "share.modal.password": "Password",
   "share.modal.error.invalid-password": "Invalid password",
-
   "share.button.download-all": "Download all",
   "share.notify.download-all-preparing": "The share is being prepared. Please try again in a few minutes.",
-
   "share.modal.file-link": "File link",
   "share.table.name": "Name",
   "share.table.size": "Size",
-
   "share.modal.file-preview.error.not-supported.title": "Preview not supported",
   "share.modal.file-preview.error.not-supported.description": "Previews are not supported for this type of files. Please download the file to view it.",
-
-  // END /share/[id]
-
-  // /share/[id]/edit
   "share.edit.title": "Edit {shareId}",
   "share.edit.append-upload": "Append file",
   "share.edit.notify.generic-error": "An error occurred while finishing your share.",
   "share.edit.notify.save-success": "Share updated successfully",
-  // END /share/[id]/edit
-
-  // /imprint
   "imprint.title": "Imprint",
-  // END /imprint
-
-  // /privacy
   "privacy.title": "Privacy Policy",
-  // END /privacy
-
-  // /admin/config
   "admin.config.config-file-warning.title": "Configuration file present",
   "admin.config.config-file-warning.description": "As you have a configured Swiss DataShare with a configuration file, you can't change the configuration through the UI.",
-
   "admin.config.title": "Configuration",
   "admin.config.category.general": "General",
   "admin.config.category.share": "Share",
@@ -412,7 +301,6 @@ export default {
   "admin.config.category.saas": "SaaS",
   "admin.config.category.smtp": "SMTP",
   "admin.config.category.oauth": "Social Login",
-
   "admin.config.general.app-name": "App name",
   "admin.config.general.app-name.description": "Name of the application",
   "admin.config.general.app-url": "App URL",
@@ -441,7 +329,6 @@ export default {
   "admin.config.general.header-show-app-name": "Show application name in header",
   "admin.config.general.header-show-app-name.description": "When disabled, only the logo is shown in the top bar (main site and admin). Page titles and the home headline are unchanged.",
   "admin.config.general.logo.preview-header": "Preview (admin header bar)",
-
   "admin.config.cache.ttl": "TTL",
   "admin.config.cache.ttl.description": "Time in second to keep information inside the cache.",
   "admin.config.cache.max-items": "Maximum items",
@@ -450,7 +337,6 @@ export default {
   "admin.config.cache.redis-enabled.description": "Normally Swiss DataShare caches information in memory. If you run multiple instances of Swiss DataShare, you need to enable Redis caching to share the cache between the instances.",
   "admin.config.cache.redis-url": "Redis URL",
   "admin.config.cache.redis-url.description": "Url to connect to the Redis instance used for caching.",
-
   "admin.config.email.enable-share-email-recipients": "Enable email recipient sharing",
   "admin.config.email.enable-share-email-recipients.description": "Whether to allow email sharing with recipients. Only enable this if SMTP is activated.",
   "admin.config.email.share-recipients-subject": "Share recipients subject",
@@ -469,7 +355,6 @@ export default {
   "admin.config.email.invite-subject.description": "Subject of the sent email when an admin invites a user.",
   "admin.config.email.invite-message": "Invite message",
   "admin.config.email.invite-message.description": "Message which gets sent when an admin invites a user. {url} will be replaced with the invite URL, {email} with the email and {password} with the users password.",
-
   "admin.config.share.allow-registration": "Allow registration",
   "admin.config.share.allow-registration.description": "Whether registration is allowed",
   "admin.config.share.allow-unauthenticated-shares": "Allow unauthenticated shares",
@@ -486,7 +371,6 @@ export default {
   "admin.config.share.chunk-size.description": "Adjust the chunk size for your uploads to balance efficiency and reliability according to your internet connection. Smaller chunks can enhance success rates for unstable connections, while larger chunks make uploads faster for stable connections.",
   "admin.config.share.auto-open-share-modal": "Auto open create share modal",
   "admin.config.share.auto-open-share-modal.description": "The share creation modal automatically appears when a user selects files, eliminating the need to manually click the button.",
-
   "admin.config.saas.enabled": "Enable SaaS billing",
   "admin.config.saas.enabled.description": "Turns on SaaS billing features and subscription checks when use case contains 'saas'.",
   "admin.config.saas.monthly-price-chf": "Monthly price (CHF)",
@@ -520,7 +404,6 @@ export default {
   "admin.config.saas.payments.all-time": "Total all-time",
   "admin.config.saas.payments.amount": "Amount",
   "admin.config.saas.payments.status": "Status",
-
   "admin.config.smtp.enabled": "Enable",
   "admin.config.smtp.enabled.description": "Whether SMTP is enabled. Only set this to true if you entered the host, port, email, user and password of your SMTP server.",
   "admin.config.smtp.host": "Host",
@@ -536,7 +419,6 @@ export default {
   "admin.config.smtp.button.test": "Send test email",
   "admin.config.smtp.allow-unauthorized-certificates": "Trust unauthorized SMTP server certificates",
   "admin.config.smtp.allow-unauthorized-certificates.description": "Only set this to true if you need to trust self signed certificates.",
-
   "admin.config.oauth.allow-registration": "Allow registration",
   "admin.config.oauth.allow-registration.description": "Allow users to register via social login",
   "admin.config.oauth.ignore-totp": "Ignore TOTP",
@@ -584,16 +466,15 @@ export default {
   "admin.config.oauth.oidc-username-claim": "OpenID Connect username claim",
   "admin.config.oauth.oidc-username-claim.description": "Username claim in OpenID Connect ID token. Leave it blank if you don't know what this config is.",
   "admin.config.oauth.oidc-role-path": "Path to roles in OpenID Connect token",
-  "admin.config.oauth.oidc-role-path.description": "Must be a valid JMES path referencing an array of roles. " + "Managing access rights using OpenID Connect roles is only recommended if no other identity provider is configured and password login is disabled. " + "Leave it blank if you don't know what this config is.",
+  "admin.config.oauth.oidc-role-path.description": "Must be a valid JMES path referencing an array of roles. Managing access rights using OpenID Connect roles is only recommended if no other identity provider is configured and password login is disabled. Leave it blank if you don't know what this config is.",
   "admin.config.oauth.oidc-role-general-access": "OpenID Connect role for general access",
-  "admin.config.oauth.oidc-role-general-access.description": "Role required for general access. Must be present in a user's roles for them to log in. " + "Leave it blank if you don't know what this config is.",
+  "admin.config.oauth.oidc-role-general-access.description": "Role required for general access. Must be present in a user's roles for them to log in. Leave it blank if you don't know what this config is.",
   "admin.config.oauth.oidc-role-admin-access": "OpenID Connect role for admin access",
-  "admin.config.oauth.oidc-role-admin-access.description": "Role required for administrative access. Must be present in a user's roles for them to access the admin panel. " + "Leave it blank if you don't know what this config is.",
+  "admin.config.oauth.oidc-role-admin-access.description": "Role required for administrative access. Must be present in a user's roles for them to access the admin panel. Leave it blank if you don't know what this config is.",
   "admin.config.oauth.oidc-client-id": "OpenID Connect Client ID",
   "admin.config.oauth.oidc-client-id.description": "Client ID of the OpenID Connect OAuth app",
   "admin.config.oauth.oidc-client-secret": "OpenID Connect Client secret",
   "admin.config.oauth.oidc-client-secret.description": "Client secret of the OpenID Connect OAuth app",
-
   "admin.config.category.ldap": "LDAP",
   "admin.config.ldap.enabled": "Enable LDAP",
   "admin.config.ldap.enabled.description": "Use LDAP authentication for user login",
@@ -616,7 +497,6 @@ export default {
   "admin.config.notify.success": "Configuration updated successfully.",
   "admin.config.notify.logo-success": "Logo updated successfully. It may take a few minutes to update on the website.",
   "admin.config.notify.no-changes": "No changes to save.",
-
   "admin.config.category.s3": "S3",
   "admin.config.s3.enabled": "Enabled",
   "admin.config.s3.enabled.description": "Whether S3 should be used to store the shared files instead of the local file system.",
@@ -634,7 +514,6 @@ export default {
   "admin.config.s3.secret.description": "The secret which allows you to access the S3 bucket.",
   "admin.config.s3.use-checksum": "Use checksum",
   "admin.config.s3.use-checksum.description": "Turn off for backends that do not support checksum (e.g. B2).",
-
   "admin.config.category.legal": "Legal",
   "admin.config.legal.enabled": "Enable legal notices",
   "admin.config.legal.enabled.description": "Whether to show a link to imprint and privacy policy in the footer.",
@@ -646,12 +525,8 @@ export default {
   "admin.config.legal.privacy-policy-text.description": "The text which should be shown in the privacy policy. Supports Markdown. Leave blank to link to an external privacy policy page.",
   "admin.config.legal.privacy-policy-url": "Privacy policy URL",
   "admin.config.legal.privacy-policy-url.description": "If you already have a privacy policy page you can link it here instead of using the text field.",
-
-  // 404
   "404.description": "Oops this page doesn't exist.",
   "404.button.home": "Bring me back home",
-
-  // error
   "error.title": "Error",
   "error.description": "Oops!",
   "error.button.back": "Go back",
@@ -671,8 +546,6 @@ export default {
   "error.param.provider_microsoft": "Microsoft",
   "error.param.provider_discord": "Discord",
   "error.param.provider_oidc": "OpenID Connect",
-
-  // Common translations
   "common.button.save": "Save",
   "common.button.create": "Create",
   "common.button.submit": "Submit",
@@ -693,7 +566,6 @@ export default {
   "common.aria.copy-request-link": "Copy data request link",
   "common.aria.delete-request-link": "Delete data request link",
   "common.notify.copied": "Your link was copied to the clipboard",
-
   "common.error": "Error",
   "common.error.unknown": "An unknown error occurred",
   "common.error.invalid-email": "Invalid email address",

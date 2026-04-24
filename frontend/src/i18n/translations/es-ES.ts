@@ -1,5 +1,4 @@
 export default {
-  // Navbar
   "navbar.upload": "Subir",
   "navbar.signin": "Iniciar sesión",
   "navbar.home": "Inicio",
@@ -9,8 +8,6 @@ export default {
   "navbar.avatar.account": "Mi cuenta",
   "navbar.avatar.admin": "Administración",
   "navbar.avatar.signout": "Cerrar sesión",
-  // END navbar
-  // /
   "home.title": "Intercambio seguro de archivos para equipos, socios o clientes.",
   "home.description": "Sube archivos, crea un enlace seguro y envíalo por correo electrónico.",
   "home.button.start": "Start secure transfer",
@@ -34,8 +31,6 @@ export default {
   "home.how.step2.description": "Haz clic en «{actionLabel}», elige opciones opcionales y crea el enlace seguro.",
   "home.how.step3.title": "Compartir el enlace seguro",
   "home.how.step3.description": "Copia el enlace seguro generado y envíalo por correo electrónico a los destinatarios deseados.",
-  // END /
-  // /auth/signin
   "signin.title": "Bienvenido nuevamente",
   "signin.description": "¿Todavía no tienes una cuenta?",
   "signin.button.signup": "Registrarse",
@@ -52,8 +47,6 @@ export default {
   "signIn.oauth.microsoft": "Microsoft",
   "signIn.oauth.discord": "Discord",
   "signIn.oauth.oidc": "OpenID",
-  // END /auth/signin
-  // /auth/signup
   "signup.title": "Crear una cuenta",
   "signup.description": "¿Ya tienes una cuenta?",
   "signup.button.signin": "Iniciar sesión",
@@ -62,12 +55,8 @@ export default {
   "signup.input.email": "Correo",
   "signup.input.email.placeholder": "Tu correo",
   "signup.button.submit": "Comencemos",
-  // END /auth/signup
-  // /auth/totp
   "totp.title": "Autenticación TOTP",
   "totp.button.signIn": "Iniciar sesión",
-  // END /auth/totp
-  // /auth/reset-password
   "resetPassword.title": "¿Olvidaste tu contraseña?",
   "resetPassword.description": "Ingresa tu correo para restablecer tu contraseña.",
   "resetPassword.notify.success": "Se ha enviado un mensaje con un enlace para restablecer tu contraseña si el correo electrónico proporcionado existe.",
@@ -76,7 +65,6 @@ export default {
   "resetPassword.text.enterNewPassword": "Ingresa tu nueva contraseña",
   "resetPassword.input.password": "Nueva contraseña",
   "resetPassword.notify.passwordReset": "Tu contraseña ha sido restablecida exitosamente.",
-  // /account
   "account.title": "Mi cuenta",
   "account.card.info.title": "Información de cuenta",
   "account.card.info.username": "Nombre de usuario",
@@ -113,15 +101,31 @@ export default {
   "account.notify.totp.enable": "TOTP habilitado correctamente",
   "account.card.language.title": "Idioma",
   "account.card.color.title": "Esquema de colores",
-  // ThemeSwitcher.tsx
+  "account.card.billing.title": "Facturación",
+  "account.card.billing.status": "Estado de la suscripción: {status}",
+  "account.card.billing.status-value.none": "Sin suscripción",
+  "account.card.billing.status-value.active": "Activa",
+  "account.card.billing.status-value.trialing": "Periodo de prueba",
+  "account.card.billing.status-value.past_due": "Pago vencido",
+  "account.card.billing.status-value.unpaid": "Impago",
+  "account.card.billing.status-value.canceled": "Cancelada",
+  "account.card.billing.status-value.incomplete": "Incompleta",
+  "account.card.billing.status-value.incomplete_expired": "Incompleta (caducada)",
+  "account.card.billing.status-value.paused": "En pausa",
+  "account.card.billing.trial-ends": "La prueba termina el {date}",
+  "account.card.billing.next-payment": "Próximo pago el {date}",
+  "account.card.billing.cancel-scheduled": "Tu suscripción está cancelada y sigue activa hasta el {date}.",
+  "account.card.billing.grace-ends": "El periodo de gracia termina el {date}",
+  "account.card.billing.subscribe-monthly": "Suscribirse mensualmente",
+  "account.card.billing.subscribe-yearly": "Suscribirse anualmente",
+  "account.card.billing.subscribe-locked": "Las opciones de suscripción están desactivadas mientras tu suscripción actual siga activa.",
+  "account.card.billing.manage": "Gestionar facturación",
   "account.theme.dark": "Obscuro",
   "account.theme.light": "Claro",
   "account.theme.system": "Sistema",
   "account.button.delete": "Eliminar Cuenta",
   "account.modal.delete.title": "Eliminar Cuenta",
   "account.modal.delete.description": "¿Realmente quieres eliminar tu cuenta con todos los archivos que estás compartiendo actualmente?",
-  // END /account
-  // /account/shares
   "account.shares.title": "Mis compartidos",
   "account.shares.title.empty": "Aquí está vacío 👀",
   "account.shares.description.empty": "No tienes nada compartido.",
@@ -140,14 +144,13 @@ export default {
   "account.shares.modal.share-link": "Enlace",
   "account.shares.modal.delete.title": "Eliminar enlace compartido: {share}",
   "account.shares.modal.delete.description": "¿Seguro que quieres eliminar este compartido?",
-  // END /account/shares
-  // /account/reverseShares
   "account.reverseShares.title": "Comparticiones inversas",
   "account.reverseShares.description": "Una compartición inversa te permite generar una URL única con la que usuarios externos pueden compartir archivos.",
   "account.reverseShares.title.empty": "Aquí está vacío 👀",
   "account.reverseShares.description.empty": "No tienes ninguna compartición inversa.",
-  // showCreateReverseShareModal.tsx
   "account.reverseShares.modal.title": "Crear compartición inversa",
+  "account.reverseShares.modal.name.label": "Nombre",
+  "account.reverseShares.modal.name.placeholder": "Nombre opcional para esta solicitud de archivos",
   "account.reverseShares.modal.expiration.label": "Expiración",
   "account.reverseShares.modal.max-size.label": "Tamaño máximo del compartido",
   "account.reverseShares.modal.send-email": "Enviar notificaciones por correo electrónico",
@@ -161,6 +164,7 @@ export default {
   "account.reverseShare.never-expires": "Esta compartición inversa nunca expirará.",
   "account.reverseShare.expires-on": "Esta compartición inversa expirará en {expiration}.",
   "account.reverseShares.table.no-shares": "Todavía no se han creado compartidos",
+  "account.reverseShares.table.name": "Nombre",
   "account.reverseShares.table.count.singular": "compartido",
   "account.reverseShares.table.count.plural": "compartidos",
   "account.reverseShares.table.shares": "Compartidos",
@@ -170,17 +174,17 @@ export default {
   "account.reverseShares.modal.reverse-share-link": "Enlace de compartición inversa",
   "account.reverseShares.modal.delete.title": "Eliminar compartición inversa",
   "account.reverseShares.modal.delete.description": "¿Seguro que quieres eliminar esta compartición inversa? Si lo haces, todos los archivos asociados también serán eliminados.",
-  // END /account/reverseShares
-  // /admin
   "admin.title": "Administración",
   "admin.button.users": "Gestión de usuarios",
   "admin.button.shares": "Gestión de comparticiones",
   "admin.button.config": "Configuración del sistema",
-  // END /admin
-  // /admin/users
   "admin.users.title": "Gestión de usuarios",
   "admin.users.table.username": "Nombre de usuario",
   "admin.users.table.email": "Correo",
+  "admin.users.table.subscription": "Suscripción",
+  "admin.users.table.subscription.valid": "Válida",
+  "admin.users.table.subscription.invalid": "No válida",
+  "admin.users.table.subscription.exempt": "Exenta",
   "admin.users.table.admin": "Administrador",
   "admin.users.edit.update.title": "Editar usuario: {username}",
   "admin.users.edit.update.admin-privileges": "Privilegios de administrador",
@@ -190,7 +194,6 @@ export default {
   "admin.users.edit.update.notify.password.success": "Contraseña cambiada correctamente",
   "admin.users.edit.delete.title": "¿Eliminar usuario: {username} ?",
   "admin.users.edit.delete.description": "¿Realmente deseas eliminar a este usuario y todos sus enlaces compartidos?",
-  // showCreateUserModal.tsx
   "admin.users.modal.create.title": "Crear usuario",
   "admin.users.modal.create.username": "Nombre de usuario",
   "admin.users.modal.create.email": "Correo",
@@ -199,29 +202,22 @@ export default {
   "admin.users.modal.create.manual-password.description": "Si no se marca, el usuario recibirá un correo con un enlace para configurar su contraseña.",
   "admin.users.modal.create.admin": "Privilegios de administrador",
   "admin.users.modal.create.admin.description": "Si se marca, el usuario podrá acceder al panel de administrador.",
-  // END /admin/users
-  // /admin/shares
   "admin.shares.title": "Gestión de comparticiones",
   "admin.shares.table.username": "Creador",
   "admin.shares.edit.delete.title": "Eliminar enlace compartido: {id}",
   "admin.shares.edit.delete.description": "¿Seguro que quieres eliminar este compartido?",
-  // END /admin/shares
-  // /upload
   "upload.title": "Subir",
   "upload.notify.confirm-leave": "¿Estás seguro de que quieres salir de esta página? Tu subida será cancelada.",
   "upload.notify.generic-error": "Ha ocurrido un error mientras se compartía tu archivo.",
   "upload.notify.count-failed": "No se pudo cargar {count} archivos. Intentando nuevamente.",
   "upload.reverse-share.error.invalid.title": "Enlace de uso compartido inverso inválido",
   "upload.reverse-share.error.invalid.description": "Este enlace de uso compartido inverso ha caducado o no es válido.",
-  // Dropzone.tsx
   "upload.dropzone.title": "Subir archivos",
   "upload.dropzone.description": "Arrastra los archivos aquí (o selecciónalos) y luego haz clic en «{actionLabel}» para crear tu enlace de carga. Tamaño total máximo: {maxSize}.",
   "upload.dropzone.button.select": "Seleccionar archivos",
   "upload.dropzone.notify.file-too-big": "Tus archivos exceden el tamaño máximo de {maxSize}.",
-  // FileList.tsx
   "upload.filelist.name": "Nombre",
   "upload.filelist.size": "Tamaño",
-  // showCreateUploadModal.tsx
   "upload.modal.title": "Crear enlace de carga",
   "upload.modal.link.error.invalid": "Solo puede contener letras, números, guiones y guiones bajos",
   "upload.modal.link.error.taken": "Este enlace ya está en uso",
@@ -249,18 +245,25 @@ export default {
   "upload.modal.accordion.name-and-description.description.placeholder": "Nota para los destinatarios de este compartido",
   "upload.modal.accordion.email.placeholder": "Ingresa los correos de los destinatarios",
   "upload.modal.accordion.email.invalid-email": "Dirección de correo inválida",
+  "upload.modal.accordion.email.helper": "Déjalo vacío si quieres enviar tú mismo el enlace de datos, o añade aquí destinatarios para enviar el enlace directamente por correo.",
   "upload.modal.accordion.security.title": "Opciones de seguridad",
   "upload.modal.accordion.security.password.label": "Protección por contraseña",
   "upload.modal.accordion.security.password.placeholder": "Sin contraseña",
   "upload.modal.accordion.security.max-views.label": "Máximo de vistas",
   "upload.modal.accordion.security.max-views.placeholder": "Sin límite",
-  // showCompletedUploadModal.tsx
   "upload.modal.completed.never-expires": "Este compartido nunca expirará.",
   "upload.modal.completed.expires-on": "Este compartido expira en {expiration}.",
   "upload.modal.completed.share-ready": "Compartido listo",
+  "upload.modal.completed.reverse-share-finished": "Tus archivos se han subido correctamente.",
   "upload.modal.completed.notified-reverse-share-creator": "Hemos notificado al creador de la compartición inversa. También puedes compartir manualmente este enlace con otros a través de otros medios.",
-  // END /upload
-  // /share/[id]
+  "upload.reverse-share.title": "Sube tus archivos aquí",
+  "upload.reverse-share.description": "Arrastra y suelta tus archivos o selecciónalos en tu dispositivo. También puedes añadir una nota opcional y luego pulsar «Finalizar subida» para enviar tus archivos de forma segura al solicitante.",
+  "upload.reverse-share.dropzone.title": "Sube tus archivos",
+  "upload.reverse-share.dropzone.description": "Arrastra aquí todos los archivos que quieras enviar. Tamaño total máximo: {maxSize}.",
+  "upload.reverse-share.note.label": "Mensaje para el solicitante (opcional)",
+  "upload.reverse-share.note.placeholder": "Añade contexto sobre los archivos que envías",
+  "upload.reverse-share.note.helper": "Tu mensaje se mostrará al solicitante cuando se le notifique.",
+  "upload.reverse-share.button.finish": "Finalizar subida",
   "share.title": "Compartido {shareId}",
   "share.description": "¡Mira lo que he compartido contigo!",
   "share.fileCount": "{count, plural, one {}=1 {# archivo} other {# archivos}} · {size} (el archivo comprimido (zip, 7z) puede ser más pequeño debido a la compresión)",
@@ -282,20 +285,12 @@ export default {
   "share.table.size": "Tamaño",
   "share.modal.file-preview.error.not-supported.title": "Vista previa no disponible",
   "share.modal.file-preview.error.not-supported.description": "Las vistas previas no son compatibles con este tipo de archivos. Por favor, descargue el archivo para verlo.",
-  // END /share/[id]
-  // /share/[id]/edit
   "share.edit.title": "Editar {shareId}",
   "share.edit.append-upload": "Agregar archivo",
   "share.edit.notify.generic-error": "Ha ocurrido un error mientras se compartía tu archivo.",
   "share.edit.notify.save-success": "Compartir actualizado correctamente",
-  // END /share/[id]/edit
-  // /imprint
   "imprint.title": "Aviso legal",
-  // END /imprint
-  // /privacy
   "privacy.title": "Política de privacidad",
-  // END /privacy
-  // /admin/config
   "admin.config.config-file-warning.title": "Archivo de configuración presente",
   "admin.config.config-file-warning.description": "Como tienes configurado Swiss DataShare con un archivo de configuración, no puedes cambiar la configuración a través de la interfaz gráfica.",
   "admin.config.title": "Configuración",
@@ -303,6 +298,7 @@ export default {
   "admin.config.category.share": "Compartido",
   "admin.config.category.cache": "Caché",
   "admin.config.category.email": "Correo",
+  "admin.config.category.saas": "SaaS",
   "admin.config.category.smtp": "SMTP",
   "admin.config.category.oauth": "Inicio de sesión social",
   "admin.config.general.app-name": "Nombre de la App",
@@ -375,6 +371,39 @@ export default {
   "admin.config.share.chunk-size.description": "Ajusta el tamaño del fragmento para tus subidas y equilibra la eficiencia y la fiabilidad según tu conexión a Internet. Fragmentos más pequeños pueden aumentar las tasas de éxito para conexiones inestables, mientras que fragmentos más grandes hacen que las subidas sean más rápidas para conexiones estables.",
   "admin.config.share.auto-open-share-modal": "Auto abrir un modal de creación de compartidos",
   "admin.config.share.auto-open-share-modal.description": "El modal de creación de compartir aparece automáticamente cuando un usuario selecciona archivos, eliminando la necesidad de hacer clic manualmente en el botón.",
+  "admin.config.saas.enabled": "Activar facturación SaaS",
+  "admin.config.saas.enabled.description": "Activa las funciones de facturación SaaS y las comprobaciones de suscripción cuando el caso de uso incluye «saas».",
+  "admin.config.saas.monthly-price-chf": "Precio mensual (CHF)",
+  "admin.config.saas.monthly-price-chf.description": "Precio mensual de suscripción mostrado en francos suizos.",
+  "admin.config.saas.yearly-price-chf": "Precio anual (CHF)",
+  "admin.config.saas.yearly-price-chf.description": "Precio anual de suscripción mostrado en francos suizos.",
+  "admin.config.saas.trial-days": "Días de periodo de prueba",
+  "admin.config.saas.trial-days.description": "Número de días gratuitos tras el registro antes de que sea obligatoria la suscripción.",
+  "admin.config.saas.grace-days": "Días de periodo de gracia",
+  "admin.config.saas.grace-days.description": "Días adicionales tras el vencimiento de la suscripción antes de bloquear la subida o el uso compartido.",
+  "admin.config.saas.enforce-subscription": "Exigir suscripción",
+  "admin.config.saas.enforce-subscription.description": "Si está activado, los usuarios no exentos, no administradores y con pago atrasado no podrán subir archivos ni compartir.",
+  "admin.config.saas.stripe-publishable-key": "Clave publicable de Stripe",
+  "admin.config.saas.stripe-publishable-key.description": "Clave pública de Stripe usada por el frontend en los flujos de facturación.",
+  "admin.config.saas.stripe-secret-key": "Clave secreta de Stripe",
+  "admin.config.saas.stripe-secret-key.description": "Clave privada de Stripe usada por el backend para crear sesiones de pago y gestionar suscripciones.",
+  "admin.config.saas.stripe-webhook-secret": "Secreto del webhook de Stripe",
+  "admin.config.saas.stripe-webhook-secret.description": "Secreto de firma para verificar los eventos de webhook de Stripe.",
+  "admin.config.saas.stripe-monthly-price-id": "ID de precio mensual en Stripe",
+  "admin.config.saas.stripe-monthly-price-id.description": "ID de precio de la suscripción mensual en Stripe.",
+  "admin.config.saas.stripe-yearly-price-id": "ID de precio anual en Stripe",
+  "admin.config.saas.stripe-yearly-price-id.description": "ID de precio de la suscripción anual en Stripe.",
+  "admin.config.saas.exempt-users.title": "Usuarios exentos",
+  "admin.config.saas.exempt-users.search": "Buscar usuarios por nombre o correo",
+  "admin.config.saas.exempt-users.exempt": "Eximir",
+  "admin.config.saas.exempt-users.add": "Eximir usuario",
+  "admin.config.saas.exempt-users.remove": "Quitar exención",
+  "admin.config.saas.payments.title": "Historial de pagos",
+  "admin.config.saas.payments.month": "Total este mes",
+  "admin.config.saas.payments.year": "Total este año",
+  "admin.config.saas.payments.all-time": "Total histórico",
+  "admin.config.saas.payments.amount": "Importe",
+  "admin.config.saas.payments.status": "Estado",
   "admin.config.smtp.enabled": "Habilitar",
   "admin.config.smtp.enabled.description": "Si SMTP está habilitado. Active solo si ha introducido el host, el puerto, el correo, el usuario y la contraseña de su servidor SMTP.",
   "admin.config.smtp.host": "Host",
@@ -437,11 +466,11 @@ export default {
   "admin.config.oauth.oidc-username-claim": "Reclamo de nombre de usuario de OpenID Connect",
   "admin.config.oauth.oidc-username-claim.description": "Reclamo de nombre de usuario en el token de OpenID Connect. Déjalo en blanco si no sabes qué es esta configuración.",
   "admin.config.oauth.oidc-role-path": "Ruta a los roles en el token de OpenID Connect",
-  "admin.config.oauth.oidc-role-path.description": "Debe ser una ruta JMES válida que haga referencia a un array de roles. " + "Se recomienda gestionar los derechos de acceso utilizando roles de OpenID Connect solo si no se ha configurado ningún otro proveedor de identidad y si el inicio de sesión con contraseña está deshabilitado. " + "Déjalo en blanco si no sabe lo que es esta configuración.",
+  "admin.config.oauth.oidc-role-path.description": "Debe ser una ruta JMES válida que haga referencia a un array de roles. Se recomienda gestionar los derechos de acceso utilizando roles de OpenID Connect solo si no se ha configurado ningún otro proveedor de identidad y si el inicio de sesión con contraseña está deshabilitado. Déjalo en blanco si no sabe lo que es esta configuración.",
   "admin.config.oauth.oidc-role-general-access": "Rol de OpenID Connect para acceso general",
-  "admin.config.oauth.oidc-role-general-access.description": "Rol requerido para acceso general. Debe estar presente en los roles de un usuario para que inicie sesión. " + "Déjalo en blanco si no sabe lo que es esta configuración.",
+  "admin.config.oauth.oidc-role-general-access.description": "Rol requerido para acceso general. Debe estar presente en los roles de un usuario para que inicie sesión. Déjalo en blanco si no sabe lo que es esta configuración.",
   "admin.config.oauth.oidc-role-admin-access": "Rol de OpenID Connect para acceso de administrador",
-  "admin.config.oauth.oidc-role-admin-access.description": "Rol requerido para el acceso administrativo. Debe estar presente en los roles de un usuario para acceder al panel de administración. " + "Déjalo en blanco si no sabe lo que es esta configuración.",
+  "admin.config.oauth.oidc-role-admin-access.description": "Rol requerido para el acceso administrativo. Debe estar presente en los roles de un usuario para acceder al panel de administración. Déjalo en blanco si no sabe lo que es esta configuración.",
   "admin.config.oauth.oidc-client-id": "ID de Cliente OpenID Connect",
   "admin.config.oauth.oidc-client-id.description": "ID de cliente de la aplicación OAuth de OpenID Connect",
   "admin.config.oauth.oidc-client-secret": "Secreto de cliente de OpenID Connect",
@@ -496,10 +525,8 @@ export default {
   "admin.config.legal.privacy-policy-text.description": "El texto que debe mostrarse en la política de privacidad. Compatible con Markdown. Dejar en blanco para enlazar a una página de política de privacidad externa.",
   "admin.config.legal.privacy-policy-url": "URL de la política de privacidad",
   "admin.config.legal.privacy-policy-url.description": "Si ya tiene una página de política de privacidad puede enlazarla aquí en lugar de usar el campo de texto.",
-  // 404
   "404.description": "Oops esta página no existe.",
   "404.button.home": "Regrésame al inicio",
-  // error
   "error.title": "Error",
   "error.description": "¡Ups!",
   "error.button.back": "Volver",
@@ -519,7 +546,6 @@ export default {
   "error.param.provider_microsoft": "Microsoft",
   "error.param.provider_discord": "Discord",
   "error.param.provider_oidc": "Conexión OpenID",
-  // Common translations
   "common.button.save": "Guardar",
   "common.button.create": "Crear",
   "common.button.submit": "Enviar",
@@ -536,6 +562,9 @@ export default {
   "upload.flow.hint.manual-open": "Paso 1: añade archivos. Paso 2: haz clic en «{actionLabel}» para configurar y crear tu enlace de carga.",
   "common.button.go-back": "Volver",
   "common.button.go-home": "Página de inicio",
+  "common.aria.copy-share-link": "Copiar enlace del compartido",
+  "common.aria.copy-request-link": "Copiar enlace de solicitud de archivos",
+  "common.aria.delete-request-link": "Eliminar enlace de solicitud de archivos",
   "common.notify.copied": "Tu enlace se ha copiado al portapapeles",
   "common.error": "Error",
   "common.error.unknown": "Ocurrió un error desconocido",
@@ -546,5 +575,5 @@ export default {
   "common.error.number-too-large": "Debe ser como máximo {max}",
   "common.error.exact-length": "Debe tener exactamente {length} caracteres",
   "common.error.invalid-number": "Debe ser un número",
-  "common.error.field-required": "Este campo es requerido"
+  "common.error.field-required": "Este campo es requerido",
 };
