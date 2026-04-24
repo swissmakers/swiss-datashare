@@ -263,3 +263,7 @@ initUser:
   password: my-secure-password
   isAdmin: true
   ldapDN: ""
+# internal settings are normally created in the database on first run (not required in YAML).
+# If you set them here, they override the DB. OAuth ID tokens at rest use AES-256-GCM with:
+# internal:
+#   oauthTokenEncryptionKey: "<32 random bytes, base64>"  # must decode to exactly 32 bytes

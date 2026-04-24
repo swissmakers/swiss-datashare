@@ -4,6 +4,7 @@ import {
   forwardRef,
   Inject,
   Injectable,
+  InternalServerErrorException,
   Logger,
   UnauthorizedException,
 } from "@nestjs/common";
@@ -21,6 +22,10 @@ import { UserSevice } from "../user/user.service";
 import { AuthRegisterDTO } from "./dto/authRegister.dto";
 import { AuthSignInDTO } from "./dto/authSignIn.dto";
 import { LdapService } from "./ldap.service";
+import {
+  decryptOauthIdTokenAtRest,
+  encryptOauthIdTokenAtRest,
+} from "src/utils/oauthTokenCrypto.util";
 
 @Injectable()
 export class AuthService {
@@ -253,33 +258,52 @@ export class AuthService {
         });
 
       if (typeof oauthIDToken === "string") {
-        const [providerName, idTokenHint] = oauthIDToken.split(":");
-        const provider = this.oAuthService.availableProviders()[providerName];
-        let signOutFromProviderSupportedAndActivated = false;
+        let oauthIDTokenPlain: string | null = null;
         try {
-          signOutFromProviderSupportedAndActivated = this.config.get(
-            `oauth.${providerName}-signOut`,
+          oauthIDTokenPlain = decryptOauthIdTokenAtRest(
+            oauthIDToken,
+            this.config.get("internal.oauthTokenEncryptionKey"),
           );
-        } catch {
-          // Ignore error if the provider is not supported or if the provider sign out is not activated
+        } catch (e) {
+          this.logger.warn(
+            "Could not decrypt stored OAuth id token; skipping provider logout hint",
+            e instanceof Error ? e.message : e,
+          );
         }
-        if (
-          provider instanceof GenericOidcProvider &&
-          signOutFromProviderSupportedAndActivated
-        ) {
-          const configuration = await provider.getConfiguration();
-          if (URL.canParse(configuration.end_session_endpoint)) {
-            const redirectURI = new URL(configuration.end_session_endpoint);
-            redirectURI.searchParams.append(
-              "post_logout_redirect_uri",
-              this.config.get("general.appUrl"),
-            );
-            redirectURI.searchParams.append("id_token_hint", idTokenHint);
-            redirectURI.searchParams.append(
-              "client_id",
-              this.config.get(`oauth.${providerName}-clientId`),
-            );
-            return redirectURI.toString();
+        if (oauthIDTokenPlain) {
+          const sep = oauthIDTokenPlain.indexOf(":");
+          if (sep >= 1) {
+            const providerName = oauthIDTokenPlain.slice(0, sep);
+            const idTokenHint = oauthIDTokenPlain.slice(sep + 1);
+            const provider =
+              this.oAuthService.availableProviders()[providerName];
+            let signOutFromProviderSupportedAndActivated = false;
+            try {
+              signOutFromProviderSupportedAndActivated = this.config.get(
+                `oauth.${providerName}-signOut`,
+              );
+            } catch {
+              // Ignore error if the provider is not supported or if the provider sign out is not activated
+            }
+            if (
+              provider instanceof GenericOidcProvider &&
+              signOutFromProviderSupportedAndActivated
+            ) {
+              const configuration = await provider.getConfiguration();
+              if (URL.canParse(configuration.end_session_endpoint)) {
+                const redirectURI = new URL(configuration.end_session_endpoint);
+                redirectURI.searchParams.append(
+                  "post_logout_redirect_uri",
+                  this.config.get("general.appUrl"),
+                );
+                redirectURI.searchParams.append("id_token_hint", idTokenHint);
+                redirectURI.searchParams.append(
+                  "client_id",
+                  this.config.get(`oauth.${providerName}-clientId`),
+                );
+                return redirectURI.toString();
+              }
+            }
           }
         }
       }
@@ -303,13 +327,30 @@ export class AuthService {
 
   async createRefreshToken(userId: string, idToken?: string) {
     const sessionDuration = this.config.get("general.sessionDuration");
+    let oauthIDTokenStored: string | undefined = idToken;
+    if (idToken) {
+      try {
+        oauthIDTokenStored = encryptOauthIdTokenAtRest(
+          idToken,
+          this.config.get("internal.oauthTokenEncryptionKey"),
+        );
+      } catch (e) {
+        this.logger.error(
+          "Failed to encrypt OAuth ID token; check internal.oauthTokenEncryptionKey (32 bytes, base64)",
+          e instanceof Error ? e.stack : e,
+        );
+        throw new InternalServerErrorException(
+          "OAuth token encryption is misconfigured",
+        );
+      }
+    }
     const { id, token } = await this.prisma.refreshToken.create({
       data: {
         userId,
         expiresAt: moment()
           .add(sessionDuration.value, sessionDuration.unit)
           .toDate(),
-        oauthIDToken: idToken,
+        oauthIDToken: oauthIDTokenStored,
       },
     });
 
@@ -334,6 +375,7 @@ export class AuthService {
     const isSecure = this.config.get("general.secureCookies");
     if (accessToken)
       response.cookie("access_token", accessToken, {
+        path: "/",
         sameSite: "lax",
         secure: isSecure,
         maxAge: 1000 * 60 * 60 * 24 * 30 * 3, // 3 months

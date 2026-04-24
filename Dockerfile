@@ -1,11 +1,15 @@
+# syntax=docker/dockerfile:1
 # Shared build base container
 FROM node:24-alpine AS build-base
 RUN npm install -g npm@latest && apk add --no-cache python3 openssl
-# Configure npm with bounded retry/timeout settings to avoid long hangs.
-RUN npm config set fetch-timeout 120000 && \
-    npm config set fetch-retries 2 && \
-    npm config set fetch-retry-mintimeout 5000 && \
-    npm config set fetch-retry-maxtimeout 30000
+# Configure npm retries/timeouts with balanced defaults for CI.
+RUN npm config set fetch-timeout 180000 && \
+    npm config set fetch-retries 3 && \
+    npm config set fetch-retry-mintimeout 10000 && \
+    npm config set fetch-retry-maxtimeout 60000 && \
+    npm config set fetch-retry-factor 2 && \
+    npm config set loglevel error && \
+    npm config set maxsockets 10
 WORKDIR /opt/app
 
 # Frontend dependencies
@@ -13,13 +17,14 @@ FROM build-base AS frontend-dependencies
 WORKDIR /opt/app/frontend
 COPY frontend/package.json frontend/package-lock.json ./
 # Run deterministic install with retries for transient network issues.
-RUN set -e; \
+RUN --mount=type=cache,target=/root/.npm \
+    set -e; \
     npm_ci_retry() { \
       attempt=1; \
       max_attempts=3; \
       while [ "$attempt" -le "$max_attempts" ]; do \
         echo "Running npm ci (attempt ${attempt}/${max_attempts})"; \
-        if npm ci --prefer-offline --no-audit --progress=false --include=optional --fetch-timeout=120000 --fetch-retries=2 --fetch-retry-mintimeout=5000 --fetch-retry-maxtimeout=30000; then \
+        if npm ci --no-audit --progress=false --include=optional --loglevel=error --fetch-timeout=180000 --fetch-retries=3 --fetch-retry-mintimeout=10000 --fetch-retry-maxtimeout=60000; then \
           return 0; \
         fi; \
         if [ "$attempt" -eq "$max_attempts" ]; then \
@@ -44,13 +49,14 @@ RUN npm run build
 FROM build-base AS backend-dependencies
 WORKDIR /opt/app/backend
 COPY backend/package.json backend/package-lock.json ./
-RUN set -e; \
+RUN --mount=type=cache,target=/root/.npm \
+    set -e; \
     npm_ci_retry() { \
       attempt=1; \
       max_attempts=3; \
       while [ "$attempt" -le "$max_attempts" ]; do \
         echo "Running npm ci (attempt ${attempt}/${max_attempts})"; \
-        if npm ci --prefer-offline --no-audit --progress=false --include=optional --fetch-timeout=120000 --fetch-retries=2 --fetch-retry-mintimeout=5000 --fetch-retry-maxtimeout=30000; then \
+        if npm ci --no-audit --progress=false --include=optional --loglevel=error --fetch-timeout=180000 --fetch-retries=3 --fetch-retry-mintimeout=10000 --fetch-retry-maxtimeout=60000; then \
           return 0; \
         fi; \
         if [ "$attempt" -eq "$max_attempts" ]; then \

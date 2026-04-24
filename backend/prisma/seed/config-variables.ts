@@ -23,6 +23,12 @@ export const configVariables = {
       value: crypto.randomBytes(256).toString("base64"),
       locked: true,
     },
+    /** 32-byte key (base64) for AES-256-GCM encryption of OAuth ID tokens at rest in RefreshToken.oauthIDToken */
+    oauthTokenEncryptionKey: {
+      type: "string",
+      value: crypto.randomBytes(32).toString("base64"),
+      locked: true,
+    },
   },
   general: {
     appName: {

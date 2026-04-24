@@ -5,10 +5,19 @@ import SignInForm from "../../components/auth/SignInForm";
 import Meta from "../../components/Meta";
 import useUser from "../../hooks/user.hook";
 import { LoadingSpinner } from "../../components/ui";
+import { safeRedirectPath } from "../../utils/router.util";
 
 export function getServerSideProps(context: GetServerSidePropsContext) {
+  const raw = context.query.redirect;
+  const redirectPath =
+    typeof raw === "string"
+      ? raw
+      : Array.isArray(raw) && typeof raw[0] === "string"
+        ? raw[0]
+        : null;
+
   return {
-    props: { redirectPath: context.query.redirect ?? null },
+    props: { redirectPath },
   };
 }
 
@@ -23,7 +32,7 @@ const SignIn = ({ redirectPath }: { redirectPath?: string }) => {
   useEffect(() => {
     refreshUser().then((user) => {
       if (user) {
-        router.replace(redirectPath ?? "/upload");
+        router.replace(safeRedirectPath(redirectPath ?? "/upload"));
       } else {
         setIsLoading(false);
       }

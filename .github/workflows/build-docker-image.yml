@@ -8,6 +8,11 @@ jobs:
   build:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      actions: read
+      actions: write
     steps:
       - name: checkout code
         uses: actions/checkout@v3

@@ -47,7 +47,7 @@ const SignInForm = ({ redirectPath }: { redirectPath: string }) => {
           router.push(
             `/auth/totp/${
               response.data["loginToken"]
-            }?redirect=${encodeURIComponent(redirectPath)}`,
+            }?redirect=${encodeURIComponent(safeRedirectPath(redirectPath))}`,
           );
         } else {
           await refreshUser();

@@ -32,26 +32,32 @@ const Share = ({ shareId }: { shareId: string }) => {
   const loadShare = async (retryCount = 0) => {
     // Prevent multiple simultaneous calls
     if (loadingRef.current) {
-      console.log(`[ShareEdit] Already loading share, skipping...`);
+      console.log("[ShareEdit] Already loading share, skipping...");
       return;
     }
     
     loadingRef.current = true;
     const maxRetries = 3;
-    const retryDelay = 1000; // 1 second
+    const retryDelay = 1000;
     
     try {
-      console.log(`[ShareEdit] Loading share ${shareId} (attempt ${retryCount + 1}/${maxRetries + 1})`);
+      console.log("[ShareEdit] Loading share", {
+        shareId,
+        attempt: retryCount + 1,
+        maxAttempts: maxRetries + 1,
+      });
       const share = await shareService.getFromOwner(shareId);
-      console.log(`[ShareEdit] Share loaded successfully:`, share);
+      console.log("[ShareEdit] Share loaded successfully");
       setShare(share);
       setIsLoading(false);
     } catch (e: any) {
-      console.error(`[ShareEdit] Error loading share ${shareId}:`, e);
+      console.error("[ShareEdit] Error loading share", { shareId, error: e });
       
       // Retry logic for 404 errors (might be temporary due to share state changes)
       if (e.response?.status === 404 && retryCount < maxRetries) {
-        console.log(`[ShareEdit] 404 error, retrying in ${retryDelay * (retryCount + 1)}ms...`);
+        console.log("[ShareEdit] 404 error, retrying", {
+          delayMs: retryDelay * (retryCount + 1),
+        });
         loadingRef.current = false;
         await new Promise((resolve) => setTimeout(resolve, retryDelay * (retryCount + 1)));
         return loadShare(retryCount + 1);
@@ -66,7 +72,8 @@ const Share = ({ shareId }: { shareId: string }) => {
             e.response.data.message,
           );
         } else {
-          console.error(`[ShareEdit] Share not found: ${shareId}`, {
+          console.error("[ShareEdit] Share not found", {
+            shareId,
             status: e.response?.status,
             statusText: e.response?.statusText,
             data: e.response?.data,
@@ -85,7 +92,8 @@ const Share = ({ shareId }: { shareId: string }) => {
           t("share.error.access-denied.description"),
         );
       } else {
-        console.error(`[ShareEdit] Unknown error:`, {
+        console.error("[ShareEdit] Unknown error", {
+          shareId,
           status: e.response?.status,
           statusText: e.response?.statusText,
           data: e.response?.data,

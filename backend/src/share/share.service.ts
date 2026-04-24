@@ -18,7 +18,11 @@ import { FileService } from "src/file/file.service";
 import { PrismaService } from "src/prisma/prisma.service";
 import { ReverseShareService } from "src/reverseShare/reverseShare.service";
 import { parseRelativeDateToAbsolute } from "src/utils/date.util";
-import { SHARE_DIRECTORY } from "../constants";
+import {
+  assertSafeFileIdForStorage,
+  resolvePathSegmentUnderShareDirectory,
+  resolveValidatedShareDirectory,
+} from "src/utils/sharePath.util";
 import { CreateShareDTO } from "./dto/createShare.dto";
 
 @Injectable()
@@ -79,7 +83,8 @@ export class ShareService {
       expirationDate = parsedExpiration;
     }
 
-    fs.mkdirSync(`${SHARE_DIRECTORY}/${share.id}`, {
+    const shareDir = resolveValidatedShareDirectory(share.id);
+    fs.mkdirSync(shareDir, {
       recursive: true,
     });
 
@@ -116,16 +121,22 @@ export class ShareService {
   async createZip(shareId: string) {
     if (this.config.get("s3.enabled")) return;
 
-    const path = `${SHARE_DIRECTORY}/${shareId}`;
+    resolveValidatedShareDirectory(shareId);
 
     const files = await this.prisma.file.findMany({ where: { shareId } });
     const archive = archiver("zip", {
       zlib: { level: this.config.get("share.zipCompressionLevel") },
     });
-    const writeStream = fs.createWriteStream(`${path}/archive.zip`);
+    const archivePath = resolvePathSegmentUnderShareDirectory(
+      shareId,
+      "archive.zip",
+    );
+    const writeStream = fs.createWriteStream(archivePath);
 
     for (const file of files) {
-      archive.append(fs.createReadStream(`${path}/${file.id}`), {
+      assertSafeFileIdForStorage(file.id);
+      const filePath = resolvePathSegmentUnderShareDirectory(shareId, file.id);
+      archive.append(fs.createReadStream(filePath), {
         name: file.name,
       });
     }

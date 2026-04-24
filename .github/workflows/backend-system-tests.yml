@@ -12,6 +12,8 @@ jobs:
   system-tests:
     timeout-minutes: 15
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     container: node:22
     steps:
       - uses: actions/checkout@v3
