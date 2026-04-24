@@ -5,11 +5,11 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import { Request } from "express";
-import * as moment from "moment";
-import { PrismaService } from "src/prisma/prisma.service";
-import { ShareSecurityGuard } from "src/share/guard/shareSecurity.guard";
-import { ShareService } from "src/share/share.service";
-import { ConfigService } from "src/config/config.service";
+import moment from "moment";
+import { PrismaService } from "@/prisma/prisma.service";
+import { ShareSecurityGuard } from "@/share/guard/shareSecurity.guard";
+import { ShareService } from "@/share/share.service";
+import { ConfigService } from "@/config/config.service";
 
 @Injectable()
 export class FileSecurityGuard extends ShareSecurityGuard {

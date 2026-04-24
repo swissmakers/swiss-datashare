@@ -75,6 +75,11 @@ export const configVariables = {
       defaultValue: "default",
       secret: false,
     },
+    defaultLocale: {
+      type: "string",
+      defaultValue: "en-US",
+      secret: false,
+    },
     logoScalePercent: {
       type: "number",
       defaultValue: "100",

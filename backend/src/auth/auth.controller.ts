@@ -14,7 +14,7 @@ import {
 import { Throttle } from "@nestjs/throttler";
 import { User } from "@prisma/client";
 import { Request, Response } from "express";
-import { ConfigService } from "src/config/config.service";
+import { ConfigService } from "@/config/config.service";
 import { AuthService } from "./auth.service";
 import { AuthTotpService } from "./authTotp.service";
 import { GetUser } from "./decorator/getUser.decorator";

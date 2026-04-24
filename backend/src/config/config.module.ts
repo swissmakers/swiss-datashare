@@ -1,7 +1,7 @@
 import { Global, Module } from "@nestjs/common";
 import { Config } from "@prisma/client";
-import { EmailModule } from "src/email/email.module";
-import { PrismaService } from "src/prisma/prisma.service";
+import { EmailModule } from "@/email/email.module";
+import { PrismaService } from "@/prisma/prisma.service";
 import { ConfigController } from "./config.controller";
 import { ConfigService } from "./config.service";
 import { LogoService } from "./logo.service";

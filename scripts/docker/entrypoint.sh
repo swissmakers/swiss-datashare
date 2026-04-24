@@ -1,5 +1,12 @@
 #!/bin/sh
 
+# Enforce secure TLS by default inside the container.
+# If an upstream environment injects NODE_TLS_REJECT_UNAUTHORIZED=0, override it.
+if [ "${NODE_TLS_REJECT_UNAUTHORIZED:-1}" = "0" ]; then
+  echo "Warning: insecure NODE_TLS_REJECT_UNAUTHORIZED=0 detected; forcing secure TLS verification."
+  export NODE_TLS_REJECT_UNAUTHORIZED=1
+fi
+
 # Migrate database from old name to new name if needed
 if [ -f /opt/app/backend/data/pingvin-share.db ] && [ ! -f /opt/app/backend/data/swiss-datashare.db ]; then
     echo "Migrating database from pingvin-share.db to swiss-datashare.db..."

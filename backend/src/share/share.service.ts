@@ -7,22 +7,22 @@ import {
 } from "@nestjs/common";
 import { JwtService, JwtSignOptions } from "@nestjs/jwt";
 import { Share, User } from "@prisma/client";
-import * as archiver from "archiver";
+import archiver from "archiver";
 import * as argon from "argon2";
 import * as fs from "fs";
-import * as moment from "moment";
-import { ClamScanService } from "src/clamscan/clamscan.service";
-import { ConfigService } from "src/config/config.service";
-import { EmailService } from "src/email/email.service";
-import { FileService } from "src/file/file.service";
-import { PrismaService } from "src/prisma/prisma.service";
-import { ReverseShareService } from "src/reverseShare/reverseShare.service";
-import { parseRelativeDateToAbsolute } from "src/utils/date.util";
+import moment from "moment";
+import { ClamScanService } from "@/clamscan/clamscan.service";
+import { ConfigService } from "@/config/config.service";
+import { EmailService } from "@/email/email.service";
+import { FileService } from "@/file/file.service";
+import { PrismaService } from "@/prisma/prisma.service";
+import { ReverseShareService } from "@/reverseShare/reverseShare.service";
+import { parseRelativeDateToAbsolute } from "@/utils/date.util";
 import {
   assertSafeFileIdForStorage,
   resolvePathSegmentUnderShareDirectory,
   resolveValidatedShareDirectory,
-} from "src/utils/sharePath.util";
+} from "@/utils/sharePath.util";
 import { CreateShareDTO } from "./dto/createShare.dto";
 
 @Injectable()

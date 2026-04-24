@@ -7,7 +7,7 @@ const DATABASE_URL =
 export default defineConfig({
   schema: "prisma/schema.prisma",
   migrations: {
-    seed: "ts-node prisma/seed/config.seed.ts",
+    seed: "ts-node --project prisma/seed/tsconfig.seed.json --transpile-only prisma/seed/config.seed.ts",
   },
   datasource: {
     url: DATABASE_URL,

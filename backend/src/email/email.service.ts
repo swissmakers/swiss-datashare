@@ -4,8 +4,8 @@ import {
   Logger,
 } from "@nestjs/common";
 import * as nodemailer from "nodemailer";
-import { ConfigService } from "src/config/config.service";
-import { PrismaService } from "src/prisma/prisma.service";
+import { ConfigService } from "@/config/config.service";
+import { PrismaService } from "@/prisma/prisma.service";
 import { getEmailCopy } from "./i18n/messages";
 import { normalizeEmailLocale } from "./i18n/locales";
 import { EmailBranding, renderEmailTemplate } from "./template/email-template.renderer";
@@ -159,8 +159,9 @@ export class EmailService {
       .trim();
 
     const scale = this.resolveLogoScalePercent() / 100;
-    const logoMaxWidthPx = Math.round(520 * scale);
-    const logoMaxHeightPx = Math.round(48 * scale);
+    // Keep logos proportional for wide and square assets in email clients.
+    const logoMaxWidthPx = Math.round(360 * scale);
+    const logoMaxHeightPx = Math.round(120 * scale);
 
     return {
       appName: appName || "Swiss DataShare",

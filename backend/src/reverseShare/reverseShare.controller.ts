@@ -10,10 +10,10 @@ import {
 } from "@nestjs/common";
 import { Throttle } from "@nestjs/throttler";
 import { User } from "@prisma/client";
-import { GetUser } from "src/auth/decorator/getUser.decorator";
-import { JwtGuard } from "src/auth/guard/jwt.guard";
-import { ConfigService } from "src/config/config.service";
-import { SaasSubscriptionGuard } from "src/saas/guard/saasSubscription.guard";
+import { GetUser } from "@/auth/decorator/getUser.decorator";
+import { JwtGuard } from "@/auth/guard/jwt.guard";
+import { ConfigService } from "@/config/config.service";
+import { SaasSubscriptionGuard } from "@/saas/guard/saasSubscription.guard";
 import { CreateReverseShareDTO } from "./dto/createReverseShare.dto";
 import { ReverseShareDTO } from "./dto/reverseShare.dto";
 import { ReverseShareTokenWithShares } from "./dto/reverseShareTokenWithShares";

@@ -3,10 +3,11 @@ import { Prisma } from "@prisma/client";
 import * as argon from "argon2";
 import * as crypto from "crypto";
 import { Entry } from "ldapts";
-import { AuthSignInDTO } from "src/auth/dto/authSignIn.dto";
-import { EmailService } from "src/email/email.service";
-import { PrismaService } from "src/prisma/prisma.service";
+import { AuthSignInDTO } from "@/auth/dto/authSignIn.dto";
+import { EmailService } from "@/email/email.service";
+import { PrismaService } from "@/prisma/prisma.service";
 import { inspect } from "util";
+import { normalizeEmailLocale } from "@/email/i18n/locales";
 import { ConfigService } from "../config/config.service";
 import { FileService } from "../file/file.service";
 import { CreateUserDTO } from "./dto/createUser.dto";
@@ -47,11 +48,20 @@ export class UserSevice {
       hash = await argon.hash(dto.password);
     }
 
+    const siteDefault = normalizeEmailLocale(
+      String(this.configService.get("general.defaultLocale")),
+    );
+    const resolvedLocale =
+      dto.locale != null && String(dto.locale).trim() !== ""
+        ? normalizeEmailLocale(dto.locale)
+        : siteDefault;
+
     try {
       return await this.prisma.user.create({
         data: {
           ...dto,
           password: hash,
+          locale: resolvedLocale,
         },
       });
     } catch (e) {
@@ -161,7 +171,9 @@ export class UserSevice {
           username: providedCredentials.username ?? placeholderUsername,
           email: userEmail ?? placeholderEMail,
           password: await argon.hash(crypto.randomUUID()),
-
+          locale: normalizeEmailLocale(
+            String(this.configService.get("general.defaultLocale")),
+          ),
           isAdmin,
           ldapDN: ldapEntry.dn,
         },

@@ -1,5 +1,5 @@
 import * as assert from "node:assert/strict";
-import { buildDefaultLegalConfigTranslations } from "../../src/legal/i18n/messages";
+import { buildDefaultLegalConfigTranslations } from "@/legal/i18n/messages";
 
 function run() {
   const defaults = buildDefaultLegalConfigTranslations();

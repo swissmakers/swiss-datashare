@@ -5,8 +5,8 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import { Request } from "express";
-import * as moment from "moment";
-import { PrismaService } from "src/prisma/prisma.service";
+import moment from "moment";
+import { PrismaService } from "@/prisma/prisma.service";
 
 @Injectable()
 export class ShareTokenSecurity implements CanActivate {

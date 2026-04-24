@@ -18,14 +18,14 @@ import {
   UploadPartCommand,
   UploadPartCommandOutput,
 } from "@aws-sdk/client-s3";
-import { PrismaService } from "src/prisma/prisma.service";
-import { ConfigService } from "src/config/config.service";
+import { PrismaService } from "@/prisma/prisma.service";
+import { ConfigService } from "@/config/config.service";
 import * as crypto from "crypto";
 import * as mime from "mime-types";
 import { File } from "./file.service";
 import { Readable } from "stream";
 import { validate as isValidUUID } from "uuid";
-import * as archiver from "archiver";
+import archiver from "archiver";
 
 @Injectable()
 export class S3FileService {

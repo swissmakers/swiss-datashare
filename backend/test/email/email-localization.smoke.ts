@@ -1,7 +1,7 @@
 import * as assert from "node:assert/strict";
-import { getEmailCopy } from "../../src/email/i18n/messages";
-import { normalizeEmailLocale } from "../../src/email/i18n/locales";
-import { renderEmailTemplate } from "../../src/email/template/email-template.renderer";
+import { getEmailCopy } from "@/email/i18n/messages";
+import { normalizeEmailLocale } from "@/email/i18n/locales";
+import { renderEmailTemplate } from "@/email/template/email-template.renderer";
 
 function run() {
   assert.equal(normalizeEmailLocale("de"), "de-DE");

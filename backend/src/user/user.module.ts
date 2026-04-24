@@ -1,8 +1,8 @@
 import { Module } from "@nestjs/common";
-import { EmailModule } from "src/email/email.module";
+import { EmailModule } from "@/email/email.module";
 import { UserController } from "./user.controller";
 import { UserSevice } from "./user.service";
-import { FileModule } from "src/file/file.module";
+import { FileModule } from "@/file/file.module";
 
 @Module({
   imports: [EmailModule, FileModule],

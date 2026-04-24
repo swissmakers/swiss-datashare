@@ -1,8 +1,8 @@
 import { ExecutionContext, ForbiddenException, Injectable } from "@nestjs/common";
-import { JwtGuard } from "src/auth/guard/jwt.guard";
-import { ConfigService } from "src/config/config.service";
-import { ReverseShareService } from "src/reverseShare/reverseShare.service";
-import { SaasService } from "src/saas/saas.service";
+import { JwtGuard } from "@/auth/guard/jwt.guard";
+import { ConfigService } from "@/config/config.service";
+import { ReverseShareService } from "@/reverseShare/reverseShare.service";
+import { SaasService } from "@/saas/saas.service";
 
 @Injectable()
 export class CreateShareGuard extends JwtGuard {

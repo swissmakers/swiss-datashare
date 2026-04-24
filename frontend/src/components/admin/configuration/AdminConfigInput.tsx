@@ -1,4 +1,5 @@
 import { AdminConfig, UpdateConfig } from "../../../types/config.type";
+import { LOCALES } from "../../../i18n/locales";
 import { stringToTimespan, timespanToString } from "../../../utils/date.util";
 import FileSizeInput from "../../core/FileSizeInput";
 import TimespanInput from "../../core/TimespanInput";
@@ -50,6 +51,23 @@ const AdminConfigInput = ({
   return (
     <div className="flex justify-end w-full">
       {configVariable.type == "string" &&
+        configVariable.key === "general.defaultLocale" && (
+          <select
+            className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm focus:border-primary-500 focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
+            disabled={!configVariable.allowEdit}
+            value={stringValue}
+            onChange={(e) => onValueChange(configVariable, e.target.value)}
+          >
+            {Object.values(LOCALES).map((locale) => (
+              <option key={locale.code} value={locale.code}>
+                {locale.name} ({locale.code})
+              </option>
+            ))}
+          </select>
+        )}
+
+      {configVariable.type == "string" &&
+        configVariable.key !== "general.defaultLocale" &&
         (configVariable.obscured ? (
           <PasswordInput
             autoComplete="new-password"

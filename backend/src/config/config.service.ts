@@ -8,22 +8,23 @@ import {
 import * as argon from "argon2";
 import { EventEmitter } from "events";
 import * as fs from "fs";
-import { PrismaService } from "src/prisma/prisma.service";
-import { stringToTimespan } from "src/utils/date.util";
+import { PrismaService } from "@/prisma/prisma.service";
+import { stringToTimespan } from "@/utils/date.util";
 import { parse as yamlParse } from "yaml";
 import {
   buildDefaultEmailConfigTranslations,
   EmailConfigTranslationKey,
-} from "src/email/i18n/messages";
+} from "@/email/i18n/messages";
 import {
   buildDefaultLegalConfigTranslations,
   LegalConfigTranslationKey,
-} from "src/legal/i18n/messages";
+} from "@/legal/i18n/messages";
+import { SUPPORTED_EMAIL_LOCALES } from "@/email/i18n/locales";
 import {
   configVariables,
   YamlConfig,
 } from "../../prisma/seed/config-variables";
-import { CONFIG_FILE } from "src/constants";
+import { CONFIG_FILE } from "@/constants";
 
 type ConfigRow = {
   category: string;
@@ -166,6 +167,13 @@ export class ConfigService extends EventEmitter {
       );
       return;
     }
+    const initLocaleRaw = this.get("general.defaultLocale") as string;
+    const initLocale = (SUPPORTED_EMAIL_LOCALES as readonly string[]).includes(
+      initLocaleRaw,
+    )
+      ? initLocaleRaw
+      : "en-US";
+
     await this.prismaUser().create({
       data: {
         email: this.yamlConfig.initUser.email,
@@ -174,6 +182,7 @@ export class ConfigService extends EventEmitter {
           ? await argon.hash(this.yamlConfig.initUser.password)
           : null,
         isAdmin: this.yamlConfig.initUser.isAdmin,
+        locale: initLocale,
       },
     });
   }
@@ -348,6 +357,16 @@ export class ConfigService extends EventEmitter {
   }
 
   validateConfigVariable(key: string, value: string | number | boolean) {
+    if (key === "general.defaultLocale") {
+      const str = String(value);
+      if (!(SUPPORTED_EMAIL_LOCALES as readonly string[]).includes(str)) {
+        throw new BadRequestException(
+          `Default locale must be one of: ${SUPPORTED_EMAIL_LOCALES.join(", ")}`,
+        );
+      }
+      return;
+    }
+
     const validations = [
       {
         key: "share.shareIdLength",

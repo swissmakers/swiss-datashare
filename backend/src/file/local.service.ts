@@ -11,15 +11,15 @@ import * as crypto from "crypto";
 import { createReadStream } from "fs";
 import * as fs from "fs/promises";
 import * as mime from "mime-types";
-import { ConfigService } from "src/config/config.service";
-import { PrismaService } from "src/prisma/prisma.service";
+import { ConfigService } from "@/config/config.service";
+import { PrismaService } from "@/prisma/prisma.service";
 import {
   assertSafeFileIdForStorage,
   assertSafeShareId,
   resolveChunkTempPath,
   resolvePathSegmentUnderShareDirectory,
   resolveValidatedShareDirectory,
-} from "src/utils/sharePath.util";
+} from "@/utils/sharePath.util";
 import { validate as isValidUUID } from "uuid";
 import { SHARE_DIRECTORY } from "../constants";
 import { Readable } from "stream";
