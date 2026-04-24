@@ -50,7 +50,6 @@ export default {
   "signin.input.password": "Password",
   "signin.input.password.placeholder": "Your password",
   "signin.button.submit": "Sign in",
-  "signIn.notify.totp-required.title": "Two-factor authentication required",
   "signIn.notify.totp-required.description": "Please enter your two-factor authentication code",
   "signIn.oauth.or": "OR",
   "signIn.oauth.signInWith": "Sign in with",
@@ -124,7 +123,6 @@ export default {
   "account.modal.totp.title": "Enable TOTP",
   "account.modal.totp.step1": "Step 1: Add your authenticator",
   "account.modal.totp.step2": "Step 2: Validate your code",
-  "account.modal.totp.enterManually": "Enter manually",
   "account.modal.totp.code": "Code",
   "common.button.clickToCopy": "Click to copy",
   "account.modal.totp.verify": "Verify",
@@ -152,7 +150,6 @@ export default {
   "account.card.billing.subscribe-yearly": "Subscribe yearly",
   "account.card.billing.subscribe-locked": "Subscription options are disabled while your current subscription is still active.",
   "account.card.billing.manage": "Manage billing",
-  "account.card.billing.exempt-note": "Billing actions are hidden because your account is exempt from subscription requirements.",
 
   // ThemeSwitcher.tsx
   "account.theme.dark": "Dark",
@@ -170,7 +167,6 @@ export default {
   "account.shares.description.empty": "You don't have any shares.",
   "account.shares.button.create": "Create one",
 
-  "account.shares.info.title": "Share information",
   "account.shares.table.id": "ID",
   "account.shares.table.name": "Name",
   "account.shares.table.description": "Description",
@@ -202,18 +198,6 @@ export default {
   "account.reverseShares.modal.name.label": "Name",
   "account.reverseShares.modal.name.placeholder": "Optional name for this data request",
   "account.reverseShares.modal.expiration.label": "Expiration",
-  "account.reverseShares.modal.expiration.minute-singular": "Minute",
-  "account.reverseShares.modal.expiration.minute-plural": "Minutes",
-  "account.reverseShares.modal.expiration.hour-singular": "Hour",
-  "account.reverseShares.modal.expiration.hour-plural": "Hours",
-  "account.reverseShares.modal.expiration.day-singular": "Day",
-  "account.reverseShares.modal.expiration.day-plural": "Days",
-  "account.reverseShares.modal.expiration.week-singular": "Week",
-  "account.reverseShares.modal.expiration.week-plural": "Weeks",
-  "account.reverseShares.modal.expiration.month-singular": "Month",
-  "account.reverseShares.modal.expiration.month-plural": "Months",
-  "account.reverseShares.modal.expiration.year-singular": "Year",
-  "account.reverseShares.modal.expiration.year-plural": "Years",
 
   "account.reverseShares.modal.max-size.label": "Maximum allowed to upload",
 
@@ -252,7 +236,6 @@ export default {
   "admin.button.users": "User management",
   "admin.button.shares": "Share management",
   "admin.button.config": "System settings",
-  "admin.version": "Version",
   // END /admin
 
   // /admin/users
@@ -289,10 +272,7 @@ export default {
 
   // /admin/shares
   "admin.shares.title": "Share management",
-  "admin.shares.table.id": "Share ID",
   "admin.shares.table.username": "Creator",
-  "admin.shares.table.visitors": "Visitors",
-  "admin.shares.table.expires": "Expires on",
 
   "admin.shares.edit.delete.title": "Delete share: {id}",
   "admin.shares.edit.delete.description": "Do you really want to delete this share?",
@@ -348,7 +328,6 @@ export default {
   "upload.modal.accordion.name-and-description.name.placeholder": "Name",
   "upload.modal.accordion.name-and-description.description.placeholder": "Optional note for recipients",
 
-  "upload.modal.accordion.email.title": "Recipients",
   "upload.modal.accordion.email.placeholder": "Enter recipient email addresses (confirm with Enter)",
   "upload.modal.accordion.email.invalid-email": "Invalid email address",
   "upload.modal.accordion.email.helper": "Leave this empty if you want to send your data link yourself or add recipients here to send the link directly by email.",
@@ -699,7 +678,6 @@ export default {
   "common.button.submit": "Submit",
   "common.button.delete": "Delete",
   "common.button.cancel": "Cancel",
-  "common.button.confirm": "Confirm",
   "common.button.disable": "Disable",
   "common.button.share": "Share Data",
   "common.button.generate": "Generate",
@@ -715,7 +693,6 @@ export default {
   "common.aria.copy-request-link": "Copy data request link",
   "common.aria.delete-request-link": "Delete data request link",
   "common.notify.copied": "Your link was copied to the clipboard",
-  "common.success": "Success",
 
   "common.error": "Error",
   "common.error.unknown": "An unknown error occurred",
