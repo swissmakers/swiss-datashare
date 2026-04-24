@@ -1,5 +1,9 @@
 import { Expose, plainToClass } from "class-transformer";
 
+type ReverseShareWithCreator = Partial<ReverseShareDTO> & {
+  creator?: { locale?: string } | null;
+};
+
 export class ReverseShareDTO {
   @Expose()
   id: string;
@@ -19,9 +23,17 @@ export class ReverseShareDTO {
   @Expose()
   simplified: boolean;
 
-  from(partial: Partial<ReverseShareDTO>) {
-    return plainToClass(ReverseShareDTO, partial, {
+  @Expose()
+  creatorLocale?: string;
+
+  from(partial: ReverseShareWithCreator | null) {
+    const { creator, ...rest } = partial ?? {};
+    const dto = plainToClass(ReverseShareDTO, rest, {
       excludeExtraneousValues: true,
     });
+    if (creator?.locale) {
+      dto.creatorLocale = creator.locale;
+    }
+    return dto;
   }
 }

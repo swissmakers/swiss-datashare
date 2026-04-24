@@ -30,6 +30,11 @@ import "../styles/globals.css";
 
 const excludeDefaultLayoutRoutes = ["/admin/config/[category]"];
 
+type AppPageProps = AppProps["pageProps"] & {
+  creatorLocale?: string | null;
+  initialResolvedLocale?: string;
+};
+
 function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const { toasts, removeToast, success, error, warning, info } = useToast();
@@ -38,6 +43,9 @@ function App({ Component, pageProps }: AppProps) {
   useEffect(() => {
     setGlobalToast({ success, error, warning, info });
   }, [success, error, warning, info]);
+
+  const { creatorLocale, initialResolvedLocale } =
+    pageProps as AppPageProps;
 
   const [user, setUser] = useState<CurrentUser | null>(null);
   const [route, setRoute] = useState<string>(router.pathname);
@@ -84,17 +92,33 @@ function App({ Component, pageProps }: AppProps) {
     return () => clearInterval(interval);
   }, []);
 
-  // Get language from cookie or browser
-  const [language, setLanguage] = useState<string>("en");
-  
+  const [language, setLanguage] = useState<string>(
+    () => initialResolvedLocale ?? LOCALES.ENGLISH.code,
+  );
+
   useEffect(() => {
-    const lang = getCookie("language")?.toString() ||
-      (typeof window !== "undefined"
-        ? navigator.language.split("-")[0]
-        : "en");
-    setLanguage(lang);
-    moment.locale(lang);
-  }, []);
+    const siteRow = configVariables.find(
+      (c) => c.key === "general.defaultLocale",
+    );
+    const siteDefault = (
+      siteRow?.value ??
+      siteRow?.defaultValue ??
+      LOCALES.ENGLISH.code
+    ).toString();
+
+    const resolved = i18nUtil.resolveDisplayLocale({
+      cookieLang: getCookie("language")?.toString() ?? null,
+      creatorLocale: creatorLocale ?? null,
+      userLocale: user?.locale ?? null,
+      siteDefaultLocale: siteDefault,
+      acceptLanguageHeader: null,
+      navigatorLanguage:
+        typeof navigator !== "undefined" ? navigator.language : null,
+    });
+
+    setLanguage(resolved);
+    moment.locale(resolved.split("-")[0]);
+  }, [configVariables, user, creatorLocale, initialResolvedLocale]);
 
   const selectedLocale = useMemo(
     () => i18nUtil.getLocaleByCode(language) ?? LOCALES.ENGLISH,
@@ -146,7 +170,7 @@ function App({ Component, pageProps }: AppProps) {
       </Head>
       <IntlProvider
         messages={mergedMessages}
-        locale={language}
+        locale={i18nUtil.normalizeSupportedUiLocale(language)}
         defaultLocale={LOCALES.ENGLISH.code}
       >
         <ThemeProvider>

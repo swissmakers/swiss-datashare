@@ -14,6 +14,7 @@ import * as argon from "argon2";
 import { Request, Response } from "express";
 import moment from "moment";
 import { ConfigService } from "@/config/config.service";
+import { normalizeEmailLocale } from "@/email/i18n/locales";
 import { EmailService } from "@/email/email.service";
 import { PrismaService } from "@/prisma/prisma.service";
 import { OAuthService } from "../oauth/oauth.service";
@@ -51,6 +52,9 @@ export class AuthService {
           username: dto.username,
           password: hash,
           isAdmin: isAdmin ?? isFirstUser,
+          locale: normalizeEmailLocale(
+            String(this.config.get("general.defaultLocale")),
+          ),
         },
       });
 

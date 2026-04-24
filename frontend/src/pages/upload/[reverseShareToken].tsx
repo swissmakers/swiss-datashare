@@ -6,14 +6,62 @@ import shareService from "../../services/share.service";
 import useTranslate from "../../hooks/useTranslate.hook";
 import { LoadingSpinner } from "../../components/ui";
 import { useModals } from "../../contexts/ModalContext";
+import i18nUtil from "../../utils/i18n.util";
 
-export function getServerSideProps(context: GetServerSidePropsContext) {
+type PageProps = {
+  reverseShareToken: string;
+  creatorLocale: string | null;
+  initialResolvedLocale: string;
+};
+
+export async function getServerSideProps(
+  context: GetServerSidePropsContext,
+): Promise<{ props: PageProps }> {
+  const token = String(context.params!.reverseShareToken);
+  const apiUrl = process.env.API_URL || "http://localhost:8080";
+  let creatorLocale: string | null = null;
+
+  try {
+    const res = await fetch(
+      `${apiUrl}/reverseShares/${encodeURIComponent(token)}`,
+    );
+    if (res.ok) {
+      const data = (await res.json()) as { creatorLocale?: string };
+      if (data.creatorLocale) creatorLocale = data.creatorLocale;
+    }
+  } catch {
+    /* token may be invalid; page will handle client-side */
+  }
+
+  const cookieHeader = context.req.headers.cookie ?? "";
+  const languageMatch = cookieHeader.match(/(?:^|; )language=([^;]*)/);
+  const cookieLang = languageMatch
+    ? decodeURIComponent(languageMatch[1].trim())
+    : null;
+  const acceptRaw = context.req.headers["accept-language"];
+  const acceptLanguageHeader = Array.isArray(acceptRaw)
+    ? acceptRaw[0]
+    : acceptRaw ?? null;
+
+  const initialResolvedLocale = i18nUtil.resolveDisplayLocale({
+    cookieLang,
+    creatorLocale,
+    userLocale: null,
+    siteDefaultLocale: null,
+    acceptLanguageHeader,
+    navigatorLanguage: null,
+  });
+
   return {
-    props: { reverseShareToken: context.params!.reverseShareToken },
+    props: {
+      reverseShareToken: token,
+      creatorLocale,
+      initialResolvedLocale,
+    },
   };
 }
 
-const Share = ({ reverseShareToken }: { reverseShareToken: string }) => {
+const Share = ({ reverseShareToken }: PageProps) => {
   const modals = useModals();
   const t = useTranslate();
   const [isLoading, setIsLoading] = useState(true);

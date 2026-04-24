@@ -343,16 +343,15 @@ export default {
   "admin.config.general.location.description": "Controla el contenido de la interfaz según la ubicación (p. ej. \"swiss\"). Déjalo vacío para el comportamiento predeterminado.",
   "admin.config.general.use-case": "Caso de uso",
   "admin.config.general.use-case.description": "Caso de uso activo para variantes de diseño y redacción (p. ej. \"lawyer\").",
+  "admin.config.general.default-locale": "Idioma predeterminado",
+  "admin.config.general.default-locale.description": "Idioma de interfaz predeterminado para visitantes anónimos y para usuarios nuevos hasta que elijan otro en su cuenta. Las páginas de subida por compartición inversa usan el idioma del creador (salvo que el visitante ya haya elegido un idioma mediante la cookie).",
   "admin.config.general.logo": "Logo",
-  "admin.config.general.logo.description":
-    "Sube un logo PNG. Se admiten imágenes cuadradas, anchas o altas; usa el tamaño y la opción de cabecera abajo para ajustarlo a la barra, la página de inicio y los correos.",
+  "admin.config.general.logo.description": "Sube un logo PNG. Se admiten imágenes cuadradas, anchas o altas; usa el tamaño y la opción de cabecera abajo para ajustarlo a la barra, la página de inicio y los correos.",
   "admin.config.general.logo.placeholder": "Elegir imagen",
   "admin.config.general.logo-scale-percent": "Tamaño del logo",
-  "admin.config.general.logo-scale-percent.description":
-    "Escala relativa (25-250 %) del logo en la cabecera principal, inicio, barra de administración y correos salientes. Los logos anchos se limitan por el ancho máximo; los altos, por la altura máxima.",
+  "admin.config.general.logo-scale-percent.description": "Escala relativa (25-250 %) del logo en la cabecera principal, inicio, barra de administración y correos salientes. Los logos anchos se limitan por el ancho máximo; los altos, por la altura máxima.",
   "admin.config.general.header-show-app-name": "Mostrar el nombre de la aplicación en la cabecera",
-  "admin.config.general.header-show-app-name.description":
-    "Si está desactivado, solo se muestra el logo en la barra superior (sitio principal y administración). Los títulos de página y el titular de inicio no cambian.",
+  "admin.config.general.header-show-app-name.description": "Si está desactivado, solo se muestra el logo en la barra superior (sitio principal y administración). Los títulos de página y el titular de inicio no cambian.",
   "admin.config.general.logo.preview-header": "Vista previa (barra de administración)",
   "admin.config.cache.ttl": "TTL",
   "admin.config.cache.ttl.description": "Tiempo en segundos durante el cual la información se mantiene en caché.",

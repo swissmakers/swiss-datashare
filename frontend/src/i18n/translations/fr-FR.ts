@@ -343,16 +343,15 @@ export default {
   "admin.config.general.location.description": "Contrôle le contenu de l'interface lié à l'emplacement (par ex. \"swiss\"). Laisser vide pour le comportement par défaut.",
   "admin.config.general.use-case": "Cas d'usage",
   "admin.config.general.use-case.description": "Cas d'usage actif pour les variantes de design et de texte (par ex. \"lawyer\").",
+  "admin.config.general.default-locale": "Langue par défaut",
+  "admin.config.general.default-locale.description": "Langue d'interface par défaut pour les visiteurs anonymes et pour les nouveaux utilisateurs jusqu'à ce qu'ils en choisissent une autre dans leur compte. Les pages denvoi via une demande de fichiers utilisent la langue du créateur (sauf si le visiteur a déjà choisi une langue via le cookie).",
   "admin.config.general.logo": "Logo",
-  "admin.config.general.logo.description":
-    "Envoyez un logo PNG. Formats carré, large ou haut pris en charge ; utilisez la taille et l'option d'en-tête ci-dessous pour l'ajuster à la barre, l'accueil et les e-mails.",
+  "admin.config.general.logo.description": "Envoyez un logo PNG. Formats carré, large ou haut pris en charge ; utilisez la taille et l'option d'en-tête ci-dessous pour l'ajuster à la barre, l'accueil et les e-mails.",
   "admin.config.general.logo.placeholder": "Sélectionner une image",
   "admin.config.general.logo-scale-percent": "Taille du logo",
-  "admin.config.general.logo-scale-percent.description":
-    "Échelle relative (25-250 %) pour le logo dans l'en-tête principal, l'accueil, la barre d'administration et les e-mails sortants. Les logos larges sont limités en largeur ; les logos hauts en hauteur.",
+  "admin.config.general.logo-scale-percent.description": "Échelle relative (25-250 %) pour le logo dans l'en-tête principal, l'accueil, la barre d'administration et les e-mails sortants. Les logos larges sont limités en largeur ; les logos hauts en hauteur.",
   "admin.config.general.header-show-app-name": "Afficher le nom de l'application dans l'en-tête",
-  "admin.config.general.header-show-app-name.description":
-    "Si désactivé, seul le logo s'affiche dans la barre supérieure (site principal et admin). Les titres de page et le titre d'accueil restent inchangés.",
+  "admin.config.general.header-show-app-name.description": "Si désactivé, seul le logo s'affiche dans la barre supérieure (site principal et admin). Les titres de page et le titre d'accueil restent inchangés.",
   "admin.config.general.logo.preview-header": "Aperçu (barre d'administration)",
   "admin.config.cache.ttl": "DDV",
   "admin.config.cache.ttl.description": "Durée de vie des informations conservées en cache.",

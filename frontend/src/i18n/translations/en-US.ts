@@ -16,8 +16,7 @@ export default {
   // /
   "home.title": "Send and request files with clear, secure links.",
 
-  "home.description":
-    "Create a share link to send files, or create a data request link so recipients can upload files back to you.",
+  "home.description": "Create a share link to send files, or create a data request link so recipients can upload files back to you.",
 
   "home.button.start": "Start sharing files",
   "home.button.source": "Source code",
@@ -37,11 +36,9 @@ export default {
   "home.how.step1.title": "1. Upload your files",
   "home.how.step1.description": "Drag files into the upload area or select them from your device.",
   "home.how.step2.title": "2. Share Data",
-  "home.how.step2.description":
-    "Click \"{actionLabel}\", choose options like expiration and recipients, then create the link.",
+  "home.how.step2.description": "Click \"{actionLabel}\", choose options like expiration and recipients, then create the link.",
   "home.how.step3.title": "3. Send it to recipients",
-  "home.how.step3.description":
-    "Share the generated link manually, or email recipients directly from Swiss DataShare when enabled.",
+  "home.how.step3.description": "Share the generated link manually, or email recipients directly from Swiss DataShare when enabled.",
   // END /
 
   // /auth/signin
@@ -54,8 +51,7 @@ export default {
   "signin.input.password.placeholder": "Your password",
   "signin.button.submit": "Sign in",
   "signIn.notify.totp-required.title": "Two-factor authentication required",
-  "signIn.notify.totp-required.description":
-    "Please enter your two-factor authentication code",
+  "signIn.notify.totp-required.description": "Please enter your two-factor authentication code",
   "signIn.oauth.or": "OR",
   "signIn.oauth.signInWith": "Sign in with",
   "signIn.oauth.github": "GitHub",
@@ -87,14 +83,12 @@ export default {
   // /auth/reset-password
   "resetPassword.title": "Forgot your password?",
   "resetPassword.description": "Enter your email to reset your password.",
-  "resetPassword.notify.success":
-    "A message with a link to reset your password has been sent if the provided email exists.",
+  "resetPassword.notify.success": "A message with a link to reset your password has been sent if the provided email exists.",
   "resetPassword.button.back": "Back to sign in page",
   "resetPassword.text.resetPassword": "Reset password",
   "resetPassword.text.enterNewPassword": "Enter your new password",
   "resetPassword.input.password": "New password",
-  "resetPassword.notify.passwordReset":
-    "Your password has been successfully reset.",
+  "resetPassword.notify.passwordReset": "Your password has been successfully reset.",
 
   // /account
   "account.title": "My account",
@@ -107,8 +101,7 @@ export default {
   "account.card.password.title": "Password",
   "account.card.password.old": "Old password",
   "account.card.password.new": "New password",
-  "account.card.password.noPasswordSet":
-    "You do not have a password set. To sign in using your email and password, you need to create a password.",
+  "account.card.password.noPasswordSet": "You do not have a password set. To sign in using your email and password, you need to create a password.",
   "account.notify.password.success": "Password changed successfully",
 
   "account.card.oauth.title": "Social login",
@@ -121,15 +114,12 @@ export default {
   "account.card.oauth.unlink": "Unlink",
   "account.card.oauth.unlinked": "Unlinked",
   "account.modal.unlink.title": "Unlink account",
-  "account.modal.unlink.description":
-    "Unlinking your social accounts may cause you to lose your account if you don't remember your login credentials",
+  "account.modal.unlink.description": "Unlinking your social accounts may cause you to lose your account if you don't remember your login credentials",
   "account.notify.oauth.unlinked.success": "Unlinked successfully",
 
   "account.card.security.title": "Security",
-  "account.card.security.totp.enable.description":
-    "Enter your current password to start enabling TOTP",
-  "account.card.security.totp.disable.description":
-    "Enter your current password to disable TOTP",
+  "account.card.security.totp.enable.description": "Enter your current password to start enabling TOTP",
+  "account.card.security.totp.disable.description": "Enter your current password to disable TOTP",
   "account.card.security.totp.button.start": "Start",
   "account.modal.totp.title": "Enable TOTP",
   "account.modal.totp.step1": "Step 1: Add your authenticator",
@@ -152,21 +142,17 @@ export default {
   "account.card.billing.status-value.unpaid": "Unpaid",
   "account.card.billing.status-value.canceled": "Canceled",
   "account.card.billing.status-value.incomplete": "Incomplete",
-  "account.card.billing.status-value.incomplete_expired":
-    "Incomplete (expired)",
+  "account.card.billing.status-value.incomplete_expired": "Incomplete (expired)",
   "account.card.billing.status-value.paused": "Paused",
   "account.card.billing.trial-ends": "Trial ends on {date}",
   "account.card.billing.next-payment": "Next payment on {date}",
-  "account.card.billing.cancel-scheduled":
-    "Your subscription is canceled and remains active until {date}.",
+  "account.card.billing.cancel-scheduled": "Your subscription is canceled and remains active until {date}.",
   "account.card.billing.grace-ends": "Grace period ends on {date}",
   "account.card.billing.subscribe-monthly": "Subscribe monthly",
   "account.card.billing.subscribe-yearly": "Subscribe yearly",
-  "account.card.billing.subscribe-locked":
-    "Subscription options are disabled while your current subscription is still active.",
+  "account.card.billing.subscribe-locked": "Subscription options are disabled while your current subscription is still active.",
   "account.card.billing.manage": "Manage billing",
-  "account.card.billing.exempt-note":
-    "Billing actions are hidden because your account is exempt from subscription requirements.",
+  "account.card.billing.exempt-note": "Billing actions are hidden because your account is exempt from subscription requirements.",
 
   // ThemeSwitcher.tsx
   "account.theme.dark": "Dark",
@@ -175,8 +161,7 @@ export default {
 
   "account.button.delete": "Delete Account",
   "account.modal.delete.title": "Delete Account",
-  "account.modal.delete.description":
-    "Do you really want to delete your account including all your active shares?",
+  "account.modal.delete.description": "Do you really want to delete your account including all your active shares?",
   // END /account
 
   // /account/shares
@@ -201,19 +186,16 @@ export default {
   "account.shares.modal.share-link": "Share link",
 
   "account.shares.modal.delete.title": "Delete share: {share}",
-  "account.shares.modal.delete.description":
-    "Do you really want to delete this share?",
+  "account.shares.modal.delete.description": "Do you really want to delete this share?",
 
   // END /account/shares
 
   // /account/reverseShares
   "account.reverseShares.title": "Data Requests",
-  "account.reverseShares.description":
-    "Create a request link so recipients can upload files to you.",
+  "account.reverseShares.description": "Create a request link so recipients can upload files to you.",
 
   "account.reverseShares.title.empty": "It's empty here 👀",
-  "account.reverseShares.description.empty":
-    "You don't have any data requests yet.",
+  "account.reverseShares.description.empty": "You don't have any data requests yet.",
 
   // showCreateReverseShareModal.tsx
   "account.reverseShares.modal.title": "Create data request link",
@@ -236,23 +218,18 @@ export default {
   "account.reverseShares.modal.max-size.label": "Maximum allowed to upload",
 
   "account.reverseShares.modal.send-email": "Email me when completed",
-  "account.reverseShares.modal.send-email.description":
-    "Receive an email when someone finishes uploading files with this request link.",
+  "account.reverseShares.modal.send-email.description": "Receive an email when someone finishes uploading files with this request link.",
 
   "account.reverseShares.modal.simplified": "Simple recipient flow",
-  "account.reverseShares.modal.simplified.description":
-    "Recipients can upload files and finish. They do not need to configure a separate share.",
+  "account.reverseShares.modal.simplified.description": "Recipients can upload files and finish. They do not need to configure a separate share.",
 
   "account.reverseShares.modal.public-access": "Allow public access to uploaded share",
-  "account.reverseShares.modal.public-access.description":
-    "If disabled, only you and the uploader can open the resulting share.",
+  "account.reverseShares.modal.public-access.description": "If disabled, only you and the uploader can open the resulting share.",
 
   "account.reverseShares.modal.max-use.label": "Max uses",
-  "account.reverseShares.modal.max-use.description":
-    "How many times this request link can be used.",
+  "account.reverseShares.modal.max-use.description": "How many times this request link can be used.",
   "account.reverseShare.never-expires": "This reverse share will never expire.",
-  "account.reverseShare.expires-on":
-    "This reverse share will expire on {expiration}.",
+  "account.reverseShare.expires-on": "This reverse share will expire on {expiration}.",
 
   "account.reverseShares.table.no-shares": "No uploads received yet",
   "account.reverseShares.table.name": "Name",
@@ -266,8 +243,7 @@ export default {
   "account.reverseShares.modal.reverse-share-link": "Data request link",
 
   "account.reverseShares.modal.delete.title": "Delete data request link",
-  "account.reverseShares.modal.delete.description":
-    "Do you really want to delete this data request link? Uploaded shares linked to it will also be deleted.",
+  "account.reverseShares.modal.delete.description": "Do you really want to delete this data request link? Uploaded shares linked to it will also be deleted.",
 
   // END /account/reverseShares
 
@@ -294,12 +270,10 @@ export default {
   "admin.users.edit.update.change-password.title": "Change password",
   "admin.users.edit.update.change-password.field": "New password",
   "admin.users.edit.update.change-password.button": "Save new password",
-  "admin.users.edit.update.notify.password.success":
-    "Password changed successfully",
+  "admin.users.edit.update.notify.password.success": "Password changed successfully",
 
   "admin.users.edit.delete.title": "Delete user: {username} ?",
-  "admin.users.edit.delete.description":
-    "Do you really want to delete this user and all their shares?",
+  "admin.users.edit.delete.description": "Do you really want to delete this user and all their shares?",
 
   // showCreateUserModal.tsx
   "admin.users.modal.create.title": "Create user",
@@ -307,11 +281,9 @@ export default {
   "admin.users.modal.create.email": "Email",
   "admin.users.modal.create.password": "Password",
   "admin.users.modal.create.manual-password": "Set password manually",
-  "admin.users.modal.create.manual-password.description":
-    "If not checked, the user will receive an email with a link to set their password.",
+  "admin.users.modal.create.manual-password.description": "If not checked, the user will receive an email with a link to set their password.",
   "admin.users.modal.create.admin": "Admin privileges",
-  "admin.users.modal.create.admin.description":
-    "If checked, the user will be able to access the admin panel.",
+  "admin.users.modal.create.admin.description": "If checked, the user will be able to access the admin panel.",
 
   // END /admin/users
 
@@ -323,30 +295,24 @@ export default {
   "admin.shares.table.expires": "Expires on",
 
   "admin.shares.edit.delete.title": "Delete share: {id}",
-  "admin.shares.edit.delete.description":
-    "Do you really want to delete this share?",
+  "admin.shares.edit.delete.description": "Do you really want to delete this share?",
 
   // END /admin/shares
 
   // /upload
   "upload.title": "Share Data",
 
-  "upload.notify.confirm-leave":
-    "Are you sure you want to leave this page? Your upload will be canceled.",
-  "upload.notify.generic-error":
-    "Something went wrong while finishing this share.",
+  "upload.notify.confirm-leave": "Are you sure you want to leave this page? Your upload will be canceled.",
+  "upload.notify.generic-error": "Something went wrong while finishing this share.",
   "upload.notify.count-failed": "{count} files failed to upload. Trying again.",
   "upload.reverse-share.error.invalid.title": "Invalid reverse share link",
-  "upload.reverse-share.error.invalid.description":
-    "If your already uploaded your files on a onetime share, this message is normal. It means this reverse share is now expired or the link is invalid.",
+  "upload.reverse-share.error.invalid.description": "If your already uploaded your files on a onetime share, this message is normal. It means this reverse share is now expired or the link is invalid.",
 
   // Dropzone.tsx
   "upload.dropzone.title": "Upload files",
-  "upload.dropzone.description":
-    "Drag and drop files here (or select files), then click \"{actionLabel}\" to continue. Maximum total size: {maxSize}.",
+  "upload.dropzone.description": "Drag and drop files here (or select files), then click \"{actionLabel}\" to continue. Maximum total size: {maxSize}.",
   "upload.dropzone.button.select": "Select files",
-  "upload.dropzone.notify.file-too-big":
-    "Your files exceed the maximum share size of {maxSize}.",
+  "upload.dropzone.notify.file-too-big": "Your files exceed the maximum share size of {maxSize}.",
 
   // FileList.tsx
   "upload.filelist.name": "Name",
@@ -354,17 +320,14 @@ export default {
 
   // showCreateUploadModal.tsx
   "upload.modal.title": "Share Data",
-  "upload.modal.link.error.invalid":
-    "Can only contain letters, numbers, underscores, and hyphens",
+  "upload.modal.link.error.invalid": "Can only contain letters, numbers, underscores, and hyphens",
   "upload.modal.link.error.taken": "This link is already in use",
   "upload.modal.not-signed-in": "You're not signed in",
-  "upload.modal.not-signed-in-description":
-    "Sign in to manage this share later. Without sign-in, you cannot delete it manually or see view count.",
+  "upload.modal.not-signed-in-description": "Sign in to manage this share later. Without sign-in, you cannot delete it manually or see view count.",
 
   "upload.modal.expires.never": "never",
   "upload.modal.expires.never-long": "Never expires",
-  "upload.modal.expires.error.too-long":
-    "Expiration date exceeds the maximum of {max}.",
+  "upload.modal.expires.error.too-long": "Expiration date exceeds the maximum of {max}.",
 
   "upload.modal.link.label": "Link ID",
   "upload.modal.expires.label": "Expiration",
@@ -383,14 +346,12 @@ export default {
 
   "upload.modal.accordion.name-and-description.title": "Title and note",
   "upload.modal.accordion.name-and-description.name.placeholder": "Name",
-  "upload.modal.accordion.name-and-description.description.placeholder":
-    "Optional note for recipients",
+  "upload.modal.accordion.name-and-description.description.placeholder": "Optional note for recipients",
 
   "upload.modal.accordion.email.title": "Recipients",
   "upload.modal.accordion.email.placeholder": "Enter recipient email addresses (confirm with Enter)",
   "upload.modal.accordion.email.invalid-email": "Invalid email address",
-  "upload.modal.accordion.email.helper":
-    "Leave this empty if you want to send your data link yourself or add recipients here to send the link directly by email.",
+  "upload.modal.accordion.email.helper": "Leave this empty if you want to send your data link yourself or add recipients here to send the link directly by email.",
 
   "upload.modal.accordion.security.title": "Access restrictions",
   "upload.modal.accordion.security.password.label": "Required password (if not set, no password is required)",
@@ -400,25 +361,18 @@ export default {
 
   // showCompletedUploadModal.tsx
   "upload.modal.completed.never-expires": "This share will never expire.",
-  "upload.modal.completed.expires-on":
-    "This share will expire on {expiration}.",
+  "upload.modal.completed.expires-on": "This share will expire on {expiration}.",
   "upload.modal.completed.share-ready": "All done!",
-  "upload.modal.completed.reverse-share-finished":
-    "Your files were uploaded successfully.",
-  "upload.modal.completed.notified-reverse-share-creator":
-    "The data request creator has been notified. You can still copy and send the link manually if needed.",
+  "upload.modal.completed.reverse-share-finished": "Your files were uploaded successfully.",
+  "upload.modal.completed.notified-reverse-share-creator": "The data request creator has been notified. You can still copy and send the link manually if needed.",
 
   "upload.reverse-share.title": "Upload your files here",
-  "upload.reverse-share.description":
-    "Drag and drop your files or select them from your device. You can also add an optional note, then click \"Finish upload\" to securely send your files to the request owner.",
+  "upload.reverse-share.description": "Drag and drop your files or select them from your device. You can also add an optional note, then click \"Finish upload\" to securely send your files to the request owner.",
   "upload.reverse-share.dropzone.title": "Upload your files",
-  "upload.reverse-share.dropzone.description":
-    "Drag and drop all files here that you want to send. Maximum total size: {maxSize}.",
+  "upload.reverse-share.dropzone.description": "Drag and drop all files here that you want to send. Maximum total size: {maxSize}.",
   "upload.reverse-share.note.label": "Message to the request owner (optional)",
-  "upload.reverse-share.note.placeholder":
-    "Add context for the files you are sending",
-  "upload.reverse-share.note.helper":
-    "Your message will be shown to the request owner when they are notified.",
+  "upload.reverse-share.note.placeholder": "Add context for the files you are sending",
+  "upload.reverse-share.note.helper": "Your message will be shown to the request owner when they are notified.",
   "upload.reverse-share.button.finish": "Finish upload",
 
   // END /upload
@@ -426,44 +380,36 @@ export default {
   // /share/[id]
   "share.title": "Share {shareId}",
   "share.description": "Look what I've shared with you!",
-  "share.fileCount":
-    "{count, plural, =1 {# file} other {# files}} · {size} (zip file may be smaller due to compression)",
+  "share.fileCount": "{count, plural, =1 {# file} other {# files}} · {size} (zip file may be smaller due to compression)",
   "share.error.visitor-limit-exceeded.title": "Visitor limit exceeded",
-  "share.error.visitor-limit-exceeded.description":
-    "The visitor limit from this share has been exceeded.",
+  "share.error.visitor-limit-exceeded.description": "The visitor limit from this share has been exceeded.",
   "share.error.removed.title": "Share removed",
   "share.error.not-found.title": "Share not found",
-  "share.error.not-found.description":
-    "The share you're looking for doesn't exist.",
+  "share.error.not-found.description": "The share you're looking for doesn't exist.",
   "share.error.access-denied.title": "Private share",
-  "share.error.access-denied.description":
-    "The current account does not have permission to access this share",
+  "share.error.access-denied.description": "The current account does not have permission to access this share",
 
   "share.modal.password.title": "Password required",
-  "share.modal.password.description":
-    "Please enter the password to access this share.",
+  "share.modal.password.description": "Please enter the password to access this share.",
   "share.modal.password": "Password",
   "share.modal.error.invalid-password": "Invalid password",
 
   "share.button.download-all": "Download all",
-  "share.notify.download-all-preparing":
-    "The share is being prepared. Please try again in a few minutes.",
+  "share.notify.download-all-preparing": "The share is being prepared. Please try again in a few minutes.",
 
   "share.modal.file-link": "File link",
   "share.table.name": "Name",
   "share.table.size": "Size",
 
   "share.modal.file-preview.error.not-supported.title": "Preview not supported",
-  "share.modal.file-preview.error.not-supported.description":
-    "Previews are not supported for this type of files. Please download the file to view it.",
+  "share.modal.file-preview.error.not-supported.description": "Previews are not supported for this type of files. Please download the file to view it.",
 
   // END /share/[id]
 
   // /share/[id]/edit
   "share.edit.title": "Edit {shareId}",
   "share.edit.append-upload": "Append file",
-  "share.edit.notify.generic-error":
-    "An error occurred while finishing your share.",
+  "share.edit.notify.generic-error": "An error occurred while finishing your share.",
   "share.edit.notify.save-success": "Share updated successfully",
   // END /share/[id]/edit
 
@@ -477,8 +423,7 @@ export default {
 
   // /admin/config
   "admin.config.config-file-warning.title": "Configuration file present",
-  "admin.config.config-file-warning.description":
-    "As you have a configured Swiss DataShare with a configuration file, you can't change the configuration through the UI.",
+  "admin.config.config-file-warning.description": "As you have a configured Swiss DataShare with a configuration file, you can't change the configuration through the UI.",
 
   "admin.config.title": "Configuration",
   "admin.config.category.general": "General",
@@ -492,144 +437,101 @@ export default {
   "admin.config.general.app-name": "App name",
   "admin.config.general.app-name.description": "Name of the application",
   "admin.config.general.app-url": "App URL",
-  "admin.config.general.app-url.description":
-    "On which URL Swiss DataShare is available",
+  "admin.config.general.app-url.description": "On which URL Swiss DataShare is available",
   "admin.config.general.powered-by-text": "Footer brand text",
-  "admin.config.general.powered-by-text.description":
-    "Text shown as the linked brand in the footer after \"Powered by\".",
+  "admin.config.general.powered-by-text.description": "Text shown as the linked brand in the footer after \"Powered by\".",
   "admin.config.general.powered-by-url": "Footer brand URL",
-  "admin.config.general.powered-by-url.description":
-    "Link target used for the footer brand text after \"Powered by\".",
+  "admin.config.general.powered-by-url.description": "Link target used for the footer brand text after \"Powered by\".",
   "admin.config.general.secure-cookies": "Secure cookies",
-  "admin.config.general.secure-cookies.description":
-    "Whether to set the secure flag on cookies. If enabled, the site will not function when accessed over HTTP.",
+  "admin.config.general.secure-cookies.description": "Whether to set the secure flag on cookies. If enabled, the site will not function when accessed over HTTP.",
   "admin.config.general.show-home-page": "Show home page",
-  "admin.config.general.show-home-page.description":
-    "Whether to show the home page",
+  "admin.config.general.show-home-page.description": "Whether to show the home page",
   "admin.config.general.session-duration": "Session Duration",
-  "admin.config.general.session-duration.description":
-    "Time after which a user must log in again (default: 3 months).",
+  "admin.config.general.session-duration.description": "Time after which a user must log in again (default: 3 months).",
   "admin.config.general.location": "Location",
-  "admin.config.general.location.description":
-    "Controls location-specific UI content (e.g. \"swiss\"). Leave empty for default behavior.",
+  "admin.config.general.location.description": "Controls location-specific UI content (e.g. \"swiss\"). Leave empty for default behavior.",
   "admin.config.general.use-case": "Use case",
-  "admin.config.general.use-case.description":
-    "Active use case for design and wording variants (e.g. \"lawyer\").",
+  "admin.config.general.use-case.description": "Active use case for design and wording variants (e.g. \"lawyer\").",
+  "admin.config.general.default-locale": "Default language",
+  "admin.config.general.default-locale.description": "Default UI language for anonymous visitors and for new users until they choose another language in their account. Reverse-share upload pages use the creator’s language instead (unless the visitor has already picked a language via the cookie).",
   "admin.config.general.logo": "Logo",
-  "admin.config.general.logo.description":
-    "Upload a PNG logo. Square, wide, or tall images are supported; use size and header options below so it fits the bar, home page, and emails.",
+  "admin.config.general.logo.description": "Upload a PNG logo. Square, wide, or tall images are supported; use size and header options below so it fits the bar, home page, and emails.",
   "admin.config.general.logo.placeholder": "Pick image",
   "admin.config.general.logo-scale-percent": "Logo size",
-  "admin.config.general.logo-scale-percent.description":
-    "Relative scale (25-250%) for the logo in the main header, home page, admin bar, and outgoing emails. Wide logos are limited by max width; tall logos by max height.",
+  "admin.config.general.logo-scale-percent.description": "Relative scale (25-250%) for the logo in the main header, home page, admin bar, and outgoing emails. Wide logos are limited by max width; tall logos by max height.",
   "admin.config.general.header-show-app-name": "Show application name in header",
-  "admin.config.general.header-show-app-name.description":
-    "When disabled, only the logo is shown in the top bar (main site and admin). Page titles and the home headline are unchanged.",
+  "admin.config.general.header-show-app-name.description": "When disabled, only the logo is shown in the top bar (main site and admin). Page titles and the home headline are unchanged.",
   "admin.config.general.logo.preview-header": "Preview (admin header bar)",
 
   "admin.config.cache.ttl": "TTL",
-  "admin.config.cache.ttl.description":
-    "Time in second to keep information inside the cache.",
+  "admin.config.cache.ttl.description": "Time in second to keep information inside the cache.",
   "admin.config.cache.max-items": "Maximum items",
-  "admin.config.cache.max-items.description":
-    "Maximum number of items inside the cache.",
+  "admin.config.cache.max-items.description": "Maximum number of items inside the cache.",
   "admin.config.cache.redis-enabled": "Redis enabled",
-  "admin.config.cache.redis-enabled.description":
-    "Normally Swiss DataShare caches information in memory. If you run multiple instances of Swiss DataShare, you need to enable Redis caching to share the cache between the instances.",
+  "admin.config.cache.redis-enabled.description": "Normally Swiss DataShare caches information in memory. If you run multiple instances of Swiss DataShare, you need to enable Redis caching to share the cache between the instances.",
   "admin.config.cache.redis-url": "Redis URL",
-  "admin.config.cache.redis-url.description":
-    "Url to connect to the Redis instance used for caching.",
+  "admin.config.cache.redis-url.description": "Url to connect to the Redis instance used for caching.",
 
-  "admin.config.email.enable-share-email-recipients":
-    "Enable email recipient sharing",
-  "admin.config.email.enable-share-email-recipients.description":
-    "Whether to allow email sharing with recipients. Only enable this if SMTP is activated.",
+  "admin.config.email.enable-share-email-recipients": "Enable email recipient sharing",
+  "admin.config.email.enable-share-email-recipients.description": "Whether to allow email sharing with recipients. Only enable this if SMTP is activated.",
   "admin.config.email.share-recipients-subject": "Share recipients subject",
-  "admin.config.email.share-recipients-subject.description":
-    "Subject of the email which gets sent to the share recipients.",
+  "admin.config.email.share-recipients-subject.description": "Subject of the email which gets sent to the share recipients.",
   "admin.config.email.share-recipients-message": "Share recipients message",
-  "admin.config.email.share-recipients-message.description":
-    "Message which gets sent to the share recipients. Available variables:\n {creator} - The username of the creator of the share\n {creatorEmail} - The email of the creator of the share\n {shareUrl} - The URL of the share\n {desc} - The description of the share\n {expires} - The expiration date of the share\n These variables will be replaced with the actual value.",
+  "admin.config.email.share-recipients-message.description": "Message which gets sent to the share recipients. Available variables:\n {creator} - The username of the creator of the share\n {creatorEmail} - The email of the creator of the share\n {shareUrl} - The URL of the share\n {desc} - The description of the share\n {expires} - The expiration date of the share\n These variables will be replaced with the actual value.",
   "admin.config.email.reverse-share-subject": "Reverse share subject",
-  "admin.config.email.reverse-share-subject.description":
-    "Subject of the sent email when someone created a share with your reverse share link.",
+  "admin.config.email.reverse-share-subject.description": "Subject of the sent email when someone created a share with your reverse share link.",
   "admin.config.email.reverse-share-message": "Reverse share message",
-  "admin.config.email.reverse-share-message.description":
-    "Message which gets sent when someone created a share with your reverse share link. {shareUrl} will be replaced with the creator's name and the share URL.",
+  "admin.config.email.reverse-share-message.description": "Message which gets sent when someone created a share with your reverse share link. {shareUrl} will be replaced with the creator's name and the share URL.",
   "admin.config.email.reset-password-subject": "Reset password subject",
-  "admin.config.email.reset-password-subject.description":
-    "Subject of the sent email when a user requests a password reset.",
+  "admin.config.email.reset-password-subject.description": "Subject of the sent email when a user requests a password reset.",
   "admin.config.email.reset-password-message": "Reset password message",
-  "admin.config.email.reset-password-message.description":
-    "Message which gets sent when a user requests a password reset. {url} will be replaced with the reset password URL.",
+  "admin.config.email.reset-password-message.description": "Message which gets sent when a user requests a password reset. {url} will be replaced with the reset password URL.",
   "admin.config.email.invite-subject": "Invite subject",
-  "admin.config.email.invite-subject.description":
-    "Subject of the sent email when an admin invites a user.",
+  "admin.config.email.invite-subject.description": "Subject of the sent email when an admin invites a user.",
   "admin.config.email.invite-message": "Invite message",
-  "admin.config.email.invite-message.description":
-    "Message which gets sent when an admin invites a user. {url} will be replaced with the invite URL, {email} with the email and {password} with the users password.",
+  "admin.config.email.invite-message.description": "Message which gets sent when an admin invites a user. {url} will be replaced with the invite URL, {email} with the email and {password} with the users password.",
 
   "admin.config.share.allow-registration": "Allow registration",
-  "admin.config.share.allow-registration.description":
-    "Whether registration is allowed",
-  "admin.config.share.allow-unauthenticated-shares":
-    "Allow unauthenticated shares",
-  "admin.config.share.allow-unauthenticated-shares.description":
-    "Whether unauthenticated users can create shares",
+  "admin.config.share.allow-registration.description": "Whether registration is allowed",
+  "admin.config.share.allow-unauthenticated-shares": "Allow unauthenticated shares",
+  "admin.config.share.allow-unauthenticated-shares.description": "Whether unauthenticated users can create shares",
   "admin.config.share.max-expiration": "Max expiration",
-  "admin.config.share.max-expiration.description":
-    "Maximum share expiration. Set to 0 to allow unlimited expiration.",
+  "admin.config.share.max-expiration.description": "Maximum share expiration. Set to 0 to allow unlimited expiration.",
   "admin.config.share.share-id-length": "Default share ID length",
-  "admin.config.share.share-id-length.description":
-    "Default length for the generated ID of a share. This value is also used to generate links for reverse shares. A value below 8 is not considered secure.",
+  "admin.config.share.share-id-length.description": "Default length for the generated ID of a share. This value is also used to generate links for reverse shares. A value below 8 is not considered secure.",
   "admin.config.share.max-size": "Max size",
   "admin.config.share.max-size.description": "Maximum share size",
   "admin.config.share.zip-compression-level": "Zip compression level",
-  "admin.config.share.zip-compression-level.description":
-    "Adjust the level to balance between file size and compression speed. Valid values range from 0 to 9, with 0 being no compression and 9 being maximum compression. ",
+  "admin.config.share.zip-compression-level.description": "Adjust the level to balance between file size and compression speed. Valid values range from 0 to 9, with 0 being no compression and 9 being maximum compression. ",
   "admin.config.share.chunk-size": "Chunk size",
-  "admin.config.share.chunk-size.description":
-    "Adjust the chunk size for your uploads to balance efficiency and reliability according to your internet connection. Smaller chunks can enhance success rates for unstable connections, while larger chunks make uploads faster for stable connections.",
+  "admin.config.share.chunk-size.description": "Adjust the chunk size for your uploads to balance efficiency and reliability according to your internet connection. Smaller chunks can enhance success rates for unstable connections, while larger chunks make uploads faster for stable connections.",
   "admin.config.share.auto-open-share-modal": "Auto open create share modal",
-  "admin.config.share.auto-open-share-modal.description":
-    "The share creation modal automatically appears when a user selects files, eliminating the need to manually click the button.",
+  "admin.config.share.auto-open-share-modal.description": "The share creation modal automatically appears when a user selects files, eliminating the need to manually click the button.",
 
   "admin.config.saas.enabled": "Enable SaaS billing",
-  "admin.config.saas.enabled.description":
-    "Turns on SaaS billing features and subscription checks when use case contains 'saas'.",
+  "admin.config.saas.enabled.description": "Turns on SaaS billing features and subscription checks when use case contains 'saas'.",
   "admin.config.saas.monthly-price-chf": "Monthly price (CHF)",
-  "admin.config.saas.monthly-price-chf.description":
-    "Displayed monthly subscription price in Swiss francs.",
+  "admin.config.saas.monthly-price-chf.description": "Displayed monthly subscription price in Swiss francs.",
   "admin.config.saas.yearly-price-chf": "Yearly price (CHF)",
-  "admin.config.saas.yearly-price-chf.description":
-    "Displayed yearly subscription price in Swiss francs.",
+  "admin.config.saas.yearly-price-chf.description": "Displayed yearly subscription price in Swiss francs.",
   "admin.config.saas.trial-days": "Trial period days",
-  "admin.config.saas.trial-days.description":
-    "Number of free days from user signup before subscription is required.",
+  "admin.config.saas.trial-days.description": "Number of free days from user signup before subscription is required.",
   "admin.config.saas.grace-days": "Grace period days",
-  "admin.config.saas.grace-days.description":
-    "Extra days after subscription expiry before upload/sharing is blocked.",
+  "admin.config.saas.grace-days.description": "Extra days after subscription expiry before upload/sharing is blocked.",
   "admin.config.saas.enforce-subscription": "Enforce subscription",
-  "admin.config.saas.enforce-subscription.description":
-    "If enabled, overdue non-exempt non-admin users are blocked from upload and sharing actions.",
+  "admin.config.saas.enforce-subscription.description": "If enabled, overdue non-exempt non-admin users are blocked from upload and sharing actions.",
   "admin.config.saas.stripe-publishable-key": "Stripe publishable key",
-  "admin.config.saas.stripe-publishable-key.description":
-    "Public Stripe key used by frontend billing flows.",
+  "admin.config.saas.stripe-publishable-key.description": "Public Stripe key used by frontend billing flows.",
   "admin.config.saas.stripe-secret-key": "Stripe secret key",
-  "admin.config.saas.stripe-secret-key.description":
-    "Private Stripe key used by backend to create checkout sessions and process subscriptions.",
+  "admin.config.saas.stripe-secret-key.description": "Private Stripe key used by backend to create checkout sessions and process subscriptions.",
   "admin.config.saas.stripe-webhook-secret": "Stripe webhook secret",
-  "admin.config.saas.stripe-webhook-secret.description":
-    "Signing secret used to verify Stripe webhook events.",
+  "admin.config.saas.stripe-webhook-secret.description": "Signing secret used to verify Stripe webhook events.",
   "admin.config.saas.stripe-monthly-price-id": "Stripe monthly price ID",
-  "admin.config.saas.stripe-monthly-price-id.description":
-    "Price ID for monthly subscription in Stripe.",
+  "admin.config.saas.stripe-monthly-price-id.description": "Price ID for monthly subscription in Stripe.",
   "admin.config.saas.stripe-yearly-price-id": "Stripe yearly price ID",
-  "admin.config.saas.stripe-yearly-price-id.description":
-    "Price ID for yearly subscription in Stripe.",
+  "admin.config.saas.stripe-yearly-price-id.description": "Price ID for yearly subscription in Stripe.",
   "admin.config.saas.exempt-users.title": "Exempt users",
-  "admin.config.saas.exempt-users.search":
-    "Search users by username or email",
+  "admin.config.saas.exempt-users.search": "Search users by username or email",
   "admin.config.saas.exempt-users.exempt": "Exempt",
   "admin.config.saas.exempt-users.add": "Exempt user",
   "admin.config.saas.exempt-users.remove": "Remove exemption",
@@ -641,152 +543,104 @@ export default {
   "admin.config.saas.payments.status": "Status",
 
   "admin.config.smtp.enabled": "Enable",
-  "admin.config.smtp.enabled.description":
-    "Whether SMTP is enabled. Only set this to true if you entered the host, port, email, user and password of your SMTP server.",
+  "admin.config.smtp.enabled.description": "Whether SMTP is enabled. Only set this to true if you entered the host, port, email, user and password of your SMTP server.",
   "admin.config.smtp.host": "Host",
   "admin.config.smtp.host.description": "Host of the SMTP server",
   "admin.config.smtp.port": "Port",
   "admin.config.smtp.port.description": "Port of the SMTP server",
   "admin.config.smtp.email": "Email",
-  "admin.config.smtp.email.description":
-    "Email address from which the emails get sent",
+  "admin.config.smtp.email.description": "Email address from which the emails get sent",
   "admin.config.smtp.username": "Username",
   "admin.config.smtp.username.description": "Username of the SMTP server",
   "admin.config.smtp.password": "Password",
   "admin.config.smtp.password.description": "Password of the SMTP server",
   "admin.config.smtp.button.test": "Send test email",
-  "admin.config.smtp.allow-unauthorized-certificates":
-    "Trust unauthorized SMTP server certificates",
-  "admin.config.smtp.allow-unauthorized-certificates.description":
-    "Only set this to true if you need to trust self signed certificates.",
+  "admin.config.smtp.allow-unauthorized-certificates": "Trust unauthorized SMTP server certificates",
+  "admin.config.smtp.allow-unauthorized-certificates.description": "Only set this to true if you need to trust self signed certificates.",
 
   "admin.config.oauth.allow-registration": "Allow registration",
-  "admin.config.oauth.allow-registration.description":
-    "Allow users to register via social login",
+  "admin.config.oauth.allow-registration.description": "Allow users to register via social login",
   "admin.config.oauth.ignore-totp": "Ignore TOTP",
-  "admin.config.oauth.ignore-totp.description":
-    "Whether to ignore TOTP when user using social login",
+  "admin.config.oauth.ignore-totp.description": "Whether to ignore TOTP when user using social login",
   "admin.config.oauth.disable-password": "Disable password login",
-  "admin.config.oauth.disable-password.description":
-    "Whether to disable password login\nMake sure that an OAuth provider is properly configured before activating this configuration to avoid being locked out.",
+  "admin.config.oauth.disable-password.description": "Whether to disable password login\nMake sure that an OAuth provider is properly configured before activating this configuration to avoid being locked out.",
   "admin.config.oauth.github-enabled": "GitHub",
-  "admin.config.oauth.github-enabled.description":
-    "Whether GitHub login is enabled",
+  "admin.config.oauth.github-enabled.description": "Whether GitHub login is enabled",
   "admin.config.oauth.github-client-id": "GitHub Client ID",
-  "admin.config.oauth.github-client-id.description":
-    "Client ID of the GitHub OAuth app",
+  "admin.config.oauth.github-client-id.description": "Client ID of the GitHub OAuth app",
   "admin.config.oauth.github-client-secret": "GitHub Client secret",
-  "admin.config.oauth.github-client-secret.description":
-    "Client secret of the GitHub OAuth app",
+  "admin.config.oauth.github-client-secret.description": "Client secret of the GitHub OAuth app",
   "admin.config.oauth.google-enabled": "Google",
-  "admin.config.oauth.google-enabled.description":
-    "Whether Google login is enabled",
+  "admin.config.oauth.google-enabled.description": "Whether Google login is enabled",
   "admin.config.oauth.google-client-id": "Google Client ID",
-  "admin.config.oauth.google-client-id.description":
-    "Client ID of the Google OAuth app",
+  "admin.config.oauth.google-client-id.description": "Client ID of the Google OAuth app",
   "admin.config.oauth.google-client-secret": "Google Client secret",
-  "admin.config.oauth.google-client-secret.description":
-    "Client secret of the Google OAuth app",
+  "admin.config.oauth.google-client-secret.description": "Client secret of the Google OAuth app",
   "admin.config.oauth.microsoft-enabled": "Microsoft",
-  "admin.config.oauth.microsoft-enabled.description":
-    "Whether Microsoft login is enabled",
+  "admin.config.oauth.microsoft-enabled.description": "Whether Microsoft login is enabled",
   "admin.config.oauth.microsoft-tenant": "Microsoft Tenant",
-  "admin.config.oauth.microsoft-tenant.description":
-    "Tenant ID of the Microsoft OAuth app\ncommon: Users with both a personal Microsoft account and a work or school account from Microsoft Entra ID can sign in to the application. organizations: Only users with work or school accounts from Microsoft Entra ID can sign in to the application.\nconsumers: Only users with a personal Microsoft account can sign in to the application.\ndomain name of the Microsoft Entra tenant or the tenant ID in GUID format: Only users from a specific Microsoft Entra tenant (directory members with a work or school account or directory guests with a personal Microsoft account) can sign in to the application.",
+  "admin.config.oauth.microsoft-tenant.description": "Tenant ID of the Microsoft OAuth app\ncommon: Users with both a personal Microsoft account and a work or school account from Microsoft Entra ID can sign in to the application. organizations: Only users with work or school accounts from Microsoft Entra ID can sign in to the application.\nconsumers: Only users with a personal Microsoft account can sign in to the application.\ndomain name of the Microsoft Entra tenant or the tenant ID in GUID format: Only users from a specific Microsoft Entra tenant (directory members with a work or school account or directory guests with a personal Microsoft account) can sign in to the application.",
   "admin.config.oauth.microsoft-client-id": "Microsoft Client ID",
-  "admin.config.oauth.microsoft-client-id.description":
-    "Client ID of the Microsoft OAuth app",
+  "admin.config.oauth.microsoft-client-id.description": "Client ID of the Microsoft OAuth app",
   "admin.config.oauth.microsoft-client-secret": "Microsoft Client secret",
-  "admin.config.oauth.microsoft-client-secret.description":
-    "Client secret of the Microsoft OAuth app",
+  "admin.config.oauth.microsoft-client-secret.description": "Client secret of the Microsoft OAuth app",
   "admin.config.oauth.discord-enabled": "Discord",
-  "admin.config.oauth.discord-enabled.description":
-    "Whether Discord login is enabled",
+  "admin.config.oauth.discord-enabled.description": "Whether Discord login is enabled",
   "admin.config.oauth.discord-limited-users": "Discord limited users",
-  "admin.config.oauth.discord-limited-users.description":
-    "Limit signing in to specific users by their Discord ID. Leave it blank to disable.",
+  "admin.config.oauth.discord-limited-users.description": "Limit signing in to specific users by their Discord ID. Leave it blank to disable.",
   "admin.config.oauth.discord-limited-guild": "Discord limited server ID",
-  "admin.config.oauth.discord-limited-guild.description":
-    "Limit signing in to users in a specific server. Leave it blank to disable.",
+  "admin.config.oauth.discord-limited-guild.description": "Limit signing in to users in a specific server. Leave it blank to disable.",
   "admin.config.oauth.discord-client-id": "Discord Client ID",
-  "admin.config.oauth.discord-client-id.description":
-    "Client ID of the Discord OAuth app",
+  "admin.config.oauth.discord-client-id.description": "Client ID of the Discord OAuth app",
   "admin.config.oauth.discord-client-secret": "Discord Client secret",
-  "admin.config.oauth.discord-client-secret.description":
-    "Client secret of the Discord OAuth app",
+  "admin.config.oauth.discord-client-secret.description": "Client secret of the Discord OAuth app",
   "admin.config.oauth.oidc-enabled": "OpenID Connect",
-  "admin.config.oauth.oidc-enabled.description":
-    "Whether OpenID Connect login is enabled",
+  "admin.config.oauth.oidc-enabled.description": "Whether OpenID Connect login is enabled",
   "admin.config.oauth.oidc-discovery-uri": "OpenID Connect Discovery URI",
-  "admin.config.oauth.oidc-discovery-uri.description":
-    "Discovery URI of the OpenID Connect OAuth app",
+  "admin.config.oauth.oidc-discovery-uri.description": "Discovery URI of the OpenID Connect OAuth app",
   "admin.config.oauth.oidc-sign-out": "Sign out from OpenID Connect",
-  "admin.config.oauth.oidc-sign-out.description":
-    "Whether the “Sign out” button will sign out from the OpenID Connect provider",
+  "admin.config.oauth.oidc-sign-out.description": "Whether the “Sign out” button will sign out from the OpenID Connect provider",
   "admin.config.oauth.oidc-scope": "OpenID Connect scope",
-  "admin.config.oauth.oidc-scope.description":
-    "Scopes which should be requested from the OpenID Connect provider.",
+  "admin.config.oauth.oidc-scope.description": "Scopes which should be requested from the OpenID Connect provider.",
   "admin.config.oauth.oidc-username-claim": "OpenID Connect username claim",
-  "admin.config.oauth.oidc-username-claim.description":
-    "Username claim in OpenID Connect ID token. Leave it blank if you don't know what this config is.",
+  "admin.config.oauth.oidc-username-claim.description": "Username claim in OpenID Connect ID token. Leave it blank if you don't know what this config is.",
   "admin.config.oauth.oidc-role-path": "Path to roles in OpenID Connect token",
-  "admin.config.oauth.oidc-role-path.description":
-    "Must be a valid JMES path referencing an array of roles. " +
-    "Managing access rights using OpenID Connect roles is only recommended if no other identity provider is configured and password login is disabled. " +
-    "Leave it blank if you don't know what this config is.",
-  "admin.config.oauth.oidc-role-general-access":
-    "OpenID Connect role for general access",
-  "admin.config.oauth.oidc-role-general-access.description":
-    "Role required for general access. Must be present in a user's roles for them to log in. " +
-    "Leave it blank if you don't know what this config is.",
-  "admin.config.oauth.oidc-role-admin-access":
-    "OpenID Connect role for admin access",
-  "admin.config.oauth.oidc-role-admin-access.description":
-    "Role required for administrative access. Must be present in a user's roles for them to access the admin panel. " +
-    "Leave it blank if you don't know what this config is.",
+  "admin.config.oauth.oidc-role-path.description": "Must be a valid JMES path referencing an array of roles. " + "Managing access rights using OpenID Connect roles is only recommended if no other identity provider is configured and password login is disabled. " + "Leave it blank if you don't know what this config is.",
+  "admin.config.oauth.oidc-role-general-access": "OpenID Connect role for general access",
+  "admin.config.oauth.oidc-role-general-access.description": "Role required for general access. Must be present in a user's roles for them to log in. " + "Leave it blank if you don't know what this config is.",
+  "admin.config.oauth.oidc-role-admin-access": "OpenID Connect role for admin access",
+  "admin.config.oauth.oidc-role-admin-access.description": "Role required for administrative access. Must be present in a user's roles for them to access the admin panel. " + "Leave it blank if you don't know what this config is.",
   "admin.config.oauth.oidc-client-id": "OpenID Connect Client ID",
-  "admin.config.oauth.oidc-client-id.description":
-    "Client ID of the OpenID Connect OAuth app",
+  "admin.config.oauth.oidc-client-id.description": "Client ID of the OpenID Connect OAuth app",
   "admin.config.oauth.oidc-client-secret": "OpenID Connect Client secret",
-  "admin.config.oauth.oidc-client-secret.description":
-    "Client secret of the OpenID Connect OAuth app",
+  "admin.config.oauth.oidc-client-secret.description": "Client secret of the OpenID Connect OAuth app",
 
   "admin.config.category.ldap": "LDAP",
   "admin.config.ldap.enabled": "Enable LDAP",
-  "admin.config.ldap.enabled.description":
-    "Use LDAP authentication for user login",
+  "admin.config.ldap.enabled.description": "Use LDAP authentication for user login",
   "admin.config.ldap.url": "Server URL",
   "admin.config.ldap.url.description": "URL of the LDAP server",
   "admin.config.ldap.bind-dn": "Bind DN",
-  "admin.config.ldap.bind-dn.description":
-    "Default user used to perform the user search",
+  "admin.config.ldap.bind-dn.description": "Default user used to perform the user search",
   "admin.config.ldap.bind-password": "Bind password",
-  "admin.config.ldap.bind-password.description":
-    "Password used to perform the user search",
+  "admin.config.ldap.bind-password.description": "Password used to perform the user search",
   "admin.config.ldap.search-base": "User base",
-  "admin.config.ldap.search-base.description":
-    "Base location, where the user search will be performed",
+  "admin.config.ldap.search-base.description": "Base location, where the user search will be performed",
   "admin.config.ldap.search-query": "User query",
-  "admin.config.ldap.search-query.description":
-    "The user query will be used to search the 'User base' for the LDAP user. %username% can be used as the placeholder for the user given input.",
+  "admin.config.ldap.search-query.description": "The user query will be used to search the 'User base' for the LDAP user. %username% can be used as the placeholder for the user given input.",
   "admin.config.ldap.admin-groups": "Admin group",
-  "admin.config.ldap.admin-groups.description":
-    "Group required for administrative access.",
+  "admin.config.ldap.admin-groups.description": "Group required for administrative access.",
   "admin.config.ldap.field-name-member-of": "User groups attribute name",
-  "admin.config.ldap.field-name-member-of.description":
-    "LDAP attribute name for the groups, an user is a member of. This is used when checking for the admin group.",
+  "admin.config.ldap.field-name-member-of.description": "LDAP attribute name for the groups, an user is a member of. This is used when checking for the admin group.",
   "admin.config.ldap.field-name-email": "User email attribute name",
-  "admin.config.ldap.field-name-email.description":
-    "LDAP attribute name for the email of an user.",
+  "admin.config.ldap.field-name-email.description": "LDAP attribute name for the email of an user.",
   "admin.config.notify.success": "Configuration updated successfully.",
-  "admin.config.notify.logo-success":
-    "Logo updated successfully. It may take a few minutes to update on the website.",
+  "admin.config.notify.logo-success": "Logo updated successfully. It may take a few minutes to update on the website.",
   "admin.config.notify.no-changes": "No changes to save.",
 
   "admin.config.category.s3": "S3",
   "admin.config.s3.enabled": "Enabled",
-  "admin.config.s3.enabled.description":
-    "Whether S3 should be used to store the shared files instead of the local file system.",
+  "admin.config.s3.enabled.description": "Whether S3 should be used to store the shared files instead of the local file system.",
   "admin.config.s3.endpoint": "Endpoint",
   "admin.config.s3.endpoint.description": "The URL of the S3 bucket.",
   "admin.config.s3.region": "Region",
@@ -794,34 +648,25 @@ export default {
   "admin.config.s3.bucket-name": "Bucket name",
   "admin.config.s3.bucket-name.description": "The name of the S3 bucket.",
   "admin.config.s3.bucket-path": "Path",
-  "admin.config.s3.bucket-path.description":
-    "The default path which should be used to store the files in the S3 bucket.",
+  "admin.config.s3.bucket-path.description": "The default path which should be used to store the files in the S3 bucket.",
   "admin.config.s3.key": "Key",
-  "admin.config.s3.key.description":
-    "The key which allows you to access the S3 bucket.",
+  "admin.config.s3.key.description": "The key which allows you to access the S3 bucket.",
   "admin.config.s3.secret": "Secret",
-  "admin.config.s3.secret.description":
-    "The secret which allows you to access the S3 bucket.",
+  "admin.config.s3.secret.description": "The secret which allows you to access the S3 bucket.",
   "admin.config.s3.use-checksum": "Use checksum",
-  "admin.config.s3.use-checksum.description":
-    "Turn off for backends that do not support checksum (e.g. B2).",
+  "admin.config.s3.use-checksum.description": "Turn off for backends that do not support checksum (e.g. B2).",
 
   "admin.config.category.legal": "Legal",
   "admin.config.legal.enabled": "Enable legal notices",
-  "admin.config.legal.enabled.description":
-    "Whether to show a link to imprint and privacy policy in the footer.",
+  "admin.config.legal.enabled.description": "Whether to show a link to imprint and privacy policy in the footer.",
   "admin.config.legal.imprint-text": "Imprint text",
-  "admin.config.legal.imprint-text.description":
-    "The text which should be shown in the imprint. Supports Markdown. Leave blank to link to an external imprint page.",
+  "admin.config.legal.imprint-text.description": "The text which should be shown in the imprint. Supports Markdown. Leave blank to link to an external imprint page.",
   "admin.config.legal.imprint-url": "Imprint URL",
-  "admin.config.legal.imprint-url.description":
-    "If you already have an imprint page you can link it here instead of using the text field.",
+  "admin.config.legal.imprint-url.description": "If you already have an imprint page you can link it here instead of using the text field.",
   "admin.config.legal.privacy-policy-text": "Privacy policy text",
-  "admin.config.legal.privacy-policy-text.description":
-    "The text which should be shown in the privacy policy. Supports Markdown. Leave blank to link to an external privacy policy page.",
+  "admin.config.legal.privacy-policy-text.description": "The text which should be shown in the privacy policy. Supports Markdown. Leave blank to link to an external privacy policy page.",
   "admin.config.legal.privacy-policy-url": "Privacy policy URL",
-  "admin.config.legal.privacy-policy-url.description":
-    "If you already have a privacy policy page you can link it here instead of using the text field.",
+  "admin.config.legal.privacy-policy-url.description": "If you already have a privacy policy page you can link it here instead of using the text field.",
 
   // 404
   "404.description": "Oops this page doesn't exist.",
@@ -832,22 +677,16 @@ export default {
   "error.description": "Oops!",
   "error.button.back": "Go back",
   "error.msg.default": "Something went wrong.",
-  "error.msg.access_denied":
-    "You canceled the authentication process, please try again.",
-  "error.msg.expired_token":
-    "The authentication process took too long, please try again.",
+  "error.msg.access_denied": "You canceled the authentication process, please try again.",
+  "error.msg.expired_token": "The authentication process took too long, please try again.",
   "error.msg.invalid_token": "Internal Error",
   "error.msg.no_user": "User linked to this {0} account doesn't exist.",
   "error.msg.no_email": "Can't get email address from this {0} account.",
-  "error.msg.already_linked":
-    "This {0} account is already linked to another account.",
-  "error.msg.not_linked":
-    "This {0} account hasn't been linked to any account yet.",
-  "error.msg.unverified_account":
-    "This {0} account is unverified, please try again after verification.",
+  "error.msg.already_linked": "This {0} account is already linked to another account.",
+  "error.msg.not_linked": "This {0} account hasn't been linked to any account yet.",
+  "error.msg.unverified_account": "This {0} account is unverified, please try again after verification.",
   "error.msg.user_not_allowed": "You are not allowed to sign in.",
-  "error.msg.cannot_get_user_info":
-    "Cannot get your user info from this {0} account.",
+  "error.msg.cannot_get_user_info": "Cannot get your user info from this {0} account.",
   "error.param.provider_github": "GitHub",
   "error.param.provider_google": "Google",
   "error.param.provider_microsoft": "Microsoft",
@@ -869,8 +708,7 @@ export default {
   "common.text.navigate-to-link": "Visit link",
   "common.text.or": "or",
   "common.text.redirecting": "Redirecting...",
-  "upload.flow.hint.manual-open":
-    "Step 1: add files. Step 2: click \"{actionLabel}\" to configure options and continue.",
+  "upload.flow.hint.manual-open": "Step 1: add files. Step 2: click \"{actionLabel}\" to configure options and continue.",
   "common.button.go-back": "Go back",
   "common.button.go-home": "Go home",
   "common.aria.copy-share-link": "Copy share link",

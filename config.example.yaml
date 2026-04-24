@@ -14,6 +14,8 @@ general:
   sessionDuration: 3 months
   #Use-case flags, comma-separated. Examples: default | lawyer | default,saas | lawyer,saas
   useCase: default
+  #Default UI and new-user language (en-US, de-DE, fr-FR, es-ES, it-IT). Users can change their own language later.
+  defaultLocale: en-US
   #Logo scale (25-250 percent). Applies to main header, home page, admin bar, and HTML emails.
   logoScalePercent: "100"
   #Show the application name next to the logo in the top bar (main app and admin).

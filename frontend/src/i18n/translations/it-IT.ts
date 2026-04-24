@@ -343,16 +343,15 @@ export default {
   "admin.config.general.location.description": "Controlla i contenuti dell'interfaccia in base alla posizione (es. \"swiss\"). Lascia vuoto per il comportamento predefinito.",
   "admin.config.general.use-case": "Caso d'uso",
   "admin.config.general.use-case.description": "Caso d'uso attivo per varianti di design e testi (es. \"lawyer\").",
+  "admin.config.general.default-locale": "Lingua predefinita",
+  "admin.config.general.default-locale.description": "Lingua predefinita dell'interfaccia per i visitatori anonimi e per i nuovi utenti finché non ne scelgono un'altra nell'account. Le pagine di caricamento tramite richiesta file usano la lingua del creatore (salvo che il visitante abbia già scelto una lingua tramite cookie).",
   "admin.config.general.logo": "Logo",
-  "admin.config.general.logo.description":
-    "Carica un logo PNG. Sono supportate immagini quadrate, larghe o alte; usa dimensione e opzioni intestazione sotto per adattarle alla barra, alla home e alle e-mail.",
+  "admin.config.general.logo.description": "Carica un logo PNG. Sono supportate immagini quadrate, larghe o alte; usa dimensione e opzioni intestazione sotto per adattarle alla barra, alla home e alle e-mail.",
   "admin.config.general.logo.placeholder": "Scegli un'immagine",
   "admin.config.general.logo-scale-percent": "Dimensione logo",
-  "admin.config.general.logo-scale-percent.description":
-    "Scala relativa (25-250 %) per il logo nell'intestazione principale, home, barra admin ed e-mail in uscita. Loghi larghi sono limitati in larghezza; quelli alti in altezza.",
+  "admin.config.general.logo-scale-percent.description": "Scala relativa (25-250 %) per il logo nell'intestazione principale, home, barra admin ed e-mail in uscita. Loghi larghi sono limitati in larghezza; quelli alti in altezza.",
   "admin.config.general.header-show-app-name": "Mostra il nome dell'applicazione nell'intestazione",
-  "admin.config.general.header-show-app-name.description":
-    "Se disattivato, nella barra superiore (sito principale e admin) viene mostrato solo il logo. Titoli di pagina e titolo home restano invariati.",
+  "admin.config.general.header-show-app-name.description": "Se disattivato, nella barra superiore (sito principale e admin) viene mostrato solo il logo. Titoli di pagina e titolo home restano invariati.",
   "admin.config.general.logo.preview-header": "Anteprima (barra admin)",
   "admin.config.cache.ttl": "TTL",
   "admin.config.cache.ttl.description": "Tempo (in secondi) di mantenimento delle informazioni all'interno della cache.",
