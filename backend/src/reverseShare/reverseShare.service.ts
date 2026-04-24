@@ -1,10 +1,10 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
-import * as moment from "moment";
-import { ConfigService } from "src/config/config.service";
-import { FileService } from "src/file/file.service";
-import { PrismaService } from "src/prisma/prisma.service";
-import { SaasService } from "src/saas/saas.service";
-import { parseRelativeDateToAbsolute } from "src/utils/date.util";
+import moment from "moment";
+import { ConfigService } from "@/config/config.service";
+import { FileService } from "@/file/file.service";
+import { PrismaService } from "@/prisma/prisma.service";
+import { SaasService } from "@/saas/saas.service";
+import { parseRelativeDateToAbsolute } from "@/utils/date.util";
 import { CreateReverseShareDTO } from "./dto/createReverseShare.dto";
 
 @Injectable()

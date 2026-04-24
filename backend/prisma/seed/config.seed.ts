@@ -1,10 +1,13 @@
-import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
-import { PrismaClient } from "../../node_modules/.prisma/client";
+import { PrismaLibSql } from "@prisma/adapter-libsql";
+import { PrismaClient } from "@prisma/client";
 import { configVariables } from "./config-variables";
 
+const databaseUrl =
+  process.env.DATABASE_URL || "file:./data/swiss-datashare.db";
+
 const prisma = new PrismaClient({
-  adapter: new PrismaBetterSqlite3({
-    url: process.env.DATABASE_URL || "file:./data/swiss-datashare.db",
+  adapter: new PrismaLibSql({
+    url: databaseUrl,
   }),
 });
 

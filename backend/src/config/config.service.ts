@@ -8,22 +8,22 @@ import {
 import * as argon from "argon2";
 import { EventEmitter } from "events";
 import * as fs from "fs";
-import { PrismaService } from "src/prisma/prisma.service";
-import { stringToTimespan } from "src/utils/date.util";
+import { PrismaService } from "@/prisma/prisma.service";
+import { stringToTimespan } from "@/utils/date.util";
 import { parse as yamlParse } from "yaml";
 import {
   buildDefaultEmailConfigTranslations,
   EmailConfigTranslationKey,
-} from "src/email/i18n/messages";
+} from "@/email/i18n/messages";
 import {
   buildDefaultLegalConfigTranslations,
   LegalConfigTranslationKey,
-} from "src/legal/i18n/messages";
+} from "@/legal/i18n/messages";
 import {
   configVariables,
   YamlConfig,
 } from "../../prisma/seed/config-variables";
-import { CONFIG_FILE } from "src/constants";
+import { CONFIG_FILE } from "@/constants";
 
 type ConfigRow = {
   category: string;

@@ -12,10 +12,10 @@ import { JwtService } from "@nestjs/jwt";
 import { Prisma, User } from "@prisma/client";
 import * as argon from "argon2";
 import { Request, Response } from "express";
-import * as moment from "moment";
-import { ConfigService } from "src/config/config.service";
-import { EmailService } from "src/email/email.service";
-import { PrismaService } from "src/prisma/prisma.service";
+import moment from "moment";
+import { ConfigService } from "@/config/config.service";
+import { EmailService } from "@/email/email.service";
+import { PrismaService } from "@/prisma/prisma.service";
 import { OAuthService } from "../oauth/oauth.service";
 import { GenericOidcProvider } from "../oauth/provider/genericOidc.provider";
 import { UserSevice } from "../user/user.service";
@@ -25,7 +25,7 @@ import { LdapService } from "./ldap.service";
 import {
   decryptOauthIdTokenAtRest,
   encryptOauthIdTokenAtRest,
-} from "src/utils/oauthTokenCrypto.util";
+} from "@/utils/oauthTokenCrypto.util";
 
 @Injectable()
 export class AuthService {

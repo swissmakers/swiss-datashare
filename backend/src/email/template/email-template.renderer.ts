@@ -47,18 +47,18 @@ export function renderEmailTemplate(input: EmailTemplateInput): RenderedEmail {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>${escapeHtml(input.title)}</title>
   </head>
-  <body style="margin:0;padding:0;background:#f1f5f9;font-family:Inter,Segoe UI,Roboto,Helvetica,Arial,sans-serif;">
+  <body style="margin:0;padding:0;background:#ffffff;font-family:Segoe UI,Roboto,Helvetica,Arial,sans-serif;">
     <span style="display:none;visibility:hidden;opacity:0;height:0;width:0;overflow:hidden;">${escapeHtml(input.preheader)}</span>
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="padding:24px 12px;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="padding:24px 12px;background:#ffffff;">
       <tr>
         <td align="center">
-          <table role="presentation" width="640" cellpadding="0" cellspacing="0" style="width:100%;max-width:640px;background:#ffffff;border-radius:14px;overflow:hidden;border:1px solid #e2e8f0;">
+          <table role="presentation" width="640" cellpadding="0" cellspacing="0" style="width:100%;max-width:640px;background:#ffffff;border:1px solid #e2e8f0;">
             <tr>
-              <td align="center" style="padding:22px 24px;background:linear-gradient(120deg,#0f172a 0%,#1d4ed8 100%);">
+              <td align="center" style="padding:22px 24px;background:#f8fafc;border-bottom:1px solid #e2e8f0;">
                 <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
                   <tr>
                     <td align="center" style="padding:0;">
-                      <img src="${escapeHtml(input.branding.logoUrl)}" alt="${escapeHtml(input.branding.appName)}" width="${input.branding.logoMaxWidthPx}" style="max-width:${input.branding.logoMaxWidthPx}px;width:80%;height:auto;max-height:${input.branding.logoMaxHeightPx}px;display:block;margin:0 auto;border:0;line-height:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic;" />
+                      <img src="${escapeHtml(input.branding.logoUrl)}" alt="${escapeHtml(input.branding.appName)}" style="display:block;margin:0 auto;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic;width:auto;max-width:${input.branding.logoMaxWidthPx}px;height:auto;max-height:${input.branding.logoMaxHeightPx}px;" />
                     </td>
                   </tr>
                 </table>

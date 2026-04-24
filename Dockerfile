@@ -82,6 +82,7 @@ RUN npm run build && npm prune --production
 FROM node:24-alpine AS runner
 RUN npm install -g npm@latest
 ENV NODE_ENV=docker
+ENV NODE_TLS_REJECT_UNAUTHORIZED=1
 
 RUN deluser --remove-home node 2>/dev/null || true
 

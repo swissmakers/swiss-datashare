@@ -5,11 +5,11 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import { Request } from "express";
-import * as moment from "moment";
-import { PrismaService } from "src/prisma/prisma.service";
-import { ShareService } from "src/share/share.service";
-import { ConfigService } from "src/config/config.service";
-import { JwtGuard } from "src/auth/guard/jwt.guard";
+import moment from "moment";
+import { PrismaService } from "@/prisma/prisma.service";
+import { ShareService } from "@/share/share.service";
+import { ConfigService } from "@/config/config.service";
+import { JwtGuard } from "@/auth/guard/jwt.guard";
 import { User } from "@prisma/client";
 
 @Injectable()

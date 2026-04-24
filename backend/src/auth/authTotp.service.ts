@@ -6,9 +6,9 @@ import {
 } from "@nestjs/common";
 import { User } from "@prisma/client";
 import { generateSecret, generateSync, generateURI, verifySync } from "otplib";
-import * as qrcode from "qrcode-svg";
-import { ConfigService } from "src/config/config.service";
-import { PrismaService } from "src/prisma/prisma.service";
+import QRCode from "qrcode-svg";
+import { ConfigService } from "@/config/config.service";
+import { PrismaService } from "@/prisma/prisma.service";
 import { AuthService } from "./auth.service";
 import { AuthSignInTotpDTO } from "./dto/authSignInTotp.dto";
 
@@ -104,7 +104,7 @@ export class AuthTotpService {
     });
 
     // TODO: Maybe we should generate the QR code on the client rather than the server?
-    const qrCode = new qrcode({
+    const qrCode = new QRCode({
       content: otpURL,
       container: "svg-viewbox",
       join: true,

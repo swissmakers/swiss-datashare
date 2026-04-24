@@ -5,8 +5,8 @@ import {
   Logger,
 } from "@nestjs/common";
 import { User } from "@prisma/client";
-import { ConfigService } from "src/config/config.service";
-import { PrismaService } from "src/prisma/prisma.service";
+import { ConfigService } from "@/config/config.service";
+import { PrismaService } from "@/prisma/prisma.service";
 import * as StripeModule from "stripe";
 
 @Injectable()

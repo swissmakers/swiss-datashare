@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { LocalFileService } from "./local.service";
 import { S3FileService } from "./s3.service";
-import { ConfigService } from "src/config/config.service";
+import { ConfigService } from "@/config/config.service";
 import { Readable } from "stream";
 import { PrismaService } from "../prisma/prisma.service";
 

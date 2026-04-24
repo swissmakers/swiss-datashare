@@ -3,8 +3,8 @@ import { CacheModule } from "@nestjs/cache-manager";
 import { CacheableMemory } from "cacheable";
 import { createKeyv } from "@keyv/redis";
 import { Keyv } from "keyv";
-import { ConfigModule } from "src/config/config.module";
-import { ConfigService } from "src/config/config.service";
+import { ConfigModule } from "@/config/config.module";
+import { ConfigService } from "@/config/config.service";
 
 @Module({
   imports: [

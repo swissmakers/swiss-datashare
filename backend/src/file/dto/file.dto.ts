@@ -1,5 +1,5 @@
 import { Expose, plainToClass } from "class-transformer";
-import { ShareDTO } from "src/share/dto/share.dto";
+import { ShareDTO } from "@/share/dto/share.dto";
 
 export class FileDTO {
   @Expose()

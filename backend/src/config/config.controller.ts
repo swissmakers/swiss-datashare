@@ -14,10 +14,10 @@ import {
 import { FileInterceptor } from "@nestjs/platform-express";
 import { User } from "@prisma/client";
 import { SkipThrottle } from "@nestjs/throttler";
-import { GetUser } from "src/auth/decorator/getUser.decorator";
-import { AdministratorGuard } from "src/auth/guard/isAdmin.guard";
-import { JwtGuard } from "src/auth/guard/jwt.guard";
-import { EmailService } from "src/email/email.service";
+import { GetUser } from "@/auth/decorator/getUser.decorator";
+import { AdministratorGuard } from "@/auth/guard/isAdmin.guard";
+import { JwtGuard } from "@/auth/guard/jwt.guard";
+import { EmailService } from "@/email/email.service";
 import { ConfigService } from "./config.service";
 import { AdminConfigDTO } from "./dto/adminConfig.dto";
 import { ConfigDTO } from "./dto/config.dto";
@@ -89,7 +89,7 @@ export class ConfigController {
         validators: [new FileTypeValidator({ fileType: "image/png" })],
       }),
     )
-    file: Express.Multer.File,
+    file: { buffer: Buffer },
   ) {
     return await this.logoService.create(file.buffer);
   }

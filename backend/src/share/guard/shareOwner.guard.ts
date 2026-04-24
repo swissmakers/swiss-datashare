@@ -5,8 +5,8 @@ import {
 } from "@nestjs/common";
 import { User } from "@prisma/client";
 import { Request } from "express";
-import { ConfigService } from "src/config/config.service";
-import { PrismaService } from "src/prisma/prisma.service";
+import { ConfigService } from "@/config/config.service";
+import { PrismaService } from "@/prisma/prisma.service";
 import { JwtGuard } from "../../auth/guard/jwt.guard";
 
 @Injectable()

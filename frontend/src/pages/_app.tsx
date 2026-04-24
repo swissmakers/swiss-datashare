@@ -1,6 +1,9 @@
 import { getCookie } from "cookies-next";
 import moment from "moment";
-import "moment/min/locales";
+import "moment/locale/de";
+import "moment/locale/es";
+import "moment/locale/fr";
+import "moment/locale/it";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import { useRouter } from "next/router";

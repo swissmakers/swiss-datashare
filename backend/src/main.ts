@@ -8,7 +8,7 @@ import { NestFactory, Reflector } from "@nestjs/core";
 import { NestExpressApplication } from "@nestjs/platform-express";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import * as bodyParser from "body-parser";
-import * as cookieParser from "cookie-parser";
+import cookieParser from "cookie-parser";
 import { NextFunction, Request, Response } from "express";
 import * as fs from "fs";
 import { AppModule } from "./app.module";
@@ -37,6 +37,16 @@ function generateNestJsLogLevels(): LogLevel[] {
 async function bootstrap() {
   const logLevels = generateNestJsLogLevels();
   Logger.log(`Showing ${logLevels.join(", ")} messages`);
+
+  if (
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED === "0" &&
+    process.env.ALLOW_INSECURE_NODE_TLS !== "true"
+  ) {
+    Logger.warn(
+      "Insecure NODE_TLS_REJECT_UNAUTHORIZED=0 detected; forcing secure TLS verification. Set ALLOW_INSECURE_NODE_TLS=true to bypass intentionally.",
+    );
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = "1";
+  }
 
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     logger: logLevels,
