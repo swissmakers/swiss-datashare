@@ -343,7 +343,8 @@ const CreateUploadModalBody = ({
               {getExpirationPreview(
                 {
                   neverExpires: t("upload.modal.completed.never-expires"),
-                  expiresOn: t("upload.modal.completed.expires-on"),
+                  formatExpiresOn: (expiration) =>
+                    t("upload.modal.completed.expires-on", { expiration }),
                 },
                 form,
               )}

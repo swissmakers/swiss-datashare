@@ -204,8 +204,9 @@ const Body = ({
         <p className="mt-2 text-xs text-gray-500 dark:text-gray-400 italic">
           {getExpirationPreview(
             {
-              expiresOn: t("account.reverseShare.expires-on"),
               neverExpires: t("account.reverseShare.never-expires"),
+              formatExpiresOn: (expiration) =>
+                t("account.reverseShare.expires-on", { expiration }),
             },
             form,
           )}

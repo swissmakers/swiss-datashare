@@ -4,7 +4,7 @@ import { Timespan } from "../types/timespan.type";
 export const getExpirationPreview = (
   messages: {
     neverExpires: string;
-    expiresOn: string;
+    formatExpiresOn: (expiration: string) => string;
   },
   form: {
     values: {
@@ -26,10 +26,7 @@ export const getExpirationPreview = (
     )
     .toDate();
 
-  return messages.expiresOn.replace(
-    "{expiration}",
-    moment(expirationDate).format("LLL"),
-  );
+  return messages.formatExpiresOn(moment(expirationDate).format("LLL"));
 };
 
 export const timespanToString = (timespan: Timespan) => {

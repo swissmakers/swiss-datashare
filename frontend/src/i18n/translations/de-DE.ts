@@ -559,7 +559,7 @@ export default {
   "common.text.navigate-to-link": "Link öffnen",
   "common.text.or": "oder",
   "common.text.redirecting": "Umleitung...",
-  "upload.flow.hint.manual-open": "Schritt 1: Dateien hinzufügen. Schritt 2: auf \"{actionLabel}\" klicken, um den Link zu konfigurieren und die Datenfreigabe zu erstellen.",
+  "upload.flow.hint.manual-open": "Schritt 1: Dateien hinzufügen. Schritt 2: auf \"{actionLabel}\" klicken, um den Link zu konfigurieren und anschliessend die Datenfreigabe zu erstellen.",
   "common.button.go-back": "Zurück",
   "common.button.go-home": "Zur Startseite",
   "common.aria.copy-share-link": "Freigabe-Link kopieren",
