@@ -4,7 +4,8 @@ import "moment/locale/de";
 import "moment/locale/es";
 import "moment/locale/fr";
 import "moment/locale/it";
-import type { AppProps } from "next/app";
+import type { AppContext, AppProps } from "next/app";
+import NextApp from "next/app";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState, useMemo } from "react";
@@ -26,6 +27,10 @@ import { useToast } from "../hooks/useToast";
 import { ToastContainer } from "../components/ui";
 import { setGlobalToast } from "../utils/toast.util";
 import { mergeMessagesForUseCase } from "../i18n/useCaseOverrides";
+import {
+  fetchPublicConfigList,
+  resolveAppInitialLocale,
+} from "../utils/initialLocale.app.util";
 import "../styles/globals.css";
 
 const excludeDefaultLayoutRoutes = ["/admin/config/[category]"];
@@ -35,7 +40,7 @@ type AppPageProps = AppProps["pageProps"] & {
   initialResolvedLocale?: string;
 };
 
-function App({ Component, pageProps }: AppProps) {
+function SwissDataShare({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const { toasts, removeToast, success, error, warning, info } = useToast();
 
@@ -116,9 +121,11 @@ function App({ Component, pageProps }: AppProps) {
         typeof navigator !== "undefined" ? navigator.language : null,
     });
 
-    setLanguage(resolved);
     moment.locale(resolved.split("-")[0]);
-  }, [configVariables, user, creatorLocale, initialResolvedLocale]);
+    if (resolved !== language) {
+      setLanguage(resolved);
+    }
+  }, [configVariables, user, creatorLocale, initialResolvedLocale, language]);
 
   const selectedLocale = useMemo(
     () => i18nUtil.getLocaleByCode(language) ?? LOCALES.ENGLISH,
@@ -222,4 +229,37 @@ function App({ Component, pageProps }: AppProps) {
   );
 }
 
-export default App;
+SwissDataShare.getInitialProps = async (appContext: AppContext) => {
+  const appProps = await NextApp.getInitialProps(appContext);
+  const pageProps = (appProps.pageProps ?? {}) as AppPageProps;
+
+  let configs: Config[] | null = null;
+  try {
+    configs = await fetchPublicConfigList();
+  } catch (e) {
+    if (typeof window === "undefined") {
+      console.error("[SwissDataShare.getInitialProps] config fetch failed:", e);
+    }
+  }
+
+  let initialResolvedLocale: string;
+  try {
+    initialResolvedLocale = resolveAppInitialLocale(
+      appContext.ctx,
+      pageProps,
+      configs,
+    );
+  } catch {
+    initialResolvedLocale = LOCALES.ENGLISH.code;
+  }
+
+  return {
+    ...appProps,
+    pageProps: {
+      ...pageProps,
+      initialResolvedLocale,
+    },
+  };
+};
+
+export default SwissDataShare;
