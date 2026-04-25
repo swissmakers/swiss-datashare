@@ -8,6 +8,7 @@ export default {
   "navbar.avatar.account": "Mi cuenta",
   "navbar.avatar.admin": "Administración",
   "navbar.avatar.signout": "Cerrar sesión",
+  "navbar.avatar.signed-in-as": "Conectado como",
   "home.title": "Intercambio seguro de archivos para equipos, socios o clientes.",
   "home.description": "Sube archivos, crea un enlace seguro y envíalo por correo electrónico.",
   "home.button.start": "Start secure transfer",

@@ -8,6 +8,7 @@ export default {
   "navbar.avatar.account": "Mein Konto",
   "navbar.avatar.admin": "Verwaltung",
   "navbar.avatar.signout": "Abmelden",
+  "navbar.avatar.signed-in-as": "Angemeldet als",
   "home.title": "Sichere Dateifreigaben für Teams, Partner oder Klienten.",
   "home.description": "Dateien sicher hochladen, einen sicheren Link erstellen und diesen kontrolliert mit Empfängern teilen.",
   "home.button.start": "Dateifreigaben starten",

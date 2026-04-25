@@ -26,6 +26,17 @@ const ActionAvatar = () => {
         leaveTo="transform opacity-0 scale-95"
       >
         <Menu.Items className="absolute right-0 mt-2 w-48 origin-top-right rounded-lg bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50 border border-gray-200 dark:border-gray-700">
+          <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              <FormattedMessage id="navbar.avatar.signed-in-as" />
+            </p>
+            <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
+              {user?.username || user?.email}
+            </p>
+            {user?.email && user?.email !== user?.username && (
+              <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{user.email}</p>
+            )}
+          </div>
           <div className="py-1">
             <Menu.Item>
               {({ active }) => (
@@ -43,7 +54,7 @@ const ActionAvatar = () => {
                 </Link>
               )}
             </Menu.Item>
-            {user!.isAdmin && (
+            {user?.isAdmin && (
               <Menu.Item>
                 {({ active }) => (
                   <Link

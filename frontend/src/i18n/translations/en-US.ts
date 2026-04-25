@@ -8,6 +8,7 @@ export default {
   "navbar.avatar.account": "My account",
   "navbar.avatar.admin": "Administration",
   "navbar.avatar.signout": "Sign out",
+  "navbar.avatar.signed-in-as": "Signed in as",
   "home.title": "Send and request files with clear, secure links.",
   "home.description": "Create a share link to send files, or create a data request link so recipients can upload files back to you.",
   "home.button.start": "Start sharing files",
