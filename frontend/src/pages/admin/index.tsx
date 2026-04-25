@@ -1,17 +1,19 @@
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { TbLink, TbRefresh, TbSettings, TbUsers } from "react-icons/tb";
+import { TbLink, TbSettings, TbUsers } from "react-icons/tb";
 import { FormattedMessage } from "react-intl";
 import Meta from "../../components/Meta";
 import useTranslate from "../../hooks/useTranslate.hook";
-import configService from "../../services/config.service";
-import { Container, Card } from "../../components/ui";
+import versionService from "../../services/version.service";
+import { Container, Card, Alert } from "../../components/ui";
 import clsx from "clsx";
+import { useEffect, useState } from "react";
 
 const Admin = () => {
   const t = useTranslate();
+  const localVersion = versionService.getLocalVersion();
+  const [latestVersion, setLatestVersion] = useState<string | null>(null);
 
-  const [managementOptions, setManagementOptions] = useState([
+  const managementOptions = [
     {
       title: t("admin.button.users"),
       icon: TbUsers,
@@ -27,26 +29,23 @@ const Admin = () => {
       icon: TbSettings,
       route: "/admin/config/general",
     },
-  ]);
+  ];
 
   useEffect(() => {
-    configService
-      .isNewReleaseAvailable()
-      .then((isNewReleaseAvailable) => {
-        if (isNewReleaseAvailable) {
-          setManagementOptions([
-            ...managementOptions,
-            {
-              title: "Update",
-              icon: TbRefresh,
-              route:
-                "https://github.com/swissmakers/swiss-datashare/releases/latest",
-            },
-          ]);
-        }
-      })
-      .catch();
+    let cancelled = false;
+    const run = async () => {
+      const latest = await versionService.getLatestReleaseTag();
+      if (!cancelled) setLatestVersion(latest);
+    };
+    void run();
+    return () => {
+      cancelled = true;
+    };
   }, []);
+
+  const hasUpdate =
+    latestVersion != null &&
+    versionService.isVersionNewer(latestVersion, localVersion);
 
   return (
     <>
@@ -55,16 +54,37 @@ const Admin = () => {
         <h2 className="text-2xl font-bold mb-8 text-text dark:text-text-dark">
           <FormattedMessage id="admin.title" />
         </h2>
+        <Alert color={hasUpdate ? "yellow" : "blue"} className="mb-6">
+          <div className="space-y-1">
+            <p>
+              {t("admin.version.current", { version: localVersion })}
+            </p>
+            {hasUpdate && latestVersion ? (
+              <p>
+                {t("admin.version.update-available", {
+                  version: latestVersion,
+                })}{" "}
+                <a
+                  href={versionService.RELEASES_LATEST_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline font-medium"
+                >
+                  {t("admin.version.view-release")}
+                </a>
+              </p>
+            ) : (
+              <p>{t("admin.version.up-to-date")}</p>
+            )}
+          </div>
+        </Alert>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {managementOptions.map((item) => {
             const Icon = item.icon;
-            const isExternal = item.route.startsWith("http");
             return (
               <Link
                 key={item.route}
                 href={item.route}
-                target={isExternal ? "_blank" : undefined}
-                rel={isExternal ? "noopener noreferrer" : undefined}
                 className="block"
               >
                 <Card

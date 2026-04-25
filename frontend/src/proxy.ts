@@ -174,6 +174,37 @@ export async function proxy(request: NextRequest) {
       return NextResponse.redirect(new URL(path, request.url));
     }
   }
+
+  const res = NextResponse.next();
+  if (!request.cookies.get("language")?.value) {
+    const defaultLoc = getConfig("general.defaultLocale");
+    const raw =
+      defaultLoc != null && String(defaultLoc).trim() !== ""
+        ? String(defaultLoc)
+        : "en-US";
+    res.cookies.set("language", normalizeUiLocaleForMiddleware(raw), {
+      path: "/",
+      maxAge: 60 * 60 * 24 * 365,
+      sameSite: "lax",
+    });
+  }
+  return res;
+}
+
+function normalizeUiLocaleForMiddleware(raw: string): string {
+  const t = raw.trim().toLowerCase();
+  const supported = ["en-US", "de-DE", "fr-FR", "es-ES", "it-IT"] as const;
+  const exact = supported.find((c) => c.toLowerCase() === t);
+  if (exact) return exact;
+  const base = t.split("-")[0];
+  const map: Record<string, string> = {
+    en: "en-US",
+    de: "de-DE",
+    fr: "fr-FR",
+    es: "es-ES",
+    it: "it-IT",
+  };
+  return map[base] ?? "en-US";
 }
 
 // Helper class to check if a route matches a list of routes

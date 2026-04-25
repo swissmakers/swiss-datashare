@@ -2,8 +2,15 @@ import Link from "next/link";
 import { FormattedMessage } from "react-intl";
 import Meta from "../components/Meta";
 import { Button, Container } from "../components/ui";
+import useConfig from "../hooks/config.hook";
+import useUser from "../hooks/user.hook";
+import { getHomeEntryHref } from "../utils/homeEntryRoute.util";
 
 const ErrorNotFound = () => {
+  const config = useConfig();
+  const { user } = useUser();
+  const homeHref = getHomeEntryHref(user, config.get);
+
   return (
     <>
       <Meta title="Not found" />
@@ -15,7 +22,7 @@ const ErrorNotFound = () => {
           <h1 className="text-2xl sm:text-3xl font-bold text-text dark:text-text-dark mb-10">
             <FormattedMessage id="404.description" />
           </h1>
-          <Button as={Link} href="/" variant="outline">
+          <Button as={Link} href={homeHref} variant="outline">
             <FormattedMessage id="404.button.home" />
           </Button>
         </div>

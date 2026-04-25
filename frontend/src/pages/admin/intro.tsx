@@ -2,8 +2,15 @@ import Link from "next/link";
 import Logo from "../../components/Logo";
 import Meta from "../../components/Meta";
 import { Container, Button } from "../../components/ui";
+import useConfig from "../../hooks/config.hook";
+import useUser from "../../hooks/user.hook";
+import { getHomeEntryHref } from "../../utils/homeEntryRoute.util";
 
 const Intro = () => {
+  const config = useConfig();
+  const { user } = useUser();
+  const exploreHref = getHomeEntryHref(user, config.get);
+
   return (
     <>
       <Meta title="Intro" />
@@ -35,7 +42,7 @@ const Intro = () => {
             <Button as={Link} href="/admin/config/general" fullWidth>
               Customize configuration
             </Button>
-            <Button as={Link} href="/" variant="outline" fullWidth>
+            <Button as={Link} href={exploreHref} variant="outline" fullWidth>
               Explore Swiss DataShare
             </Button>
           </div>

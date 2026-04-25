@@ -87,17 +87,15 @@ const ManageUserTable = ({
                   </Table.Cell>
                   <Table.Cell>
                     <div className="flex items-center justify-end gap-2">
-                      {!user.isLdap && (
-                        <button
-                          onClick={() =>
-                            showUpdateUserModal(modals, user, getUsers)
-                          }
-                          className="p-1.5 text-primary-600 hover:text-primary-700 hover:bg-primary-50 dark:text-primary-400 dark:hover:text-primary-300 dark:hover:bg-primary-900/20 rounded-lg transition-colors"
-                          aria-label="Edit user"
-                        >
-                          <TbEdit size={18} />
-                        </button>
-                      )}
+                      <button
+                        onClick={() =>
+                          showUpdateUserModal(modals, user, getUsers)
+                        }
+                        className="p-1.5 text-primary-600 hover:text-primary-700 hover:bg-primary-50 dark:text-primary-400 dark:hover:text-primary-300 dark:hover:bg-primary-900/20 rounded-lg transition-colors"
+                        aria-label="Edit user"
+                      >
+                        <TbEdit size={18} />
+                      </button>
                       <button
                         onClick={() => deleteUser(user)}
                         className="p-1.5 text-red-600 hover:text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-red-900/20 rounded-lg transition-colors"

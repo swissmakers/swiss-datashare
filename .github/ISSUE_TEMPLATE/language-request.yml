@@ -1,5 +1,5 @@
 name: "🌐 Language request"
-description: "You want to contribute to a language that isn't on Crowdin yet?"
+description: "You want to contribute to a language?"
 title: "🌐 Language request: <language name in english>"
 labels: [language-request]
 body:

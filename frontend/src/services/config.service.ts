@@ -104,15 +104,6 @@ const resetLegalTranslations = async (): Promise<AdminConfig[]> => {
   return (await api.post("/configs/admin/legal/resetTranslations")).data;
 };
 
-const isNewReleaseAvailable = async () => {
-  const response = (await (
-    await fetch(
-      "https://api.github.com/repos/swissmakers/swiss-datashare/releases/latest",
-    )
-  ).json()) as { tag_name: string };
-  return response.tag_name.replace("v", "") != process.env.VERSION;
-};
-
 const changeLogo = async (file: File) => {
   const form = new FormData();
   form.append("file", file);
@@ -128,6 +119,5 @@ export default {
   sendTestEmail,
   resetEmailTranslations,
   resetLegalTranslations,
-  isNewReleaseAvailable,
   changeLogo,
 };

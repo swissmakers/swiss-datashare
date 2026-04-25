@@ -13,6 +13,7 @@ import Logo from "../Logo";
 import ActionAvatar from "./ActionAvatar";
 import NavbarShareMenu from "./NavbarShareMenu";
 import clsx from "clsx";
+import { getHomeEntryHref } from "../../utils/homeEntryRoute.util";
 
 const HEADER_HEIGHT = 60;
 
@@ -94,6 +95,8 @@ const Header = () => {
     });
 
   const links = user ? authenticatedLinks : unauthenticatedLinks;
+
+  const logoHref = getHomeEntryHref(user, config.get);
 
   const NavLink = ({ link, label, component, onClick, isMobile = false }: NavLink & { onClick?: () => void; isMobile?: boolean }) => {
     if (component) {
@@ -188,7 +191,7 @@ const Header = () => {
     <header className="relative z-10 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 mb-10">
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" style={{ height: `${HEADER_HEIGHT}px` }}>
         <div className="flex items-center justify-between h-full">
-          <Link href="/" className="flex items-center gap-2 min-w-0">
+          <Link href={logoHref} className="flex items-center gap-2 min-w-0">
             <Logo placement="header" className="shrink-0" />
             {config.get("general.headerShowAppName") !== false && (
               <span className="text-lg font-semibold text-text dark:text-text-dark truncate">
