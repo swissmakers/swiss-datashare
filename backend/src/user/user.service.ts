@@ -78,11 +78,27 @@ export class UserSevice {
 
   async update(id: string, user: UpdateUserDto) {
     try {
-      const hash = user.password && (await argon.hash(user.password));
+      const existing = await this.prisma.user.findUnique({
+        where: { id },
+      });
+      if (!existing) {
+        throw new BadRequestException("User not found");
+      }
+
+      const updatePayload: UpdateUserDto = { ...user };
+      if (existing.ldapDN) {
+        // LDAP accounts are managed externally; only local admin rights can be toggled here.
+        delete updatePayload.username;
+        delete updatePayload.email;
+        delete updatePayload.password;
+      }
+
+      const hash =
+        updatePayload.password && (await argon.hash(updatePayload.password));
 
       return await this.prisma.user.update({
         where: { id },
-        data: { ...user, password: hash },
+        data: { ...updatePayload, password: hash },
       });
     } catch (e) {
       if (e instanceof Prisma.PrismaClientKnownRequestError) {

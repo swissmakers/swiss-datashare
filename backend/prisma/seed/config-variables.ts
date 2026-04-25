@@ -289,6 +289,11 @@ export const configVariables = {
       defaultValue: "false",
       secret: false,
     },
+    ignoreTlsVerification: {
+      type: "boolean",
+      defaultValue: "false",
+      secret: false,
+    },
 
     url: {
       type: "string",

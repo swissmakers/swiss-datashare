@@ -151,6 +151,8 @@ smtp:
 ldap:
   #Use LDAP authentication for user login
   enabled: "false"
+  #Disable TLS certificate verification for ldaps:// (insecure; dev or internal CAs only)
+  ignoreTlsVerification: "false"
   #URL of the LDAP server
   url: ""
   #Default user used to perform the user search

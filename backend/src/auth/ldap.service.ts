@@ -6,6 +6,7 @@ import { Client, Entry, InvalidCredentialsError } from "ldapts";
 @Injectable()
 export class LdapService {
   private readonly logger = new Logger(LdapService.name);
+  private warnedInsecureTls = false;
   constructor(
     @Inject(ConfigService)
     private readonly serviceConfig: ConfigService,
@@ -17,10 +18,23 @@ export class LdapService {
       throw new Error("LDAP server URL is not defined");
     }
 
+    const ignoreTlsVerification = this.serviceConfig.get(
+      "ldap.ignoreTlsVerification",
+    );
+    if (ignoreTlsVerification && !this.warnedInsecureTls) {
+      this.logger.warn(
+        "LDAP TLS certificate verification is disabled (ignoreTlsVerification). Connections are vulnerable to man-in-the-middle attacks.",
+      );
+      this.warnedInsecureTls = true;
+    }
+
     const ldapClient = new Client({
       url: ldapUrl,
       timeout: 15_000,
       connectTimeout: 15_000,
+      ...(ignoreTlsVerification
+        ? { tlsOptions: { rejectUnauthorized: false } }
+        : {}),
     });
 
     const bindDn = this.serviceConfig.get("ldap.bindDn") || null;
@@ -55,7 +69,13 @@ export class LdapService {
       .get("ldap.searchQuery")
       .replaceAll("%username%", username);
 
-    const ldapClient = await this.createLdapConnection();
+    let ldapClient: Client;
+    try {
+      ldapClient = await this.createLdapConnection();
+    } catch (error) {
+      this.logger.warn(`LDAP connection setup failed: ${inspect(error)}`);
+      return null;
+    }
     try {
       const { searchEntries } = await ldapClient.search(searchBase, {
         filter: searchQuery,

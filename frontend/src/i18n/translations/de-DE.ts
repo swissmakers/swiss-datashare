@@ -483,6 +483,9 @@ export default {
   "admin.config.category.ldap": "LDAP",
   "admin.config.ldap.enabled": "LDAP aktivieren",
   "admin.config.ldap.enabled.description": "LDAP-Authentifizierung für die Benutzeranmeldung verwenden",
+  "admin.config.ldap.ignore-tls-verification": "TLS-Zertifikatsprüfung ignorieren",
+  "admin.config.ldap.ignore-tls-verification.description":
+    "Nur für ldaps://: selbstsignierte oder sonst nicht vertrauenswürdige Serverzertifikate akzeptieren. Unsicher—nur in der Entwicklung oder mit einer vertrauenswürdigen privaten CA; besser die CA im Container installieren.",
   "admin.config.ldap.url": "Server-URL",
   "admin.config.ldap.url.description": "URL des LDAP-Servers",
   "admin.config.ldap.bind-dn": "Binde DN",

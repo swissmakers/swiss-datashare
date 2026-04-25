@@ -68,8 +68,11 @@ const Body = ({
       <form
         id="accountForm"
         onSubmit={accountForm.onSubmit(async (values) => {
+          const payload = user.isLdap
+            ? { isAdmin: values.isAdmin }
+            : values;
           userService
-            .update(user.id, values)
+            .update(user.id, payload)
             .then(() => {
               getUsers();
               modals.closeAll();
@@ -78,57 +81,63 @@ const Body = ({
         })}
         className="space-y-4"
       >
-        <Input
-          label={t("admin.users.table.username")}
-          value={accountForm.values.username}
-          onChange={(e) => accountForm.setValue("username", e.target.value)}
-          error={(accountForm.errors as any).username}
-        />
-        <Input
-          label={t("admin.users.table.email")}
-          type="email"
-          value={accountForm.values.email}
-          onChange={(e) => accountForm.setValue("email", e.target.value)}
-          error={(accountForm.errors as any).email}
-        />
+        {!user.isLdap && (
+          <>
+            <Input
+              label={t("admin.users.table.username")}
+              value={accountForm.values.username}
+              onChange={(e) => accountForm.setValue("username", e.target.value)}
+              error={(accountForm.errors as any).username}
+            />
+            <Input
+              label={t("admin.users.table.email")}
+              type="email"
+              value={accountForm.values.email}
+              onChange={(e) => accountForm.setValue("email", e.target.value)}
+              error={(accountForm.errors as any).email}
+            />
+          </>
+        )}
         <Switch
           label={t("admin.users.edit.update.admin-privileges")}
           checked={accountForm.values.isAdmin}
           onChange={(checked) => accountForm.setValue("isAdmin", checked)}
         />
       </form>
-      <Accordion>
-        <Accordion.Item value="changePassword">
-          <Accordion.Control>
-            <FormattedMessage id="admin.users.edit.update.change-password.title" />
-          </Accordion.Control>
-          <Accordion.Panel>
-            <form
-              onSubmit={passwordForm.onSubmit(async (values) => {
-                userService
-                  .update(user.id, {
-                    password: values.password,
-                  })
-                  .then(() =>
-                    toast.success(
-                      t("admin.users.edit.update.notify.password.success"),
-                    ),
-                  )
-                  .catch(toast.axiosError);
-              })}
-              className="space-y-4 pt-4"
-            >
-              <PasswordInput
-                label={t("admin.users.edit.update.change-password.field")}
-                {...passwordForm.getInputProps("password")}
-              />
-              <Button variant="outline" type="submit">
-                <FormattedMessage id="admin.users.edit.update.change-password.button" />
-              </Button>
-            </form>
-          </Accordion.Panel>
-        </Accordion.Item>
-      </Accordion>
+      {!user.isLdap && (
+        <Accordion>
+          <Accordion.Item value="changePassword">
+            <Accordion.Control>
+              <FormattedMessage id="admin.users.edit.update.change-password.title" />
+            </Accordion.Control>
+            <Accordion.Panel>
+              <form
+                onSubmit={passwordForm.onSubmit(async (values) => {
+                  userService
+                    .update(user.id, {
+                      password: values.password,
+                    })
+                    .then(() =>
+                      toast.success(
+                        t("admin.users.edit.update.notify.password.success"),
+                      ),
+                    )
+                    .catch(toast.axiosError);
+                })}
+                className="space-y-4 pt-4"
+              >
+                <PasswordInput
+                  label={t("admin.users.edit.update.change-password.field")}
+                  {...passwordForm.getInputProps("password")}
+                />
+                <Button variant="outline" type="submit">
+                  <FormattedMessage id="admin.users.edit.update.change-password.button" />
+                </Button>
+              </form>
+            </Accordion.Panel>
+          </Accordion.Item>
+        </Accordion>
+      )}
       <div className="flex justify-end">
         <Button type="submit" form="accountForm">
           <FormattedMessage id="common.button.save" />
