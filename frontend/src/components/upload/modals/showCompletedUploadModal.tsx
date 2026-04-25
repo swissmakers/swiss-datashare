@@ -8,6 +8,9 @@ import { CompletedShare } from "../../../types/share.type";
 import CopyTextField from "../CopyTextField";
 import { Button } from "../../../components/ui";
 import { ModalContextType } from "../../../contexts/ModalContext";
+import useConfig from "../../../hooks/config.hook";
+import useUser from "../../../hooks/user.hook";
+import { getHomeEntryHref } from "../../../utils/homeEntryRoute.util";
 
 const showCompletedUploadModal = (
   modals: ModalContextType,
@@ -25,6 +28,8 @@ const showCompletedUploadModal = (
 
 const Body = ({ share, modals }: { share: CompletedShare; modals: ModalContextType }) => {
   const router = useRouter();
+  const config = useConfig();
+  const { user } = useUser();
   const t = useTranslate();
 
   const isReverseShare = !!router.query["reverseShareToken"];
@@ -57,7 +62,7 @@ const Body = ({ share, modals }: { share: CompletedShare; modals: ModalContextTy
         onClick={() => {
           modals.closeAll();
           if (isReverseShare) {
-            router.push("/");
+            router.push(getHomeEntryHref(user, config.get));
           } else {
             router.push("/upload");
           }

@@ -2,6 +2,8 @@ import Link from "next/link";
 import { Dispatch, SetStateAction } from "react";
 import { FormattedMessage } from "react-intl";
 import useConfig from "../../../hooks/config.hook";
+import useUser from "../../../hooks/user.hook";
+import { getHomeEntryHref } from "../../../utils/homeEntryRoute.util";
 import Logo from "../../Logo";
 import { Button } from "../../ui";
 import { Bars3Icon } from "@heroicons/react/24/outline";
@@ -21,6 +23,8 @@ const ConfigurationHeader = ({
   headerPreview?: AdminHeaderBrandingPreview;
 }) => {
   const config = useConfig();
+  const { user } = useUser();
+  const logoHref = getHomeEntryHref(user, config.get);
   const scaleOverride = headerPreview?.logoScalePercent;
   const showAppName =
     headerPreview?.headerShowAppName ??
@@ -36,7 +40,7 @@ const ConfigurationHeader = ({
           <Bars3Icon className="h-6 w-6" />
         </button>
         <div className="flex items-center justify-between w-full">
-          <Link href="/" className="flex items-center gap-2 min-w-0">
+          <Link href={logoHref} className="flex items-center gap-2 min-w-0">
             <Logo
               placement="adminHeader"
               scalePercentOverride={scaleOverride}

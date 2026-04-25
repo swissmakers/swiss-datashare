@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import {
   TbArrowRight,
   TbCode,
@@ -17,30 +17,34 @@ import useConfig from "../hooks/config.hook";
 import useTranslate from "../hooks/useTranslate.hook";
 import { Button, Container, Card } from "../components/ui";
 import { hasUseCase } from "../utils/useCase.util";
+import { getHomeEntryHref } from "../utils/homeEntryRoute.util";
 
 export default function Home() {
-  const { refreshUser } = useUser();
+  const { user } = useUser();
   const router = useRouter();
   const config = useConfig();
   const t = useTranslate();
   const [signupEnabled, setSignupEnabled] = useState(true);
 
-  // If user is already authenticated, redirect to the upload page
-  useEffect(() => {
-    refreshUser().then((user) => {
-      if (user) {
-        router.replace("/upload");
-      }
-    });
+  // Keep marketing home invisible when disabled or when already signed in (before paint when possible).
+  useLayoutEffect(() => {
+    if (user) {
+      void router.replace("/upload");
+      return;
+    }
+    if (config.get("general.showHomePage") === false) {
+      void router.replace(getHomeEntryHref(null, config.get));
+    }
+  }, [user, router, config]);
 
-    // If registration is disabled, get started button should redirect to the sign in page
+  useEffect(() => {
     try {
       const allowRegistration = config.get("share.allowRegistration");
       setSignupEnabled(allowRegistration !== false);
-    } catch (error) {
+    } catch {
       setSignupEnabled(true);
     }
-  }, [config, refreshUser, router]);
+  }, [config]);
 
   const getButtonHref = () => {
     return signupEnabled ? "/auth/signUp" : "/auth/signIn";
