@@ -618,6 +618,7 @@ export default {
   "common.notify.copied": "Votre lien a été copié dans le presse-papiers",
   "common.error": "Erreur",
   "common.error.unknown": "Une erreur inconnue est survenue",
+  "common.error.request-timeout": "Le serveur n'a pas répondu à temps. Veuillez réessayer ou recharger la page.",
   "common.error.invalid-email": "Adresse courriel invalide",
   "common.error.too-short": "Doit comporter au moins {length} caractères",
   "common.error.too-long": "Doit comporter au plus {length} caractères",

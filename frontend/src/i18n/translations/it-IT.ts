@@ -618,6 +618,7 @@ export default {
   "common.notify.copied": "Il tuo collegamento è stato copiato negli appunti",
   "common.error": "Errore",
   "common.error.unknown": "Si è verificato un errore sconosciuto",
+  "common.error.request-timeout": "Il server non ha risposto in tempo. Riprovare o ricaricare la pagina.",
   "common.error.invalid-email": "Indirizzo email non valido",
   "common.error.too-short": "Deve contenere almeno {length} caratteri",
   "common.error.too-long": "Deve contenere al massimo {length} caratteri",

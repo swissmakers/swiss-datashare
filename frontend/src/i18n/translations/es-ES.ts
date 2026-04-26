@@ -618,6 +618,7 @@ export default {
   "common.notify.copied": "Tu enlace se ha copiado al portapapeles",
   "common.error": "Error",
   "common.error.unknown": "Ocurrió un error desconocido",
+  "common.error.request-timeout": "El servidor no respondió a tiempo. Inténtelo de nuevo o recargue la página.",
   "common.error.invalid-email": "Correo electrónico no válido",
   "common.error.too-short": "Debe tener al menos {length} caracteres",
   "common.error.too-long": "Debe tener como máximo {length} caracteres",
