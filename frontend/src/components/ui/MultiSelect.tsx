@@ -7,6 +7,10 @@ export interface MultiSelectProps {
   error?: string;
   helperText?: string;
   data?: { value: string; label: string }[];
+  /** When set (including `[]`), creatable mode merges these with selected values for the dropdown. */
+  suggestions?: { value: string; label: string }[];
+  /** Debounced search callback for loading `suggestions` from the server (creatable + suggestions). */
+  onSearchChange?: (query: string) => void;
   value?: string[];
   onChange?: (value: string[]) => void;
   placeholder?: string;
@@ -24,6 +28,8 @@ const MultiSelect = ({
   error,
   helperText,
   data = [],
+  suggestions,
+  onSearchChange,
   value = [],
   onChange,
   placeholder,
@@ -57,51 +63,77 @@ const MultiSelect = ({
     };
   }, [isOpen]);
 
-  // For creatable mode, treat value array as string array directly
-  const selectedValues = creatable ? value : value;
-  const dataItems = creatable 
-    ? value.map(v => ({ value: v, label: v }))
+  useEffect(() => {
+    if (!creatable || !onSearchChange) return;
+    const id = window.setTimeout(() => onSearchChange(inputValue), 250);
+    return () => window.clearTimeout(id);
+  }, [inputValue, creatable, onSearchChange]);
+
+  useEffect(() => {
+    if (isOpen && creatable && onSearchChange) {
+      onSearchChange(inputValue);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- refresh suggestions when dropdown opens
+  }, [isOpen]);
+
+  const hasSuggestions = suggestions !== undefined;
+  const suggestionPool = hasSuggestions
+    ? (suggestions ?? []).filter((s) => !value.includes(s.value))
+    : [];
+  const selectedPool = value.map((v) => ({ value: v, label: v }));
+
+  const dataItems = creatable
+    ? hasSuggestions
+      ? [...suggestionPool, ...selectedPool]
+      : selectedPool
     : data;
 
-  const filteredData = searchable && searchValue
-    ? dataItems.filter(item => 
-        item.label.toLowerCase().includes(searchValue.toLowerCase()) ||
-        item.value.toLowerCase().includes(searchValue.toLowerCase())
-      )
-    : dataItems;
+  const filteredData =
+    searchable && searchValue.trim()
+      ? dataItems.filter(
+          (item) =>
+            item.label.toLowerCase().includes(searchValue.toLowerCase()) ||
+            item.value.toLowerCase().includes(searchValue.toLowerCase()),
+        )
+      : dataItems;
 
   const selectedItems = creatable
-    ? selectedValues.map(v => ({ value: v, label: v }))
-    : dataItems.filter(item => value.includes(item.value));
+    ? value.map((v) => ({ value: v, label: v }))
+    : dataItems.filter((item) => value.includes(item.value));
 
   const toggleItem = (itemValue: string) => {
     const newValue = value.includes(itemValue)
-      ? value.filter(v => v !== itemValue)
+      ? value.filter((v) => v !== itemValue)
       : [...value, itemValue];
     onChange?.(newValue);
     setSearchValue("");
+    setInputValue("");
   };
 
   const handleCreate = (query: string) => {
-    if (creatable && onCreate) {
-      const result = onCreate(query);
-      if (result) {
-        const newValue = [...value, result];
-        onChange?.(newValue);
-      } else if (!value.includes(query)) {
-        const newValue = [...value, query];
-        onChange?.(newValue);
-      }
-      setInputValue("");
-      setSearchValue("");
+    if (!creatable || !onCreate) return;
+    const result = onCreate(query);
+    if (result && !value.includes(result)) {
+      onChange?.([...value, result]);
     }
+    setInputValue("");
+    setSearchValue("");
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (onKeyDown) {
       onKeyDown(e);
     }
-    if (creatable && (e.key === "Enter" || e.key === "," || e.key === ";")) {
+    if (!creatable) return;
+
+    if (e.key === " ") {
+      e.preventDefault();
+      setInputValue("");
+      setSearchValue("");
+      return;
+    }
+
+    if (e.key === "Enter" || e.key === "," || e.key === ";") {
       e.preventDefault();
       const trimmed = inputValue.trim();
       if (trimmed) {
@@ -109,6 +141,7 @@ const MultiSelect = ({
         if (inputRef.current) {
           inputRef.current.value = "";
           setInputValue("");
+          setSearchValue("");
         }
       }
     }
@@ -116,7 +149,7 @@ const MultiSelect = ({
 
   const removeItem = (itemValue: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    onChange?.(value.filter(v => v !== itemValue));
+    onChange?.(value.filter((v) => v !== itemValue));
   };
 
   return (
@@ -135,12 +168,12 @@ const MultiSelect = ({
             "focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent",
             "dark:bg-gray-800 dark:text-text-dark dark:border-gray-600 dark:focus:ring-primary-400",
             error && "border-red-500 focus:ring-red-500 dark:border-red-400",
-            "flex items-center justify-between min-h-[42px]"
+            "flex items-center justify-between min-h-[42px]",
           )}
         >
           <div className="flex flex-wrap gap-1 flex-1">
             {selectedItems.length > 0 ? (
-              selectedItems.map(item => (
+              selectedItems.map((item) => (
                 <span
                   key={item.value}
                   className="inline-flex items-center gap-1 px-2 py-1 bg-primary-100 text-primary-800 rounded text-sm dark:bg-primary-900/30 dark:text-primary-300"
@@ -156,13 +189,15 @@ const MultiSelect = ({
                 </span>
               ))
             ) : (
-              <span className="text-gray-500 dark:text-gray-400">{placeholder || "Select items..."}</span>
+              <span className="text-gray-500 dark:text-gray-400">
+                {placeholder || "Select items..."}
+              </span>
             )}
           </div>
           <svg
             className={clsx(
               "w-5 h-5 text-gray-400 transition-transform",
-              isOpen && "transform rotate-180"
+              isOpen && "transform rotate-180",
             )}
             fill="none"
             stroke="currentColor"
@@ -179,7 +214,7 @@ const MultiSelect = ({
                 <input
                   ref={inputRef}
                   type="text"
-                  inputMode={inputMode as any}
+                  inputMode={inputMode as React.HTMLAttributes<HTMLInputElement>["inputMode"]}
                   value={creatable ? inputValue : searchValue}
                   onChange={(e) => {
                     const val = e.target.value;
@@ -198,24 +233,27 @@ const MultiSelect = ({
               </div>
             )}
             <div className="py-1">
-              {creatable && searchValue && !filteredData.some(item => item.value === searchValue) && (
-                <button
-                  type="button"
-                  onClick={() => handleCreate(searchValue)}
-                  className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-primary-600 dark:text-primary-400"
-                >
-                  {getCreateLabel ? getCreateLabel(searchValue) : `+ ${searchValue}`}
-                </button>
-              )}
+              {creatable &&
+                searchValue &&
+                !filteredData.some((item) => item.value === searchValue) && (
+                  <button
+                    type="button"
+                    onClick={() => handleCreate(searchValue)}
+                    className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-primary-600 dark:text-primary-400"
+                  >
+                    {getCreateLabel ? getCreateLabel(searchValue) : `+ ${searchValue}`}
+                  </button>
+                )}
               {filteredData.length > 0 ? (
-                filteredData.map(item => (
+                filteredData.map((item) => (
                   <button
                     key={item.value}
                     type="button"
                     onClick={() => toggleItem(item.value)}
                     className={clsx(
                       "w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors",
-                      value.includes(item.value) && "bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300"
+                      value.includes(item.value) &&
+                        "bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300",
                     )}
                   >
                     <div className="flex items-center gap-2">
@@ -229,18 +267,18 @@ const MultiSelect = ({
                     </div>
                   </button>
                 ))
-              ) : !creatable && (
-                <div className="px-4 py-2 text-sm text-gray-500 dark:text-gray-400">
-                  No options found
-                </div>
+              ) : (
+                !creatable && (
+                  <div className="px-4 py-2 text-sm text-gray-500 dark:text-gray-400">
+                    No options found
+                  </div>
+                )
               )}
             </div>
           </div>
         )}
       </div>
-      {error && (
-        <p className="mt-1.5 text-sm text-red-600 dark:text-red-400">{error}</p>
-      )}
+      {error && <p className="mt-1.5 text-sm text-red-600 dark:text-red-400">{error}</p>}
       {helperText && !error && (
         <p className="mt-1.5 text-sm text-gray-500 dark:text-gray-400">{helperText}</p>
       )}
@@ -249,4 +287,3 @@ const MultiSelect = ({
 };
 
 export default MultiSelect;
-

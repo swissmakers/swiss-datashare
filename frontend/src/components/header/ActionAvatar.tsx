@@ -1,7 +1,7 @@
 import { Menu, Transition } from "@headlessui/react";
 import Link from "next/link";
 import { Fragment } from "react";
-import { TbDoorExit, TbSettings, TbUser } from "react-icons/tb";
+import { TbAddressBook, TbDoorExit, TbSettings, TbUser } from "react-icons/tb";
 import { UserCircleIcon } from "@heroicons/react/24/outline";
 import useUser from "../../hooks/user.hook";
 import authService from "../../services/auth.service";
@@ -51,6 +51,22 @@ const ActionAvatar = () => {
                 >
                   <TbUser className="mr-3 h-4 w-4" />
                   <FormattedMessage id="navbar.avatar.account" />
+                </Link>
+              )}
+            </Menu.Item>
+            <Menu.Item>
+              {({ active }) => (
+                <Link
+                  href="/account/contacts"
+                  className={clsx(
+                    "flex items-center px-4 py-2 text-sm transition-colors",
+                    active
+                      ? "bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                      : "text-gray-700 dark:text-gray-300"
+                  )}
+                >
+                  <TbAddressBook className="mr-3 h-4 w-4" />
+                  <FormattedMessage id="navbar.avatar.contacts" />
                 </Link>
               )}
             </Menu.Item>
