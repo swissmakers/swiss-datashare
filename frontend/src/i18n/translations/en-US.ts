@@ -298,7 +298,7 @@ export default {
   "upload.modal.completed.reverse-share-finished": "Your files were uploaded successfully.",
   "upload.modal.completed.notified-reverse-share-creator": "The data request creator has been notified. You can still copy and send the link manually if needed.",
   "upload.reverse-share.title": "Upload your files here",
-  "upload.reverse-share.description": "Upload your files. You can also add an optional note, then click \"Finish upload\" to securely send your files to the request owner.",
+  "upload.reverse-share.description": "You can also add an optional note, then click \"Finish upload\" to securely send your files to the request owner.",
   "upload.reverse-share.dropzone.title": "Upload your files",
   "upload.reverse-share.dropzone.description": "Drag and drop all files here that you want to send. Maximum total size: {maxSize}.",
   "upload.reverse-share.note.label": "Message to the request owner (optional)",

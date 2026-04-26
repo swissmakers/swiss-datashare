@@ -298,7 +298,7 @@ export default {
   "upload.modal.completed.reverse-share-finished": "I tuoi file sono stati caricati correttamente.",
   "upload.modal.completed.notified-reverse-share-creator": "Abbiamo avvisato il creatore della condivisione inversa. Puoi anche condividere manualmente questo link tramite altri mezzi.",
   "upload.reverse-share.title": "Carica i tuoi file qui",
-  "upload.reverse-share.description": "Trascina i file o selezionali dal dispositivo. Puoi anche aggiungere una nota facoltativa, quindi fai clic su «Termina caricamento» per inviare i file in modo sicuro al richiedente.",
+  "upload.reverse-share.description": "Puoi anche aggiungere una nota facoltativa, quindi fai clic su «Termina caricamento» per inviare i file in modo sicuro al richiedente.",
   "upload.reverse-share.dropzone.title": "Carica i tuoi file",
   "upload.reverse-share.dropzone.description": "Trascina qui tutti i file che vuoi inviare. Dimensione totale massima: {maxSize}.",
   "upload.reverse-share.note.label": "Messaggio al richiedente (facoltativo)",

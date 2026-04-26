@@ -31,9 +31,8 @@ const lawyerOverridesByLocale: Record<string, Messages> = {
     "home.how.step2.title": "Share Data",
     "home.how.step3.title": "Share confidentially",
     "upload.title": "Share Data",
-    "upload.reverse-share.title": "Upload requested documents",
-    "upload.reverse-share.description":
-      "Upload documents for this request. Add an optional note, then click \"Finish upload\".",
+    "upload.reverse-share.title": "Upload your files",
+    "upload.reverse-share.description": "You can also add an optional note, then click \"Finish upload\" to securely send your files to the request owner.",
     "common.button.share": "Share Data",
     "account.shares.title": "Matter shares",
     "account.reverseShares.title": "Data Requests",

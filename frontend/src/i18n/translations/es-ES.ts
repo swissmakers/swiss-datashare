@@ -298,7 +298,7 @@ export default {
   "upload.modal.completed.reverse-share-finished": "Tus archivos se han subido correctamente.",
   "upload.modal.completed.notified-reverse-share-creator": "Hemos notificado al creador de la compartición inversa. También puedes compartir manualmente este enlace con otros a través de otros medios.",
   "upload.reverse-share.title": "Sube tus archivos aquí",
-  "upload.reverse-share.description": "Arrastra y suelta tus archivos o selecciónalos en tu dispositivo. También puedes añadir una nota opcional y luego pulsar «Finalizar subida» para enviar tus archivos de forma segura al solicitante.",
+  "upload.reverse-share.description": "También puedes añadir una nota opcional y luego pulsar «Finalizar subida» para enviar tus archivos de forma segura al solicitante.",
   "upload.reverse-share.dropzone.title": "Sube tus archivos",
   "upload.reverse-share.dropzone.description": "Arrastra aquí todos los archivos que quieras enviar. Tamaño total máximo: {maxSize}.",
   "upload.reverse-share.note.label": "Mensaje para el solicitante (opcional)",
