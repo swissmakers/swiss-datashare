@@ -45,6 +45,18 @@ export function getSiteDefaultLocaleFromConfigs(configs: Config[]): string {
   ).toString();
 }
 
+/** Resolved text for a public config key (`category.name`), or empty string. */
+export function getPublicConfigText(
+  configs: Config[] | null | undefined,
+  key: string,
+): string {
+  if (!configs?.length) return "";
+  const row = configs.find((c) => c.key === key);
+  const raw = row?.value ?? row?.defaultValue;
+  if (raw == null) return "";
+  return String(raw);
+}
+
 export type PageLocaleProps = {
   creatorLocale?: string | null;
   initialResolvedLocale?: string;

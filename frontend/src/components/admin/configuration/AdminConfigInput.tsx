@@ -93,7 +93,12 @@ const AdminConfigInput = ({
           value={textValue}
           placeholder={configVariable.defaultValue}
           onChange={(e) => onValueChange(configVariable, e.target.value)}
-          rows={4}
+          rows={
+            configVariable.key === "general.customHeadCss" ||
+            configVariable.key === "general.customHeadJs"
+              ? 12
+              : 4
+          }
         />
       )}
       {configVariable.type == "number" && (

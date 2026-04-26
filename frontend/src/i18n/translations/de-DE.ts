@@ -333,6 +333,12 @@ export default {
   "admin.config.general.logo-scale-percent.description": "Skalierung (25-250 %) für Logo in Hauptleiste, Startseite, Admin-Leiste und E-Mails. Breite Logos werden über die max. Breite begrenzt, hohe über die max. Höhe.",
   "admin.config.general.header-show-app-name": "Anwendungsname in der Kopfzeile",
   "admin.config.general.header-show-app-name.description": "Wenn deaktiviert, erscheint in der oberen Leiste (Hauptseite und Admin) nur das Logo. Seitentitel und Startseiten-Überschrift bleiben unverändert.",
+  "admin.config.general.custom-head-css": "Eigenes CSS im Seitenkopf",
+  "admin.config.general.custom-head-css.description":
+    "Optionales CSS für alle Besucher auf jeder Seite (bereits in der ersten HTML-Antwort). Bei Konflikten mit gebündelten Styles höhere Spezifität oder !important verwenden. Nur vertrauenswürdige Administratoren sollten dies bearbeiten.",
+  "admin.config.general.custom-head-js": "Eigenes JavaScript im Seitenkopf",
+  "admin.config.general.custom-head-js.description":
+    "Optionales JavaScript im Kopf jeder Seite für alle Besucher (läuft früh). Vermeiden Sie, die React-Hydration zu stören (z. B. Root-Knoten nicht vor dem Mount ersetzen). Nur vertrauenswürdige Admins; eine künftige Content-Security-Policy könnte Inline-Skripte blockieren.",
   "admin.config.general.logo.preview-header": "Vorschau (Admin-Kopfzeile)",
   "admin.config.cache.ttl": "TTL",
   "admin.config.cache.ttl.description": "Zeit in Sekunden, wie lange Informationen im Cache gespeichert bleiben.",

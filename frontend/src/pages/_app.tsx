@@ -29,6 +29,7 @@ import { setGlobalToast } from "../utils/toast.util";
 import { mergeMessagesForUseCase } from "../i18n/useCaseOverrides";
 import {
   fetchPublicConfigList,
+  getPublicConfigText,
   resolveAppInitialLocale,
 } from "../utils/initialLocale.app.util";
 import "../styles/globals.css";
@@ -38,6 +39,8 @@ const excludeDefaultLayoutRoutes = ["/admin/config/[category]"];
 type AppPageProps = AppProps["pageProps"] & {
   creatorLocale?: string | null;
   initialResolvedLocale?: string;
+  customHeadCss?: string;
+  customHeadJs?: string;
 };
 
 function SwissDataShare({ Component, pageProps }: AppProps) {
@@ -49,8 +52,16 @@ function SwissDataShare({ Component, pageProps }: AppProps) {
     setGlobalToast({ success, error, warning, info });
   }, [success, error, warning, info]);
 
-  const { creatorLocale, initialResolvedLocale } =
-    pageProps as AppPageProps;
+  const {
+    creatorLocale,
+    initialResolvedLocale,
+    customHeadCss = "",
+    customHeadJs = "",
+    ...componentPageProps
+  } = pageProps as AppPageProps;
+
+  const trimmedCustomHeadCss = customHeadCss.trim();
+  const trimmedCustomHeadJs = customHeadJs.trim();
 
   const [user, setUser] = useState<CurrentUser | null>(null);
   const [route, setRoute] = useState<string>(router.pathname);
@@ -174,6 +185,18 @@ function SwissDataShare({ Component, pageProps }: AppProps) {
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no"
         />
+        {trimmedCustomHeadCss ? (
+          <style
+            data-app-custom-head-css
+            dangerouslySetInnerHTML={{ __html: trimmedCustomHeadCss }}
+          />
+        ) : null}
+        {trimmedCustomHeadJs ? (
+          <script
+            data-app-custom-head-js
+            dangerouslySetInnerHTML={{ __html: trimmedCustomHeadJs }}
+          />
+        ) : null}
       </Head>
       <IntlProvider
         messages={mergedMessages}
@@ -207,13 +230,13 @@ function SwissDataShare({ Component, pageProps }: AppProps) {
               )}
             >
               {excludeDefaultLayoutRoutes.includes(route) ? (
-                <Component {...pageProps} />
+                <Component {...componentPageProps} />
               ) : (
                 <div className="flex flex-col min-h-screen">
                   <div className="flex-1">
                     <Header />
                     <main>
-                      <Component {...pageProps} />
+                      <Component {...componentPageProps} />
                     </main>
                   </div>
                   <Footer />
@@ -253,11 +276,16 @@ SwissDataShare.getInitialProps = async (appContext: AppContext) => {
     initialResolvedLocale = LOCALES.ENGLISH.code;
   }
 
+  const customHeadCss = getPublicConfigText(configs, "general.customHeadCss");
+  const customHeadJs = getPublicConfigText(configs, "general.customHeadJs");
+
   return {
     ...appProps,
     pageProps: {
       ...pageProps,
       initialResolvedLocale,
+      customHeadCss,
+      customHeadJs,
     },
   };
 };

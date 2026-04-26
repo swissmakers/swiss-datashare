@@ -333,6 +333,12 @@ export default {
   "admin.config.general.logo-scale-percent.description": "Escala relativa (25-250 %) del logo en la cabecera principal, inicio, barra de administración y correos salientes. Los logos anchos se limitan por el ancho máximo; los altos, por la altura máxima.",
   "admin.config.general.header-show-app-name": "Mostrar el nombre de la aplicación en la cabecera",
   "admin.config.general.header-show-app-name.description": "Si está desactivado, solo se muestra el logo en la barra superior (sitio principal y administración). Los títulos de página y el titular de inicio no cambian.",
+  "admin.config.general.custom-head-css": "CSS personalizado en el encabezado",
+  "admin.config.general.custom-head-css.description":
+    "CSS opcional inyectado en cada página para todos los visitantes (incluido en la primera respuesta HTML). Use mayor especificidad o !important si ganan los estilos empaquetados. Solo administradores de confianza deben editarlo.",
+  "admin.config.general.custom-head-js": "JavaScript personalizado en el encabezado",
+  "admin.config.general.custom-head-js.description":
+    "JavaScript opcional en el encabezado de cada página para todos los visitantes (se ejecuta pronto). Evite romper la hidratación de React (por ejemplo, no reemplace el nodo raíz antes del montaje). Solo administradores de confianza; una futura Content-Security-Policy podría bloquear scripts en línea.",
   "admin.config.general.logo.preview-header": "Vista previa (barra de administración)",
   "admin.config.cache.ttl": "TTL",
   "admin.config.cache.ttl.description": "Tiempo en segundos durante el cual la información se mantiene en caché.",

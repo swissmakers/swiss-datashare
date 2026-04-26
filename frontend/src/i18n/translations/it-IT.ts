@@ -333,6 +333,12 @@ export default {
   "admin.config.general.logo-scale-percent.description": "Scala relativa (25-250 %) per il logo nell'intestazione principale, home, barra admin ed e-mail in uscita. Loghi larghi sono limitati in larghezza; quelli alti in altezza.",
   "admin.config.general.header-show-app-name": "Mostra il nome dell'applicazione nell'intestazione",
   "admin.config.general.header-show-app-name.description": "Se disattivato, nella barra superiore (sito principale e admin) viene mostrato solo il logo. Titoli di pagina e titolo home restano invariati.",
+  "admin.config.general.custom-head-css": "CSS personalizzato nell'intestazione",
+  "admin.config.general.custom-head-css.description":
+    "CSS opzionale iniettato in ogni pagina per tutti i visitatori (già nella prima risposta HTML). In caso di conflitto con gli stili del bundle usare maggiore specificità o !important. Solo amministratori fidati dovrebbero modificarlo.",
+  "admin.config.general.custom-head-js": "JavaScript personalizzato nell'intestazione",
+  "admin.config.general.custom-head-js.description":
+    "JavaScript opzionale nell'intestazione di ogni pagina per tutti i visitatori (esecuzione anticipata). Evitare di compromettere l'idratazione React (ad es. non sostituire il nodo root prima del mount). Solo amministratori fidati; una futura Content-Security-Policy potrebbe bloccare script inline.",
   "admin.config.general.logo.preview-header": "Anteprima (barra admin)",
   "admin.config.cache.ttl": "TTL",
   "admin.config.cache.ttl.description": "Tempo (in secondi) di mantenimento delle informazioni all'interno della cache.",

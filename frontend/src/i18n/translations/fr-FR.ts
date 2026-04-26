@@ -333,6 +333,12 @@ export default {
   "admin.config.general.logo-scale-percent.description": "Échelle relative (25-250 %) pour le logo dans l'en-tête principal, l'accueil, la barre d'administration et les e-mails sortants. Les logos larges sont limités en largeur ; les logos hauts en hauteur.",
   "admin.config.general.header-show-app-name": "Afficher le nom de l'application dans l'en-tête",
   "admin.config.general.header-show-app-name.description": "Si désactivé, seul le logo s'affiche dans la barre supérieure (site principal et admin). Les titres de page et le titre d'accueil restent inchangés.",
+  "admin.config.general.custom-head-css": "CSS personnalisé dans l'en-tête",
+  "admin.config.general.custom-head-css.description":
+    "CSS facultatif injecté sur chaque page pour tous les visiteurs (dès la première réponse HTML). En cas de conflit avec les styles groupés, augmentez la spécificité ou utilisez !important. Réservé aux administrateurs de confiance.",
+  "admin.config.general.custom-head-js": "JavaScript personnalisé dans l'en-tête",
+  "admin.config.general.custom-head-js.description":
+    "JavaScript facultatif dans l'en-tête de chaque page pour tous les visiteurs (exécution précoce). Évitez de casser l'hydratation React (par ex. ne remplacez pas le nœud racine avant le montage). Administrateurs de confiance uniquement ; une future Content-Security-Policy peut bloquer les scripts inline.",
   "admin.config.general.logo.preview-header": "Aperçu (barre d'administration)",
   "admin.config.cache.ttl": "DDV",
   "admin.config.cache.ttl.description": "Durée de vie des informations conservées en cache.",
