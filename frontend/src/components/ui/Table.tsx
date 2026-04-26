@@ -5,6 +5,8 @@ export interface TableProps {
   children: ReactNode;
   className?: string;
   striped?: boolean;
+  /** When false, no horizontal scroll wrapper — use with table-fixed + wrapping cells so the table stays within the layout width. */
+  scrollContainer?: boolean;
 }
 
 export interface TableHeaderProps {
@@ -29,22 +31,29 @@ export interface TableCellProps {
   className?: string;
   header?: boolean;
   style?: React.CSSProperties;
+  /** Body cells only: allow line breaks instead of forcing a single line (helps fixed-width tables fit the container). */
+  allowWrap?: boolean;
 }
 
-const Table = ({ children, className, striped = false }: TableProps) => {
-  return (
-    <div className="overflow-x-auto">
-      <table
-        className={clsx(
-          "w-full border-collapse",
-          striped && "table-auto",
-          className
-        )}
-      >
-        {children}
-      </table>
-    </div>
+const Table = ({
+  children,
+  className,
+  striped = false,
+  scrollContainer = true,
+}: TableProps) => {
+  const table = (
+    <table
+      className={clsx(
+        "w-full border-collapse",
+        striped && "table-auto",
+        className
+      )}
+    >
+      {children}
+    </table>
   );
+  if (!scrollContainer) return table;
+  return <div className="overflow-x-auto">{table}</div>;
 };
 
 const TableHeader = ({ children, className }: TableHeaderProps) => {
@@ -71,14 +80,25 @@ const TableRow = ({ children, className, hover = false, onClick }: TableRowProps
   );
 };
 
-const TableCell = ({ children, className, header = false, style }: TableCellProps) => {
+const TableCell = ({
+  children,
+  className,
+  header = false,
+  style,
+  allowWrap = false,
+}: TableCellProps) => {
   const Component = header ? "th" : "td";
   return (
     <Component
       className={clsx(
         header
           ? "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-400"
-          : "px-6 py-4 whitespace-nowrap text-sm text-text dark:text-text-dark",
+          : clsx(
+              "px-6 py-4 text-sm text-text dark:text-text-dark align-top",
+              allowWrap
+                ? "whitespace-normal break-words min-w-0"
+                : "whitespace-nowrap",
+            ),
         className
       )}
       style={style}

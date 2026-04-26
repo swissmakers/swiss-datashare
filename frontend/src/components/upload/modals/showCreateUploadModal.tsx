@@ -1,5 +1,5 @@
 import moment from "moment";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { TbAlertCircle } from "react-icons/tb";
 import { FormattedMessage } from "react-intl";
 import * as yup from "yup";
@@ -7,6 +7,7 @@ import useTranslate, {
   translateOutsideContext,
 } from "../../../hooks/useTranslate.hook";
 import shareService from "../../../services/share.service";
+import contactService from "../../../services/contact.service";
 import { FileUpload } from "../../../types/File.type";
 import { CreateShare } from "../../../types/share.type";
 import { getExpirationPreview } from "../../../utils/date.util";
@@ -111,6 +112,30 @@ const CreateUploadModalBody = ({
   const generatedLink = generateShareId(options.shareIdLength);
 
   const [showNotSignedInAlert, setShowNotSignedInAlert] = useState(true);
+  const [recipientSuggestions, setRecipientSuggestions] = useState<
+    { value: string; label: string }[]
+  >([]);
+
+  const loadRecipientSuggestions = useCallback(
+    async (q: string) => {
+      if (!options.isUserSignedIn || !options.enableEmailRecepients) {
+        setRecipientSuggestions([]);
+        return;
+      }
+      try {
+        const list = await contactService.list(q, 12);
+        setRecipientSuggestions(
+          list.map((c) => ({
+            value: c.email,
+            label: `${c.name} (${t(`contacts.kind.${c.kind}`)}) — ${c.email}`,
+          })),
+        );
+      } catch {
+        setRecipientSuggestions([]);
+      }
+    },
+    [options.isUserSignedIn, options.enableEmailRecepients, t],
+  );
 
   const validationSchema = yup.object().shape({
     link: yup
@@ -359,35 +384,37 @@ const CreateUploadModalBody = ({
               placeholder={t("upload.modal.accordion.email.placeholder")}
               searchable
               creatable
+              suggestions={
+                options.isUserSignedIn ? recipientSuggestions : undefined
+              }
+              onSearchChange={
+                options.isUserSignedIn ? loadRecipientSuggestions : undefined
+              }
+              error={form.errors.recipients}
               getCreateLabel={(query) => `+ ${query}`}
               onCreate={(query) => {
-                if (!query.match(/^\S+@\S+\.\S+$/)) {
+                const trimmed = query.trim();
+                const norm = trimmed.toLowerCase();
+                if (!trimmed.match(/^\S+@\S+\.\S+$/)) {
                   form.setErrors({
                     recipients: t("upload.modal.accordion.email.invalid-email"),
                   });
-                } else {
-                  form.setErrors({ recipients: undefined });
-                  const newRecipients = [...form.values.recipients, query];
-                  form.setValue("recipients", newRecipients);
-                  return query;
+                  return undefined;
                 }
+                if (
+                  form.values.recipients.some(
+                    (r) => r.toLowerCase() === norm,
+                  )
+                ) {
+                  form.setErrors({ recipients: undefined });
+                  return undefined;
+                }
+                form.setErrors({ recipients: undefined });
+                const newRecipients = [...form.values.recipients, trimmed];
+                form.setValue("recipients", newRecipients);
+                return trimmed;
               }}
               inputMode="email"
-              onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-                // Add email on comma or semicolon
-                if (e.key === "Enter" || e.key === "," || e.key === ";") {
-                  e.preventDefault();
-                  const inputValue = (e.target as HTMLInputElement).value.trim();
-                  if (inputValue.match(/^\S+@\S+\.\S+$/)) {
-                    const newRecipients = [...form.values.recipients, inputValue];
-                    form.setValue("recipients", newRecipients);
-                    (e.target as HTMLInputElement).value = "";
-                  }
-                } else if (e.key === " ") {
-                  e.preventDefault();
-                  (e.target as HTMLInputElement).value = "";
-                }
-              }}
             />
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
               <FormattedMessage id="upload.modal.accordion.email.helper" />

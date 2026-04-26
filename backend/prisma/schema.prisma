@@ -39,6 +39,27 @@ model User {
   stripeLastPaymentAt            DateTime?
   saasPayments                   SaasPayment[]
   saasWebhookEvents              SaasWebhookEvent[]
+  contacts                       UserContact[]
+}
+
+model UserContact {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  /// person | company
+  kind  String
+  name  String
+  email String
+  notes String?
+
+  @@unique([userId, email])
+  @@index([userId])
+  @@index([userId, name])
+  @@index([userId, email])
 }
 
 model RefreshToken {

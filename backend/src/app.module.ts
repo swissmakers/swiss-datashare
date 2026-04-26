@@ -18,11 +18,13 @@ import { ReverseShareModule } from "./reverseShare/reverseShare.module";
 import { SaasModule } from "./saas/saas.module";
 import { ShareModule } from "./share/share.module";
 import { UserModule } from "./user/user.module";
+import { ContactModule } from "./contact/contact.module";
 
 @Module({
   imports: [
     ConfigModule,
     AuthModule,
+    ContactModule,
     ShareModule,
     FileModule,
     EmailModule,

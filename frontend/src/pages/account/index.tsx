@@ -158,9 +158,9 @@ const Account = () => {
     <>
       <Meta title={t("account.title")} />
       <Container size="sm">
-        <h2 className="text-2xl font-bold mb-6 text-text dark:text-text-dark">
+        <h1 className="page-title mb-8">
           <FormattedMessage id="account.title" />
-        </h2>
+        </h1>
         
         <Card padding="lg" className={accountCardClass}>
           <div className="flex items-center gap-2 mb-4">

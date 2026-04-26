@@ -3,7 +3,14 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { Fragment, ReactNode, useEffect, useState } from "react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import { TbUser, TbSettings, TbDoorExit, TbLink, TbArrowLoopLeft } from "react-icons/tb";
+import {
+  TbAddressBook,
+  TbUser,
+  TbSettings,
+  TbDoorExit,
+  TbLink,
+  TbArrowLoopLeft,
+} from "react-icons/tb";
 import { FormattedMessage } from "react-intl";
 import useConfig from "../../hooks/config.hook";
 import useUser from "../../hooks/user.hook";
@@ -139,6 +146,14 @@ const Header = () => {
         >
           <TbUser className="mr-3 h-5 w-5" />
           <FormattedMessage id="navbar.avatar.account" />
+        </Link>
+        <Link
+          href="/account/contacts"
+          onClick={() => setMobileMenuOpen(false)}
+          className="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+        >
+          <TbAddressBook className="mr-3 h-5 w-5" />
+          <FormattedMessage id="navbar.avatar.contacts" />
         </Link>
         {user?.isAdmin && (
           <Link
