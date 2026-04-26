@@ -116,6 +116,8 @@ const uploadFile = async (
   const safeShareId = encodePathSegment(shareId);
   return (
     await api.post(`shares/${safeShareId}/files`, chunk, {
+      /** Chunk uploads can be large / slow; do not use the default API client timeout */
+      timeout: 0,
       headers: { "Content-Type": "application/octet-stream" },
       params: {
         id: file.id,

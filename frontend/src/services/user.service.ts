@@ -5,7 +5,12 @@ import {
   UpdateUser,
 } from "../types/user.type";
 import { getCookie } from "cookies-next";
+import {
+  getRequestTimeoutMessage,
+  isTransientApiError,
+} from "../utils/apiError.util";
 import { encodePathSegment } from "../utils/url.util";
+import toast from "../utils/toast.util";
 import api from "./api.service";
 import authService from "./auth.service";
 
@@ -35,15 +40,27 @@ const removeCurrentUser = async () => {
   await api.delete("/users/me");
 };
 
-const getCurrentUser = async (): Promise<CurrentUser | null> => {
-  try {
-    // Skip request when user has no auth cookie.
-    if (!getCookie("access_token")) return null;
+const loadCurrentUserProfile = async (): Promise<CurrentUser> => {
+  await authService.refreshAccessToken();
+  return (await api.get("users/me")).data;
+};
 
-    await authService.refreshAccessToken();
-    return (await api.get("users/me")).data;
-  } catch {
-    return null;
+const getCurrentUser = async (): Promise<CurrentUser | null> => {
+  // Skip request when user has no auth cookie.
+  if (!getCookie("access_token")) return null;
+
+  try {
+    return await loadCurrentUserProfile();
+  } catch (e1) {
+    if (!isTransientApiError(e1)) return null;
+    try {
+      return await loadCurrentUserProfile();
+    } catch (e2) {
+      if (isTransientApiError(e2)) {
+        toast.error(getRequestTimeoutMessage());
+      }
+      return null;
+    }
   }
 };
 

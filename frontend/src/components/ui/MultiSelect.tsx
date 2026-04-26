@@ -46,6 +46,8 @@ const MultiSelect = ({
   const [inputValue, setInputValue] = useState("");
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const onSearchChangeRef = useRef(onSearchChange);
+  onSearchChangeRef.current = onSearchChange;
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -64,17 +66,12 @@ const MultiSelect = ({
   }, [isOpen]);
 
   useEffect(() => {
-    if (!creatable || !onSearchChange) return;
-    const id = window.setTimeout(() => onSearchChange(inputValue), 250);
+    if (!creatable || !isOpen || !onSearchChangeRef.current) return;
+    const id = window.setTimeout(() => {
+      onSearchChangeRef.current?.(inputValue);
+    }, 250);
     return () => window.clearTimeout(id);
-  }, [inputValue, creatable, onSearchChange]);
-
-  useEffect(() => {
-    if (isOpen && creatable && onSearchChange) {
-      onSearchChange(inputValue);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- refresh suggestions when dropdown opens
-  }, [isOpen]);
+  }, [inputValue, creatable, isOpen]);
 
   const hasSuggestions = suggestions !== undefined;
   const suggestionPool = hasSuggestions
