@@ -48,3 +48,5 @@ yarn-error.log*
 
 # Jetbrains specific (webstorm)
 .idea/**/**
+
+jurshare.*

@@ -248,7 +248,7 @@ export default {
   "upload.modal.accordion.name-and-description.title": "Name und Beschreibung hinzufügen",
   "upload.modal.accordion.name-and-description.name.placeholder": "Name",
   "upload.modal.accordion.name-and-description.description.placeholder": "Hinweis für die Empfänger dieser Daten-Freigabe",
-  "upload.modal.accordion.email.placeholder": "E-Mail der Empfänger eingeben",
+  "upload.modal.accordion.email.placeholder": "E-Mail Adressen der Empfänger eingeben (mit Enter bestätigen)",
   "upload.modal.accordion.email.invalid-email": "Ungültige E-Mail-Adresse",
   "upload.modal.accordion.email.helper": "Leer lassen, wenn du den Datenlink selbst versenden möchtest, oder Empfänger hier eintragen, um den Link direkt per E-Mail zu senden.",
   "upload.modal.accordion.security.title": "Sicherheitseinstellungen",
@@ -333,6 +333,12 @@ export default {
   "admin.config.general.logo-scale-percent.description": "Skalierung (25-250 %) für Logo in Hauptleiste, Startseite, Admin-Leiste und E-Mails. Breite Logos werden über die max. Breite begrenzt, hohe über die max. Höhe.",
   "admin.config.general.header-show-app-name": "Anwendungsname in der Kopfzeile",
   "admin.config.general.header-show-app-name.description": "Wenn deaktiviert, erscheint in der oberen Leiste (Hauptseite und Admin) nur das Logo. Seitentitel und Startseiten-Überschrift bleiben unverändert.",
+  "admin.config.general.custom-head-css": "Zusätzliches CSS",
+  "admin.config.general.custom-head-css.description":
+    "Optionales CSS für die Seite. Verwende !important, um gewisse bundled Styles zu überschreiben.",
+  "admin.config.general.custom-head-js": "Zusätzliches JavaScript",
+  "admin.config.general.custom-head-js.description":
+    "Optionales JavaScript für die Seite.",
   "admin.config.general.logo.preview-header": "Vorschau (Admin-Kopfzeile)",
   "admin.config.cache.ttl": "TTL",
   "admin.config.cache.ttl.description": "Zeit in Sekunden, wie lange Informationen im Cache gespeichert bleiben.",

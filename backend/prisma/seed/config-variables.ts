@@ -90,6 +90,16 @@ export const configVariables = {
       defaultValue: "true",
       secret: false,
     },
+    customHeadCss: {
+      type: "text",
+      defaultValue: "",
+      secret: false,
+    },
+    customHeadJs: {
+      type: "text",
+      defaultValue: "",
+      secret: false,
+    },
   },
   share: {
     allowRegistration: {

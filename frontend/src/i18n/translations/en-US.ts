@@ -333,6 +333,12 @@ export default {
   "admin.config.general.logo-scale-percent.description": "Relative scale (25-250%) for the logo in the main header, home page, admin bar, and outgoing emails. Wide logos are limited by max width; tall logos by max height.",
   "admin.config.general.header-show-app-name": "Show application name in header",
   "admin.config.general.header-show-app-name.description": "When disabled, only the logo is shown in the top bar (main site and admin). Page titles and the home headline are unchanged.",
+  "admin.config.general.custom-head-css": "Additional CSS",
+  "admin.config.general.custom-head-css.description":
+    "Optional CSS for the page. Use !important to override certain bundled styles.",
+  "admin.config.general.custom-head-js": "Additional JavaScript",
+  "admin.config.general.custom-head-js.description":
+    "Optional JavaScript for the page.",
   "admin.config.general.logo.preview-header": "Preview (admin header bar)",
   "admin.config.cache.ttl": "TTL",
   "admin.config.cache.ttl.description": "Time in second to keep information inside the cache.",

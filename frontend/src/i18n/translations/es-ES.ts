@@ -248,7 +248,7 @@ export default {
   "upload.modal.accordion.name-and-description.title": "Nombre y descripción",
   "upload.modal.accordion.name-and-description.name.placeholder": "Nombre",
   "upload.modal.accordion.name-and-description.description.placeholder": "Nota para los destinatarios de este compartido",
-  "upload.modal.accordion.email.placeholder": "Ingresa los correos de los destinatarios",
+  "upload.modal.accordion.email.placeholder": "Ingresa los correos de los destinatarios (confirma con Enter)",
   "upload.modal.accordion.email.invalid-email": "Dirección de correo inválida",
   "upload.modal.accordion.email.helper": "Déjalo vacío si quieres enviar tú mismo el enlace de datos, o añade aquí destinatarios para enviar el enlace directamente por correo.",
   "upload.modal.accordion.security.title": "Opciones de seguridad",
@@ -333,6 +333,12 @@ export default {
   "admin.config.general.logo-scale-percent.description": "Escala relativa (25-250 %) del logo en la cabecera principal, inicio, barra de administración y correos salientes. Los logos anchos se limitan por el ancho máximo; los altos, por la altura máxima.",
   "admin.config.general.header-show-app-name": "Mostrar el nombre de la aplicación en la cabecera",
   "admin.config.general.header-show-app-name.description": "Si está desactivado, solo se muestra el logo en la barra superior (sitio principal y administración). Los títulos de página y el titular de inicio no cambian.",
+  "admin.config.general.custom-head-css": "CSS adicional",
+  "admin.config.general.custom-head-css.description":
+    "CSS opcional para la página. Usar !important para sobrescribir ciertos estilos empaquetados.",
+  "admin.config.general.custom-head-js": "JavaScript adicional",
+  "admin.config.general.custom-head-js.description":
+    "JavaScript opcional para la página.",
   "admin.config.general.logo.preview-header": "Vista previa (barra de administración)",
   "admin.config.cache.ttl": "TTL",
   "admin.config.cache.ttl.description": "Tiempo en segundos durante el cual la información se mantiene en caché.",

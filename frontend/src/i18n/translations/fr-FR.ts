@@ -248,7 +248,7 @@ export default {
   "upload.modal.accordion.name-and-description.title": "Nom et description",
   "upload.modal.accordion.name-and-description.name.placeholder": "Nom",
   "upload.modal.accordion.name-and-description.description.placeholder": "Note pour les destinataires de ce partage",
-  "upload.modal.accordion.email.placeholder": "Saisir les destinataires de ce partage",
+  "upload.modal.accordion.email.placeholder": "Saisir les destinataires de ce partage (confirmer avec Enter)",
   "upload.modal.accordion.email.invalid-email": "Courriel invalide",
   "upload.modal.accordion.email.helper": "Laissez vide si vous envoyez vous-même le lien de données, ou ajoutez des destinataires ici pour envoyer le lien directement par courriel.",
   "upload.modal.accordion.security.title": "Options de sécurité",
@@ -333,6 +333,12 @@ export default {
   "admin.config.general.logo-scale-percent.description": "Échelle relative (25-250 %) pour le logo dans l'en-tête principal, l'accueil, la barre d'administration et les e-mails sortants. Les logos larges sont limités en largeur ; les logos hauts en hauteur.",
   "admin.config.general.header-show-app-name": "Afficher le nom de l'application dans l'en-tête",
   "admin.config.general.header-show-app-name.description": "Si désactivé, seul le logo s'affiche dans la barre supérieure (site principal et admin). Les titres de page et le titre d'accueil restent inchangés.",
+  "admin.config.general.custom-head-css": "CSS additionnel",
+  "admin.config.general.custom-head-css.description":
+    "CSS facultatif pour la page. Utiliser !important pour surcharger certains styles empaquetés.",
+  "admin.config.general.custom-head-js": "JavaScript additionnel",
+  "admin.config.general.custom-head-js.description":
+    "JavaScript facultatif pour la page.",
   "admin.config.general.logo.preview-header": "Aperçu (barre d'administration)",
   "admin.config.cache.ttl": "DDV",
   "admin.config.cache.ttl.description": "Durée de vie des informations conservées en cache.",

@@ -20,6 +20,10 @@ general:
   logoScalePercent: "100"
   #Show the application name next to the logo in the top bar (main app and admin).
   headerShowAppName: "true"
+  #Optional CSS injected into every page head (visible to all visitors). Trusted admins only.
+  customHeadCss: ""
+  #Optional JavaScript injected into every page head (runs for all visitors). Trusted admins only; may break if CSP blocks inline scripts.
+  customHeadJs: ""
 share:
   #Whether registration is allowed
   allowRegistration: "true"
