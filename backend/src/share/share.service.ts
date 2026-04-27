@@ -288,6 +288,8 @@ export class ShareService {
       where: {
         creator: { id: userId },
         uploadLocked: true,
+        /** "Share Data" only; uploads from data request links are listed under reverse shares */
+        reverseShareId: null,
         // We want to grab any shares that are not expired or have their expiration date set to "never" (unix 0)
         OR: [
           { expiration: { gt: new Date() } },

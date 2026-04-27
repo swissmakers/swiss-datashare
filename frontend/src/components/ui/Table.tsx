@@ -61,7 +61,16 @@ const TableHeader = ({ children, className }: TableHeaderProps) => {
 };
 
 const TableBody = ({ children, className }: TableBodyProps) => {
-  return <tbody className={clsx("divide-y divide-gray-200 dark:divide-gray-700", className)}>{children}</tbody>;
+  return (
+    <tbody
+      className={clsx(
+        "divide-y divide-gray-200 bg-[#f5f6f9] dark:divide-gray-700 dark:bg-[#1a1d24]",
+        className,
+      )}
+    >
+      {children}
+    </tbody>
+  );
 };
 
 const TableRow = ({ children, className, hover = false, onClick }: TableRowProps) => {

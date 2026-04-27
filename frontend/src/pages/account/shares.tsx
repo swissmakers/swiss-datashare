@@ -50,41 +50,45 @@ const MyShares = () => {
             </Button>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <Table>
+          <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
+            <Table scrollContainer={false} className="min-w-[640px]">
               <Table.Header>
                 <Table.Row>
-                  <Table.Cell header>
-                    <FormattedMessage id="account.shares.table.id" />
-                  </Table.Cell>
-                  <Table.Cell header>
+                  <Table.Cell header className="min-w-[10rem]">
                     <FormattedMessage id="account.shares.table.name" />
                   </Table.Cell>
-                  <Table.Cell header>
+                  <Table.Cell header className="min-w-[8rem]">
+                    <FormattedMessage id="account.shares.table.id" />
+                  </Table.Cell>
+                  <Table.Cell header className="min-w-[6rem]">
                     <FormattedMessage id="account.shares.table.visitors" />
                   </Table.Cell>
-                  <Table.Cell header>
+                  <Table.Cell header className="min-w-[10rem]">
                     <FormattedMessage id="account.shares.table.expiresAt" />
                   </Table.Cell>
-                  <Table.Cell header></Table.Cell>
+                  <Table.Cell header className="w-px text-right" />
                 </Table.Row>
               </Table.Header>
               <Table.Body>
                 {shares.map((share) => (
-                  <Table.Row key={share.id}>
+                  <Table.Row key={share.id} hover>
+                    <Table.Cell allowWrap className="font-medium text-text dark:text-text-dark">
+                      {share.name?.trim() ? share.name : "—"}
+                    </Table.Cell>
                     <Table.Cell>
-                      <div className="flex items-center gap-2">
-                        {share.id}{" "}
+                      <div className="flex items-center gap-2 font-mono text-xs text-gray-700 dark:text-gray-300">
+                        <span className="truncate max-w-[14rem]" title={share.id}>
+                          {share.id}
+                        </span>
                         {share.security.passwordProtected && (
                           <TbLock
-                            className="text-orange-500"
+                            className="shrink-0 text-orange-500"
                             title={t("account.shares.table.password-protected")}
                             size={16}
                           />
                         )}
                       </div>
                     </Table.Cell>
-                    <Table.Cell>{share.name}</Table.Cell>
                     <Table.Cell>
                       {share.security.maxViews ? (
                         <FormattedMessage
@@ -98,7 +102,7 @@ const MyShares = () => {
                         share.views
                       )}
                     </Table.Cell>
-                    <Table.Cell>
+                    <Table.Cell className="text-gray-600 dark:text-gray-400">
                       {moment(share.expiration).unix() === 0 ? (
                         <FormattedMessage id="account.shares.table.expiry-never" />
                       ) : (
@@ -106,7 +110,7 @@ const MyShares = () => {
                       )}
                     </Table.Cell>
                     <Table.Cell>
-                      <div className="flex items-center justify-end gap-2">
+                      <div className="flex items-center justify-end gap-1 shrink-0">
                         <Link href={`/share/${share.id}/edit`}>
                           <button
                             className="p-1.5 text-orange-600 hover:text-orange-700 hover:bg-orange-50 dark:text-orange-400 dark:hover:text-orange-300 dark:hover:bg-orange-900/20 rounded-lg transition-colors"
