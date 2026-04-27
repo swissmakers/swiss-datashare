@@ -22,7 +22,7 @@ export default class _Document extends Document {
           />
           <link rel="manifest" href="/manifest.json" />
           <link rel="icon" type="image/x-icon" href="/img/favicon.ico" />
-          <link rel="apple-touch-icon" href="/img/icons/icon-128x128.png" />
+          <link rel="apple-touch-icon" href="/img/icons/icon-192x192.png" />
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
           <link
