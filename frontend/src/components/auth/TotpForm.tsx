@@ -3,9 +3,8 @@ import { useState } from "react";
 import { FormattedMessage } from "react-intl";
 import * as yup from "yup";
 import useTranslate from "../../hooks/useTranslate.hook";
-import useUser from "../../hooks/user.hook";
 import authService from "../../services/auth.service";
-import { safeRedirectPath } from "../../utils/router.util";
+import { navigateToPathAfterAuth } from "../../utils/router.util";
 import toast from "../../utils/toast.util";
 import { Button, Container, Card, PinInput } from "../ui";
 import { useForm } from "../../hooks/useForm";
@@ -13,7 +12,6 @@ import { useForm } from "../../hooks/useForm";
 function TotpForm({ redirectPath }: { redirectPath: string }) {
   const t = useTranslate();
   const router = useRouter();
-  const { refreshUser } = useUser();
 
   const [loading, setLoading] = useState(false);
 
@@ -36,8 +34,7 @@ function TotpForm({ redirectPath }: { redirectPath: string }) {
     setLoading(true);
     try {
       await authService.signInTotp(code, router.query.loginToken as string);
-      await refreshUser();
-      await router.replace(safeRedirectPath(redirectPath));
+      navigateToPathAfterAuth(redirectPath);
     } catch (e) {
       toast.axiosError(e);
       form.setErrors({ code: "error" });

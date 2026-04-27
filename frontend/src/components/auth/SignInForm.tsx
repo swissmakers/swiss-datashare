@@ -4,11 +4,13 @@ import { useEffect, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import * as yup from "yup";
 import useConfig from "../../hooks/config.hook";
-import useUser from "../../hooks/user.hook";
 import useTranslate from "../../hooks/useTranslate.hook";
 import authService from "../../services/auth.service";
 import { getOAuthIcon, getOAuthUrl } from "../../utils/oauth.util";
-import { safeRedirectPath } from "../../utils/router.util";
+import {
+  navigateToPathAfterAuth,
+  safeRedirectPath,
+} from "../../utils/router.util";
 import toast from "../../utils/toast.util";
 import { Button, Container, Input, PasswordInput, Card, LoadingSpinner } from "../ui";
 import { useForm } from "../../hooks/useForm";
@@ -18,7 +20,6 @@ const SignInForm = ({ redirectPath }: { redirectPath: string }) => {
   const config = useConfig();
   const router = useRouter();
   const t = useTranslate();
-  const { refreshUser } = useUser();
   const { info } = useToast();
 
   const [oauthProviders, setOauthProviders] = useState<string[] | null>(null);
@@ -50,8 +51,7 @@ const SignInForm = ({ redirectPath }: { redirectPath: string }) => {
             }?redirect=${encodeURIComponent(safeRedirectPath(redirectPath))}`,
           );
         } else {
-          await refreshUser();
-          router.replace(safeRedirectPath(redirectPath));
+          navigateToPathAfterAuth(redirectPath);
         }
       })
       .catch(toast.axiosError);

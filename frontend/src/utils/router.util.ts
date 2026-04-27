@@ -55,3 +55,17 @@ export function safeRedirectPath(
     return DEFAULT_INVALID_REDIRECT;
   }
 }
+
+/**
+ * Full document navigation after auth cookies are set (sign-in, sign-up, TOTP).
+ * More reliable than Next.js client `router.replace` on some deployments where
+ * the URL could otherwise stay on `/auth/signIn` until a manual reload.
+ */
+export function navigateToPathAfterAuth(
+  raw: string | undefined | null | string[],
+): void {
+  const path = safeRedirectPath(raw);
+  if (typeof window !== "undefined") {
+    window.location.assign(path);
+  }
+}
