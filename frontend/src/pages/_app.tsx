@@ -8,7 +8,7 @@ import type { AppContext, AppProps } from "next/app";
 import NextApp from "next/app";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect, useState, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { IntlProvider } from "react-intl";
 import Header from "../components/header/Header";
 import { ConfigContext } from "../hooks/config.hook";
@@ -67,6 +67,12 @@ function SwissDataShare({ Component, pageProps }: AppProps) {
   const [route, setRoute] = useState<string>(router.pathname);
   const [configVariables, setConfigVariables] = useState<Config[]>([]);
   const [, setIsLoading] = useState(true);
+
+  const refreshUser = useCallback(async () => {
+    const nextUser = await userService.getCurrentUser();
+    setUser(nextUser);
+    return nextUser;
+  }, []);
 
   useEffect(() => {
     setRoute(router.pathname);
@@ -220,13 +226,9 @@ function SwissDataShare({ Component, pageProps }: AppProps) {
               value={useMemo(
                 () => ({
                   user,
-                  refreshUser: async () => {
-                    const user = await userService.getCurrentUser();
-                    setUser(user);
-                    return user;
-                  },
+                  refreshUser,
                 }),
-                [user]
+                [user, refreshUser],
               )}
             >
               {excludeDefaultLayoutRoutes.includes(route) ? (

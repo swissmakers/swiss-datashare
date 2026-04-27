@@ -45,8 +45,10 @@ const loadCurrentUserProfile = async (): Promise<CurrentUser> => {
   return (await api.get("users/me")).data;
 };
 
-const getCurrentUser = async (): Promise<CurrentUser | null> => {
-  // Skip request when user has no auth cookie.
+/** Coalesce parallel session probes (_app + signIn) into one in-flight request */
+let getCurrentUserInFlight: Promise<CurrentUser | null> | null = null;
+
+const fetchCurrentUserOnce = async (): Promise<CurrentUser | null> => {
   if (!getCookie("access_token")) return null;
 
   try {
@@ -62,6 +64,20 @@ const getCurrentUser = async (): Promise<CurrentUser | null> => {
       return null;
     }
   }
+};
+
+const getCurrentUser = async (): Promise<CurrentUser | null> => {
+  if (!getCookie("access_token")) return null;
+  if (getCurrentUserInFlight) return getCurrentUserInFlight;
+
+  const pending = fetchCurrentUserOnce();
+  getCurrentUserInFlight = pending;
+  pending.finally(() => {
+    if (getCurrentUserInFlight === pending) {
+      getCurrentUserInFlight = null;
+    }
+  });
+  return pending;
 };
 
 export default {

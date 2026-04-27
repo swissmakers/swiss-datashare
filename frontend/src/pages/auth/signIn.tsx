@@ -30,13 +30,24 @@ const SignIn = ({ redirectPath }: { redirectPath?: string }) => {
   // If the access token is expired, the middleware redirects to this page.
   // If the refresh token is still valid, the user will be redirected to the last page.
   useEffect(() => {
-    refreshUser().then((user) => {
-      if (user) {
-        router.replace(safeRedirectPath(redirectPath ?? "/upload"));
-      } else {
-        setIsLoading(false);
-      }
-    });
+    let cancelled = false;
+
+    void refreshUser()
+      .then((nextUser) => {
+        if (cancelled) return;
+        if (nextUser) {
+          void router.replace(safeRedirectPath(redirectPath ?? "/upload"));
+        } else {
+          setIsLoading(false);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setIsLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, [refreshUser, router, redirectPath]);
 
   if (isLoading) {
