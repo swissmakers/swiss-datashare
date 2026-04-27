@@ -1,18 +1,17 @@
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { FormattedMessage } from "react-intl";
 import * as yup from "yup";
 import useConfig from "../../hooks/config.hook";
 import useTranslate from "../../hooks/useTranslate.hook";
 import useUser from "../../hooks/user.hook";
 import authService from "../../services/auth.service";
+import { navigateToPathAfterAuth } from "../../utils/router.util";
 import toast from "../../utils/toast.util";
 import { Button, Container, Input, PasswordInput, Card } from "../ui";
 import { useForm } from "../../hooks/useForm";
 
 const SignUpForm = () => {
   const config = useConfig();
-  const router = useRouter();
   const t = useTranslate();
   const { refreshUser } = useUser();
 
@@ -43,9 +42,9 @@ const SignUpForm = () => {
       .then(async () => {
         const user = await refreshUser();
         if (user?.isAdmin) {
-          router.replace("/admin/intro");
+          navigateToPathAfterAuth("/admin/intro");
         } else {
-          router.replace("/upload");
+          navigateToPathAfterAuth("/upload");
         }
       })
       .catch(toast.axiosError);

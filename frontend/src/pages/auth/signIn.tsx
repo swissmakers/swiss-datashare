@@ -1,11 +1,10 @@
 import { GetServerSidePropsContext } from "next";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import SignInForm from "../../components/auth/SignInForm";
 import Meta from "../../components/Meta";
 import useUser from "../../hooks/user.hook";
 import { LoadingSpinner } from "../../components/ui";
-import { safeRedirectPath } from "../../utils/router.util";
+import { navigateToPathAfterAuth } from "../../utils/router.util";
 
 export function getServerSideProps(context: GetServerSidePropsContext) {
   const raw = context.query.redirect;
@@ -23,7 +22,6 @@ export function getServerSideProps(context: GetServerSidePropsContext) {
 
 const SignIn = ({ redirectPath }: { redirectPath?: string }) => {
   const { refreshUser } = useUser();
-  const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(redirectPath ? true : false);
 
@@ -36,7 +34,7 @@ const SignIn = ({ redirectPath }: { redirectPath?: string }) => {
       .then((nextUser) => {
         if (cancelled) return;
         if (nextUser) {
-          void router.replace(safeRedirectPath(redirectPath ?? "/upload"));
+          navigateToPathAfterAuth(redirectPath ?? "/upload");
         } else {
           setIsLoading(false);
         }
@@ -48,7 +46,7 @@ const SignIn = ({ redirectPath }: { redirectPath?: string }) => {
     return () => {
       cancelled = true;
     };
-  }, [refreshUser, router, redirectPath]);
+  }, [refreshUser, redirectPath]);
 
   if (isLoading) {
     return (
