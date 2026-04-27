@@ -1,6 +1,6 @@
 {
   "name": "swiss-datashare",
-  "version": "2.0.3",
+  "version": "2.0.1",
   "scripts": {
     "format": "cd frontend && npm run format && cd ../backend && npm run format",
     "lint": "cd frontend && npm run lint && cd ../backend && npm run lint",

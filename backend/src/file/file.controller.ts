@@ -11,17 +11,21 @@ import {
   UseGuards,
 } from "@nestjs/common";
 import { SkipThrottle } from "@nestjs/throttler";
-import * as contentDisposition from "content-disposition";
+import contentDisposition = require("content-disposition");
 import { Response } from "express";
 import { CreateShareGuard } from "@/share/guard/createShare.guard";
 import { ShareOwnerGuard } from "@/share/guard/shareOwner.guard";
+import { ShareService } from "@/share/share.service";
 import { FileService } from "./file.service";
 import { FileSecurityGuard } from "./guard/fileSecurity.guard";
 import * as mime from "mime-types";
 
 @Controller("shares/:shareId/files")
 export class FileController {
-  constructor(private fileService: FileService) {}
+  constructor(
+    private fileService: FileService,
+    private shareService: ShareService,
+  ) {}
 
   @Post()
   @SkipThrottle()
@@ -55,10 +59,13 @@ export class FileController {
     @Param("shareId") shareId: string,
   ) {
     const zipStream = await this.fileService.getZip(shareId);
+    const share = await this.shareService.getMetaData(shareId);
+    const shareName = share?.name?.trim();
+    const zipFileName = shareName ? `${shareName}.zip` : `${shareId}.zip`;
 
     res.set({
       "Content-Type": "application/zip",
-      "Content-Disposition": contentDisposition(`${shareId}.zip`),
+      "Content-Disposition": contentDisposition(zipFileName),
     });
 
     return new StreamableFile(zipStream);
