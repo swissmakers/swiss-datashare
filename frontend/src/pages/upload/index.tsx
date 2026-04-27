@@ -1,6 +1,6 @@
 import { AxiosError } from "axios";
 import pLimit from "p-limit";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import Meta from "../../components/Meta";
 import Dropzone from "../../components/upload/Dropzone";
@@ -21,8 +21,9 @@ import { useModals } from "../../contexts/ModalContext";
 import { byteToHumanSizeString } from "../../utils/fileSize.util";
 
 const promiseLimit = pLimit(3);
-let errorToastShown = false;
-let createdShare: Share;
+const MAX_CHUNK_UPLOAD_ATTEMPTS = 8;
+const BASE_RETRY_DELAY_MS = 1500;
+const MAX_RETRY_DELAY_MS = 12000;
 
 const generateShareId = (length: number = 16) => {
   const chars =
@@ -94,6 +95,7 @@ const Upload = ({
     setisUploading(true);
     console.log(`[Upload] Starting upload of ${files.length} files`);
 
+    let createdShare: Share;
     try {
       const isReverseShare = router.pathname != "/upload";
       console.log(`[Upload] Creating share (isReverseShare: ${isReverseShare})...`);
@@ -106,21 +108,77 @@ const Upload = ({
       return;
     }
 
+    const getRetryDelay = (attempt: number) => {
+      const expDelay = BASE_RETRY_DELAY_MS * Math.pow(2, Math.max(0, attempt - 1));
+      return Math.min(expDelay, MAX_RETRY_DELAY_MS);
+    };
+
+    const sleep = (ms: number) =>
+      new Promise((resolve) => setTimeout(resolve, ms));
+
+    const uploadChunkWithRetry = async ({
+      shareId,
+      chunk,
+      fileName,
+      fileId,
+      chunkIndex,
+      totalChunks,
+    }: {
+      shareId: string;
+      chunk: Blob;
+      fileName: string;
+      fileId?: string;
+      chunkIndex: number;
+      totalChunks: number;
+    }) => {
+      let attempt = 0;
+
+      while (attempt < MAX_CHUNK_UPLOAD_ATTEMPTS) {
+        attempt++;
+        try {
+          return await shareService.uploadFile(
+            shareId,
+            chunk,
+            { id: fileId, name: fileName },
+            chunkIndex,
+            totalChunks,
+          );
+        } catch (e) {
+          if (
+            e instanceof AxiosError &&
+            e.response?.data?.error === "unexpected_chunk_index"
+          ) {
+            const expectedChunkIndex = e.response.data?.expectedChunkIndex;
+            if (
+              typeof expectedChunkIndex === "number" &&
+              expectedChunkIndex >= 0 &&
+              expectedChunkIndex < totalChunks
+            ) {
+              // File already progressed on server; jump to expected chunk.
+              return { id: fileId, expectedChunkIndex } as any;
+            }
+          }
+
+          if (attempt >= MAX_CHUNK_UPLOAD_ATTEMPTS) throw e;
+          const delayMs = getRetryDelay(attempt);
+          await sleep(delayMs);
+        }
+      }
+      throw new Error("Chunk upload retries exhausted");
+    };
+
     console.log(`[Upload] Starting upload of ${files.length} files (max 3 concurrent)`);
     const fileUploadPromises = files.map(async (file, fileIndex) =>
       // Limit the number of concurrent uploads to 3
       promiseLimit(async () => {
-        let fileId;
+        let fileId: string | undefined;
 
         const setFileProgress = (progress: number) => {
-          setFiles((files) =>
-            files.map((file, callbackIndex) => {
-              if (fileIndex == callbackIndex) {
-                file.uploadingProgress = progress;
-              }
-              return file;
-            }),
-          );
+          setFiles((current) => {
+            const next = [...current];
+            if (next[fileIndex]) next[fileIndex].uploadingProgress = progress;
+            return next;
+          });
         };
 
         console.log(`[Upload] Starting upload of file ${fileIndex + 1}/${files.length}: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`);
@@ -141,7 +199,7 @@ const Upload = ({
         if (isNaN(chunks) || chunks <= 0) {
           console.error(`[Upload] Invalid chunks calculation for file ${file.name}: chunks=${chunks}, file.size=${file.size}, chunkSize=${chunkSize.current}`);
           setFileProgress(-1);
-          return;
+          return false;
         }
 
         console.log(`[Upload] File ${file.name} will be uploaded in ${chunks} chunks (chunk size: ${(chunkSize.current / 1024 / 1024).toFixed(2)} MB)`);
@@ -152,58 +210,69 @@ const Upload = ({
           const blob = file.slice(from, to);
           try {
             console.log(`[Upload] Uploading chunk ${chunkIndex + 1}/${chunks} of file ${file.name}`);
-            await shareService
-              .uploadFile(
-                createdShare.id,
-                blob,
-                {
-                  id: fileId,
-                  name: file.name,
-                },
-                chunkIndex,
-                chunks,
-              )
-              .then((response) => {
-                fileId = response.id;
-                console.log(`[Upload] Chunk ${chunkIndex + 1}/${chunks} of file ${file.name} uploaded successfully, fileId: ${fileId}`);
-              });
+            const response = await uploadChunkWithRetry({
+              shareId: createdShare.id,
+              chunk: blob,
+              fileName: file.name,
+              fileId,
+              chunkIndex,
+              totalChunks: chunks,
+            });
+
+            if (
+              response &&
+              typeof (response as any).expectedChunkIndex === "number"
+            ) {
+              chunkIndex = Math.max(0, (response as any).expectedChunkIndex - 1);
+              continue;
+            }
+
+            fileId = response.id;
+            console.log(`[Upload] Chunk ${chunkIndex + 1}/${chunks} of file ${file.name} uploaded successfully, fileId: ${fileId}`);
 
             setFileProgress(((chunkIndex + 1) / chunks) * 100);
           } catch (e) {
-            if (
-              e instanceof AxiosError &&
-              e.response?.data.error == "unexpected_chunk_index"
-            ) {
-              console.warn(`[Upload] Unexpected chunk index for file ${file.name}, retrying with expected index: ${e.response!.data!.expectedChunkIndex}`);
-              // Retry with the expected chunk index
-              chunkIndex = e.response!.data!.expectedChunkIndex - 1;
-              continue;
-            } else {
-              console.error(`[Upload] Error uploading chunk ${chunkIndex + 1}/${chunks} of file ${file.name}:`, e);
-              if (e instanceof AxiosError) {
-                console.error(`[Upload] Error details:`, {
-                  status: e.response?.status,
-                  statusText: e.response?.statusText,
-                  data: e.response?.data,
-                  message: e.message,
-                });
-              }
-              setFileProgress(-1);
-              // Retry after 5 seconds
-              console.log(`[Upload] Retrying upload of file ${file.name} in 5 seconds...`);
-              await new Promise((resolve) => setTimeout(resolve, 5000));
-              chunkIndex = -1;
-
-              continue;
+            console.error(`[Upload] Error uploading chunk ${chunkIndex + 1}/${chunks} of file ${file.name}:`, e);
+            if (e instanceof AxiosError) {
+              console.error(`[Upload] Error details:`, {
+                status: e.response?.status,
+                statusText: e.response?.statusText,
+                data: e.response?.data,
+                message: e.message,
+              });
             }
+            setFileProgress(-1);
+            return false;
           }
         }
         console.log(`[Upload] Successfully completed upload of file ${file.name}`);
+        return true;
       }),
     );
 
-    await Promise.all(fileUploadPromises);
-    console.log(`[Upload] All file upload promises initiated`);
+    const uploadResults = await Promise.all(fileUploadPromises);
+    const failedFilesCount = uploadResults.filter((ok) => !ok).length;
+
+    if (failedFilesCount > 0) {
+      console.warn(`[Upload] ${failedFilesCount} file(s) failed after retry limit.`);
+      setisUploading(false);
+      toast.error(t("upload.notify.count-failed", { count: failedFilesCount }));
+      return;
+    }
+
+    console.log("[Upload] All files uploaded successfully, completing share...");
+    shareService
+      .completeShare(createdShare.id)
+      .then((completedShare) => {
+        setisUploading(false);
+        showCompletedUploadModal(modals, completedShare);
+        setFiles([]);
+        setReverseShareNote("");
+      })
+      .catch(() => {
+        setisUploading(false);
+        toast.error(t("upload.notify.generic-error"));
+      });
   };
 
   const startReverseShareUpload = async () => {
@@ -270,44 +339,6 @@ const Upload = ({
       setFiles((oldArr) => [...oldArr, ...files]);
     }
   };
-
-  useEffect(() => {
-    // Check if there are any files that failed to upload
-    const fileErrorCount = files.filter(
-      (file) => file.uploadingProgress == -1,
-    ).length;
-
-    if (fileErrorCount > 0) {
-      if (!errorToastShown) {
-        toast.error(
-          t("upload.notify.count-failed", { count: fileErrorCount }),
-        );
-      }
-      errorToastShown = true;
-    } else {
-      errorToastShown = false;
-    }
-
-    // Complete share
-    if (
-      files.length > 0 &&
-      files.every((file) => file.uploadingProgress >= 100) &&
-      fileErrorCount == 0
-    ) {
-      shareService
-        .completeShare(createdShare.id)
-        .then((share) => {
-          setisUploading(false);
-          showCompletedUploadModal(modals, share);
-          setFiles([]);
-          setReverseShareNote("");
-        })
-        .catch(() => {
-          setisUploading(false);
-          toast.error(t("upload.notify.generic-error"));
-        });
-    }
-  }, [files, modals, t]);
 
   return (
     <>
