@@ -5,6 +5,11 @@ import { NextRequest, NextResponse } from "next/server";
 // - Authentication state
 // - Setup status
 // - Admin privileges
+//
+// Auth note: do not 307 authenticated users away from `/auth/*`. Next.js client
+// navigations load `/_next/data/.../auth/signIn.json`; redirecting those to
+// `/upload` caused hung tabs / “stuck on sign-in” while cookies were valid.
+// Post-login navigation stays in SignInForm + signIn page effects.
 
 export const config = {
   matcher: "/((?!api|static|.*\\..*|_next).*)",
@@ -128,9 +133,13 @@ export async function proxy(request: NextRequest) {
       condition: routes.disabled.contains(route),
       path: "/",
     },
-     // Authenticated state
-     {
-      condition: user && routes.unauthenticated.contains(route) && !getConfig("share.allowUnauthenticatedShares"),
+    // Authenticated: skip marketing home only (not /auth/* — see file header).
+    {
+      condition:
+        user &&
+        routes.unauthenticated.contains(route) &&
+        !route.startsWith("/auth/") &&
+        !getConfig("share.allowUnauthenticatedShares"),
       path: "/upload",
     },
     // Unauthenticated state
@@ -140,7 +149,7 @@ export async function proxy(request: NextRequest) {
     },
     {
       condition: !user && routes.account.contains(route),
-      path: "/upload",
+      path: "/auth/signIn",
     },
     // Admin privileges
     {
