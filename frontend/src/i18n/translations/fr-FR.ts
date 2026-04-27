@@ -326,6 +326,7 @@ export default {
   "share.table.size": "Taille",
   "share.modal.file-preview.error.not-supported.title": "Aperçu non supporté",
   "share.modal.file-preview.error.not-supported.description": "Les aperçus ne sont pas pris en charge pour ce type de fichiers. Veuillez télécharger le fichier pour le voir.",
+  "share.modal.file-preview.view-original": "Voir le fichier original",
   "share.edit.title": "Modifier {shareId}",
   "share.edit.append-upload": "Ajouter un fichier",
   "share.edit.notify.generic-error": "Une erreur est survenue durant le traitement de votre partage.",

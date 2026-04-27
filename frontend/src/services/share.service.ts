@@ -1,5 +1,4 @@
 import { deleteCookie, setCookie } from "cookies-next";
-import mime from "mime-types";
 import { FileUploadResponse } from "../types/File.type";
 
 import {
@@ -10,6 +9,7 @@ import {
   ShareMetaData,
 } from "../types/share.type";
 import { encodePathSegment } from "../utils/url.util";
+import { isFilePreviewSupported } from "../utils/filePreview.util";
 import api from "./api.service";
 
 const REVERSE_SHARE_TOKEN_PATTERN = /^[A-Za-z0-9_-]{1,256}$/;
@@ -76,19 +76,7 @@ const isShareIdAvailable = async (id: string): Promise<boolean> => {
 };
 
 const doesFileSupportPreview = (fileName: string) => {
-  const mimeType = (mime.contentType(fileName) || "").split(";")[0];
-
-  if (!mimeType) return false;
-
-  const supportedMimeTypes = [
-    mimeType.startsWith("video/"),
-    mimeType.startsWith("image/"),
-    mimeType.startsWith("audio/"),
-    mimeType.startsWith("text/"),
-    mimeType == "application/pdf",
-  ];
-
-  return supportedMimeTypes.some((isSupported) => isSupported);
+  return isFilePreviewSupported({ fileName });
 };
 
 const downloadFile = async (shareId: string, fileId: string) => {

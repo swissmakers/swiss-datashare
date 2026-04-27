@@ -326,6 +326,7 @@ export default {
   "share.table.size": "Dimensione",
   "share.modal.file-preview.error.not-supported.title": "Anteprima non supportata",
   "share.modal.file-preview.error.not-supported.description": "Le anteprime non sono supportate per questo tipo di file. Scarica il file per visualizzarlo.",
+  "share.modal.file-preview.view-original": "Visualizza file originale",
   "share.edit.title": "Modifica {shareId}",
   "share.edit.append-upload": "Aggiungi file",
   "share.edit.notify.generic-error": "Si è verificato un errore durante il completamento della condivisione.",

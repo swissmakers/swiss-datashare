@@ -326,6 +326,7 @@ export default {
   "share.table.size": "Tamaño",
   "share.modal.file-preview.error.not-supported.title": "Vista previa no disponible",
   "share.modal.file-preview.error.not-supported.description": "Las vistas previas no son compatibles con este tipo de archivos. Por favor, descargue el archivo para verlo.",
+  "share.modal.file-preview.view-original": "Ver archivo original",
   "share.edit.title": "Editar {shareId}",
   "share.edit.append-upload": "Agregar archivo",
   "share.edit.notify.generic-error": "Ha ocurrido un error mientras se compartía tu archivo.",

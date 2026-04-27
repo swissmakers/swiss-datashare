@@ -326,6 +326,7 @@ export default {
   "share.table.size": "Size",
   "share.modal.file-preview.error.not-supported.title": "Preview not supported",
   "share.modal.file-preview.error.not-supported.description": "Previews are not supported for this type of files. Please download the file to view it.",
+  "share.modal.file-preview.view-original": "View original file",
   "share.edit.title": "Edit {shareId}",
   "share.edit.append-upload": "Append file",
   "share.edit.notify.generic-error": "An error occurred while finishing your share.",

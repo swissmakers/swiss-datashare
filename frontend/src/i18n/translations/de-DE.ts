@@ -326,6 +326,7 @@ export default {
   "share.table.size": "Grösse",
   "share.modal.file-preview.error.not-supported.title": "Vorschau wird nicht unterstützt",
   "share.modal.file-preview.error.not-supported.description": "Vorschaubilder werden für diesen Dateityp nicht unterstützt. Bitte lade die Datei herunter, um sie anzuzeigen.",
+  "share.modal.file-preview.view-original": "Originaldatei anzeigen",
   "share.edit.title": "{shareId} bearbeiten",
   "share.edit.append-upload": "Datei anfügen",
   "share.edit.notify.generic-error": "Während der Erstellung der Freigabe ist ein Fehler aufgetreten.",
