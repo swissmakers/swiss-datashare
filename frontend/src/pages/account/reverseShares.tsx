@@ -82,87 +82,86 @@ const MyShares = () => {
             </p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <Table>
+          <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
+            <Table scrollContainer={false} className="min-w-[720px]">
               <Table.Header>
                 <Table.Row>
-                  <Table.Cell header>
+                  <Table.Cell header className="min-w-[10rem]">
                     <FormattedMessage id="account.reverseShares.table.name" />
                   </Table.Cell>
-                  <Table.Cell header>
+                  <Table.Cell header className="min-w-[12rem]">
                     <FormattedMessage id="account.reverseShares.table.shares" />
                   </Table.Cell>
-                  <Table.Cell header>
+                  <Table.Cell header className="min-w-[5rem]">
                     <FormattedMessage id="account.reverseShares.table.remaining" />
                   </Table.Cell>
-                  <Table.Cell header>
+                  <Table.Cell header className="min-w-[7rem]">
                     <FormattedMessage id="account.reverseShares.table.max-size" />
                   </Table.Cell>
-                  <Table.Cell header>
+                  <Table.Cell header className="min-w-[10rem]">
                     <FormattedMessage id="account.reverseShares.table.expires" />
                   </Table.Cell>
-                  <Table.Cell header></Table.Cell>
+                  <Table.Cell header className="w-px text-right" />
                 </Table.Row>
               </Table.Header>
               <Table.Body>
                 {reverseShares.map((reverseShare) => (
-                  <Table.Row key={reverseShare.id}>
-                    <Table.Cell>{reverseShare.name || "-"}</Table.Cell>
-                    <Table.Cell style={{ width: 220 }}>
+                  <Table.Row key={reverseShare.id} hover>
+                    <Table.Cell allowWrap className="font-medium text-text dark:text-text-dark">
+                      {reverseShare.name?.trim() ? reverseShare.name : "—"}
+                    </Table.Cell>
+                    <Table.Cell allowWrap>
                       {reverseShare.shares.length == 0 ? (
-                        <p className="text-sm text-red-600 dark:text-red-400">
+                        <p className="text-sm text-gray-500 dark:text-gray-400">
                           <FormattedMessage id="account.reverseShares.table.no-shares" />
                         </p>
                       ) : (
-                        <div className="space-y-2">
-                          <p className="text-sm text-gray-600 dark:text-gray-300">
-                            {reverseShare.shares.length == 1
-                              ? `1 ${t("account.reverseShares.table.count.singular")}`
-                              : `${reverseShare.shares.length} ${t(
-                                  "account.reverseShares.table.count.plural",
-                                )}`}
-                          </p>
-                          <div className="space-y-2">
-                            {reverseShare.shares.map((share) => (
-                              <div key={share.id} className="flex items-center gap-2">
-                                <Link
-                                  href={`${window.location.origin}/share/${share.id}`}
-                                  target="_blank"
-                                  className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 truncate max-w-[120px]"
-                                >
-                                  {share.id}
-                                </Link>
-                                <button
-                                  onClick={() => {
-                                    if (typeof window !== "undefined" && window.isSecureContext) {
-                                      clipboard.copy(`${window.location.origin}/s/${share.id}`);
-                                      toast.success(t("common.notify.copied"));
-                                    } else {
-                                      showShareLinkModal(modals, share.id);
-                                    }
-                                  }}
-                                  className="p-1.5 text-primary-600 hover:text-primary-700 hover:bg-primary-50 dark:text-primary-400 dark:hover:text-primary-300 dark:hover:bg-primary-900/20 rounded-lg transition-colors"
-                                  aria-label={t("common.aria.copy-share-link")}
-                                >
-                                  <TbLink size={16} />
-                                </button>
-                              </div>
-                            ))}
-                          </div>
+                        <div className="flex flex-col gap-2">
+                          {reverseShare.shares.map((share) => (
+                            <div
+                              key={share.id}
+                              className="flex items-center gap-2 min-w-0"
+                            >
+                              <Link
+                                href={`/s/${share.id}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="font-mono text-xs text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 truncate min-w-0"
+                                title={share.id}
+                              >
+                                {share.id}
+                              </Link>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  if (typeof window !== "undefined" && window.isSecureContext) {
+                                    clipboard.copy(`${window.location.origin}/s/${share.id}`);
+                                    toast.success(t("common.notify.copied"));
+                                  } else {
+                                    showShareLinkModal(modals, share.id);
+                                  }
+                                }}
+                                className="shrink-0 p-1.5 text-primary-600 hover:text-primary-700 hover:bg-primary-50 dark:text-primary-400 dark:hover:text-primary-300 dark:hover:bg-primary-900/20 rounded-lg transition-colors"
+                                aria-label={t("common.aria.copy-share-link")}
+                              >
+                                <TbLink size={16} />
+                              </button>
+                            </div>
+                          ))}
                         </div>
                       )}
                     </Table.Cell>
                     <Table.Cell>{reverseShare.remainingUses}</Table.Cell>
-                    <Table.Cell>
+                    <Table.Cell className="text-gray-700 dark:text-gray-300">
                       {byteToHumanSizeString(parseInt(reverseShare.maxShareSize))}
                     </Table.Cell>
-                    <Table.Cell>
+                    <Table.Cell className="text-gray-600 dark:text-gray-400">
                       {moment(reverseShare.shareExpiration).unix() === 0
                         ? t("account.shares.table.expiry-never")
                         : moment(reverseShare.shareExpiration).format("LLL")}
                     </Table.Cell>
                     <Table.Cell>
-                      <div className="flex items-center justify-end gap-2">
+                      <div className="flex items-center justify-end gap-1 shrink-0">
                         <button
                           onClick={() => {
                             if (typeof window !== "undefined" && window.isSecureContext) {

@@ -77,40 +77,45 @@ const FileList = ({
   useEffect(sortFiles, [sort]);
 
   return (
-    <div className="overflow-x-auto">
-      <Table>
+    <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
+      <Table scrollContainer={false} className="min-w-[480px]">
         <Table.Header>
           <Table.Row>
-            <Table.Cell header>
+            <Table.Cell header className="min-w-[12rem]">
               <div className="flex items-center gap-2">
                 <FormattedMessage id="share.table.name" />
                 <TableSortIcon sort={sort} setSort={setSort} property="name" />
               </div>
             </Table.Cell>
-            <Table.Cell header>
+            <Table.Cell header className="min-w-[6rem]">
               <div className="flex items-center gap-2">
                 <FormattedMessage id="share.table.size" />
                 <TableSortIcon sort={sort} setSort={setSort} property="size" />
               </div>
             </Table.Cell>
-            <Table.Cell header>{null}</Table.Cell>
+            <Table.Cell header className="w-px text-right" />
           </Table.Row>
         </Table.Header>
         <Table.Body>
           {isLoading
             ? skeletonRows
             : files!.map((file) => (
-                <Table.Row key={file.name}>
-                  <Table.Cell>{file.name}</Table.Cell>
-                  <Table.Cell>{byteToHumanSizeString(parseInt(file.size))}</Table.Cell>
+                <Table.Row key={file.id} hover>
+                  <Table.Cell allowWrap className="font-medium text-text dark:text-text-dark">
+                    {file.name}
+                  </Table.Cell>
+                  <Table.Cell className="text-gray-700 dark:text-gray-300">
+                    {byteToHumanSizeString(parseInt(file.size))}
+                  </Table.Cell>
                   <Table.Cell>
-                    <div className="flex items-center justify-end gap-2">
+                    <div className="flex items-center justify-end gap-1 shrink-0">
                       {shareService.doesFileSupportPreview(file.name) && (
                         <button
+                          type="button"
                           onClick={() =>
                             showFilePreviewModal(share.id, file, modals)
                           }
-                          className="p-1.5 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                          className="p-1.5 text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:text-blue-400 dark:hover:text-blue-300 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
                           aria-label="Preview file"
                         >
                           <TbEye size={18} />
@@ -118,18 +123,20 @@ const FileList = ({
                       )}
                       {!share.hasPassword && (
                         <button
+                          type="button"
                           onClick={() => copyFileLink(file)}
-                          className="p-1.5 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                          className="p-1.5 text-primary-600 hover:text-primary-700 hover:bg-primary-50 dark:text-primary-400 dark:hover:text-primary-300 dark:hover:bg-primary-900/20 rounded-lg transition-colors"
                           aria-label="Copy file link"
                         >
                           <TbLink size={18} />
                         </button>
                       )}
                       <button
+                        type="button"
                         onClick={async () => {
                           await shareService.downloadFile(share.id, file.id);
                         }}
-                        className="p-1.5 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                        className="p-1.5 text-primary-600 hover:text-primary-700 hover:bg-primary-50 dark:text-primary-400 dark:hover:text-primary-300 dark:hover:bg-primary-900/20 rounded-lg transition-colors"
                         aria-label="Download file"
                       >
                         <TbDownload size={18} />
