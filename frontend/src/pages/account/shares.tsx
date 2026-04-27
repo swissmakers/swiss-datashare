@@ -76,10 +76,17 @@ const MyShares = () => {
                       {share.name?.trim() ? share.name : "—"}
                     </Table.Cell>
                     <Table.Cell>
-                      <div className="flex items-center gap-2 font-mono text-xs text-gray-700 dark:text-gray-300">
-                        <span className="truncate max-w-[14rem]" title={share.id}>
+                      <div className="flex items-center gap-2 min-w-0 font-mono text-xs">
+                        <Link
+                          href={`/s/${share.id}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="truncate max-w-[14rem] text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
+                          title={share.id}
+                          aria-label={t("common.aria.open-share")}
+                        >
                           {share.id}
-                        </span>
+                        </Link>
                         {share.security.passwordProtected && (
                           <TbLock
                             className="shrink-0 text-orange-500"

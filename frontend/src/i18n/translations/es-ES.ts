@@ -614,6 +614,7 @@ export default {
   "common.button.go-back": "Volver",
   "common.button.go-home": "Página de inicio",
   "common.aria.copy-share-link": "Copiar enlace del compartido",
+  "common.aria.open-share": "Abrir el compartido en una pestaña nueva",
   "common.aria.copy-request-link": "Copiar enlace de solicitud de archivos",
   "common.aria.delete-request-link": "Eliminar enlace de solicitud de archivos",
   "common.notify.copied": "Tu enlace se ha copiado al portapapeles",

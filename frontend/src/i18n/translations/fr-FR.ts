@@ -614,6 +614,7 @@ export default {
   "common.button.go-back": "Précédent",
   "common.button.go-home": "Accueil",
   "common.aria.copy-share-link": "Copier le lien de partage",
+  "common.aria.open-share": "Ouvrir le partage dans un nouvel onglet",
   "common.aria.copy-request-link": "Copier le lien de demande de fichiers",
   "common.aria.delete-request-link": "Supprimer le lien de demande de fichiers",
   "common.notify.copied": "Votre lien a été copié dans le presse-papiers",

@@ -614,6 +614,7 @@ export default {
   "common.button.go-back": "Zurück",
   "common.button.go-home": "Zur Startseite",
   "common.aria.copy-share-link": "Freigabe-Link kopieren",
+  "common.aria.open-share": "Freigabe in neuem Tab öffnen",
   "common.aria.copy-request-link": "Dateianfrage-Link kopieren",
   "common.aria.delete-request-link": "Dateianfrage-Link löschen",
   "common.notify.copied": "Dein Link wurde in die Zwischenablage kopiert",

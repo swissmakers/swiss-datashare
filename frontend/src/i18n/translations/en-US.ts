@@ -614,6 +614,7 @@ export default {
   "common.button.go-back": "Go back",
   "common.button.go-home": "Go home",
   "common.aria.copy-share-link": "Copy share link",
+  "common.aria.open-share": "Open share in new tab",
   "common.aria.copy-request-link": "Copy data request link",
   "common.aria.delete-request-link": "Delete data request link",
   "common.notify.copied": "Your link was copied to the clipboard",
