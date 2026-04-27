@@ -71,15 +71,12 @@ const Body = ({
       sendEmailNotification: true,
       expiration_num: 1,
       expiration_unit: "-days",
-      simplified: !!(getCookie("reverse-share.simplified") ?? false),
       publicAccess: !!(getCookie("reverse-share.public-access") ?? true),
     },
     validationSchema,
   });
 
   const onSubmit = form.onSubmit(async (values) => {
-    // remember simplified and publicAccess in cookies
-    setCookie("reverse-share.simplified", values.simplified);
     setCookie("reverse-share.public-access", values.publicAccess);
 
     const expirationDate = moment().add(
@@ -112,7 +109,6 @@ const Body = ({
         values.maxShareSize,
         values.maxUseCount,
         values.sendEmailNotification,
-        values.simplified,
         values.publicAccess,
       )
       .then(({ link }) => {
@@ -190,13 +186,6 @@ const Body = ({
                     ? t("upload.modal.expires.month-singular")
                     : t("upload.modal.expires.month-plural"),
               },
-              {
-                value: "-years",
-                label:
-                  form.values.expiration_num == 1
-                    ? t("upload.modal.expires.year-singular")
-                    : t("upload.modal.expires.year-plural"),
-              },
             ]}
             className="mt-6"
           />
@@ -229,18 +218,14 @@ const Body = ({
           onChange={(checked) => form.setValue("sendEmailNotification", checked)}
         />
       )}
-      <Switch
-        label={t("account.reverseShares.modal.simplified")}
-        helperText={t("account.reverseShares.modal.simplified.description")}
-        checked={form.values.simplified}
-        onChange={(checked) => form.setValue("simplified", checked)}
-      />
+      {/*
       <Switch
         label={t("account.reverseShares.modal.public-access")}
         helperText={t("account.reverseShares.modal.public-access.description")}
         checked={form.values.publicAccess}
         onChange={(checked) => form.setValue("publicAccess", checked)}
       />
+      */}
       <Button type="submit" fullWidth className="mt-4">
         <FormattedMessage id="common.button.create" />
       </Button>

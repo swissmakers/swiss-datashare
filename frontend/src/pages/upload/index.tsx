@@ -39,11 +39,14 @@ const generateShareId = (length: number = 16) => {
 const Upload = ({
   maxShareSize,
   isReverseShare = false,
-  simplified,
+  simplified = false,
+  reverseShareExpiresAt,
 }: {
   maxShareSize?: number;
-  isReverseShare: boolean;
-  simplified: boolean;
+  isReverseShare?: boolean;
+  simplified?: boolean;
+  /** ISO date from data request link; share expiration follows this on the server */
+  reverseShareExpiresAt?: string;
 }) => {
   const modals = useModals();
   const router = useRouter();
@@ -217,11 +220,16 @@ const Upload = ({
       return;
     }
 
+    const expiration =
+      reverseShareExpiresAt != null && reverseShareExpiresAt !== ""
+        ? new Date(reverseShareExpiresAt).toISOString()
+        : "never";
+
     await uploadFiles(
       {
         id: link,
         name: undefined,
-        expiration: "never",
+        expiration,
         recipients: [],
         description: reverseShareNote.trim() || undefined,
         security: {},

@@ -67,14 +67,19 @@ const Share = ({ reverseShareToken }: PageProps) => {
   const [isLoading, setIsLoading] = useState(true);
 
   const [maxShareSize, setMaxShareSize] = useState(0);
-  const [simplified, setSimplified] = useState(false);
+  const [reverseShareExpiresAt, setReverseShareExpiresAt] = useState<
+    string | null
+  >(null);
 
   useEffect(() => {
     shareService
       .setReverseShare(reverseShareToken)
       .then((reverseShareTokenData) => {
         setMaxShareSize(parseInt(reverseShareTokenData.maxShareSize));
-        setSimplified(reverseShareTokenData.simplified);
+        const exp = reverseShareTokenData.shareExpiration as string | Date;
+        setReverseShareExpiresAt(
+          typeof exp === "string" ? exp : new Date(exp).toISOString(),
+        );
         setIsLoading(false);
       })
       .catch(() => {
@@ -99,7 +104,8 @@ const Share = ({ reverseShareToken }: PageProps) => {
     <Upload
       isReverseShare
       maxShareSize={maxShareSize}
-      simplified={simplified}
+      simplified
+      reverseShareExpiresAt={reverseShareExpiresAt ?? undefined}
     />
   );
 };
