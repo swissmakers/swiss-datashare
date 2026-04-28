@@ -61,7 +61,7 @@ export class OAuthController {
       sameSite: "lax",
       secure: isSecure,
       maxAge: 15 * 60 * 1000,
-      path: "/oauth",
+      path: "/api/oauth",
     });
     response.redirect(url);
   }

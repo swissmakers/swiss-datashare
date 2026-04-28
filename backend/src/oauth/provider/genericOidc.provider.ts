@@ -8,6 +8,7 @@ import { OAuthCallbackDto } from "../dto/oauthCallback.dto";
 import { OAuthSignInDto } from "../dto/oauthSignIn.dto";
 import { ErrorPageException } from "../exceptions/errorPage.exception";
 import { OAuthProvider, OAuthToken } from "./oauthProvider.interface";
+import { buildOAuthCallbackUri } from "./oauthCallbackUri.util";
 
 export abstract class GenericOidcProvider implements OAuthProvider<OidcToken> {
   protected discoveryUri: string;
@@ -34,9 +35,7 @@ export abstract class GenericOidcProvider implements OAuthProvider<OidcToken> {
   }
 
   protected getRedirectUri(): string {
-    return `${this.config.get("general.appUrl")}/api/oauth/callback/${
-      this.name
-    }`;
+    return buildOAuthCallbackUri(this.config.get("general.appUrl"), this.name);
   }
 
   async getConfiguration(): Promise<OidcConfiguration> {

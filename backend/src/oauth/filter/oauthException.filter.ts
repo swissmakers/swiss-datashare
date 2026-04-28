@@ -21,8 +21,13 @@ export class OAuthExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
     const request = ctx.getRequest();
+    const provider = request?.params?.provider;
+    const hasStateQuery = !!request?.query?.state;
+    const hasStateCookie = !!request?.cookies?.[`oauth_${provider}_state`];
 
-    this.logger.error(exception.message);
+    this.logger.error(
+      `${exception.message} provider=${provider} path=${request?.path} hasStateQuery=${hasStateQuery} hasStateCookie=${hasStateCookie}`,
+    );
     this.logger.error(
       "Request query: " + JSON.stringify(request.query, null, 2),
     );

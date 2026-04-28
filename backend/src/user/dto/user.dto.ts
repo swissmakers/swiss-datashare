@@ -35,6 +35,9 @@ export class UserDTO {
   @Expose()
   isLdap: boolean;
 
+  @Expose()
+  oauthProviders: string[];
+
   ldapDN?: string;
 
   @Expose()
@@ -49,11 +52,23 @@ export class UserDTO {
   @Expose()
   billingSubscriptionStatus?: string;
 
-  from(partial: Partial<UserDTO>) {
+  from(
+    partial: Partial<UserDTO> & {
+      ldapDN?: string;
+      oAuthUsers?: { provider: string }[];
+    },
+  ) {
     const result = plainToClass(UserDTO, partial, {
       excludeExtraneousValues: true,
     });
     result.isLdap = partial.ldapDN?.length > 0;
+    result.oauthProviders = Array.from(
+      new Set(
+        (partial.oAuthUsers || [])
+          .map((entry) => entry.provider)
+          .filter((provider) => typeof provider === "string" && provider.length > 0),
+      ),
+    );
     return result;
   }
 

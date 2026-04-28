@@ -28,7 +28,9 @@ Redirect URL: `https://<your-domain>/api/oauth/callback/google`
 
 Please follow the [official guide](https://docs.microsoft.com/en-us/azure/active-directory/develop/quickstart-register-app) to register an application.
 
-> [!IMPORTANT] > **Microsoft Tenant** you set in the admin panel must match the **supported account types** you set in the Microsoft Entra admin center, otherwise the OAuth login will not work. Refer to the [official documentation](https://learn.microsoft.com/en-us/entra/identity-platform/v2-protocols-oidc#find-your-apps-openid-configuration-document-uri) for more details.
+> [!IMPORTANT]
+> **Microsoft Tenant** set in the admin panel must match the **supported account types** configured in Microsoft Entra, otherwise OAuth login will fail.
+> Refer to the [official documentation](https://learn.microsoft.com/en-us/entra/identity-platform/v2-protocols-oidc#find-your-apps-openid-configuration-document-uri) for details.
 
 Redirect URL: `https://<your-domain>/api/oauth/callback/microsoft`
 
@@ -45,6 +47,13 @@ Generic OpenID Connect provider is also supported, we have tested it on Keycloak
 Redirect URI: `https://<your-domain>/api/oauth/callback/oidc`
 
 Post Logout Redirect URI: `https://<your-domain>`
+
+## Troubleshooting
+
+- OAuth callback endpoint for all providers is `https://<your-domain>/api/oauth/callback/<provider>`.
+- `general.appUrl` must exactly match the public URL users access in their browser (same scheme, host, and port).
+- The OAuth state cookie must be sent on callback requests to `/api/oauth/callback/<provider>`.
+- If login fails with a generic error page, check backend logs for state mismatch details and verify the callback request includes `oauth_<provider>_state`.
 
 ## Custom your OAuth 2 Provider
 

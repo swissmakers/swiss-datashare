@@ -5,6 +5,7 @@ type User = {
   locale: string;
   isAdmin: boolean;
   isLdap: boolean;
+  oauthProviders?: string[];
   totpVerified: boolean;
   hasPassword: boolean;
   billingExempt?: boolean;

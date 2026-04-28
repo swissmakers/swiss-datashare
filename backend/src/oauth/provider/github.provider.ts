@@ -4,6 +4,7 @@ import { OAuthCallbackDto } from "../dto/oauthCallback.dto";
 import { OAuthSignInDto } from "../dto/oauthSignIn.dto";
 import { ErrorPageException } from "../exceptions/errorPage.exception";
 import { OAuthProvider, OAuthToken } from "./oauthProvider.interface";
+import { buildOAuthCallbackUri } from "./oauthCallbackUri.util";
 
 @Injectable()
 export class GitHubProvider implements OAuthProvider<GitHubToken> {
@@ -14,8 +15,10 @@ export class GitHubProvider implements OAuthProvider<GitHubToken> {
       "https://github.com/login/oauth/authorize?" +
         new URLSearchParams({
           client_id: this.config.get("oauth.github-clientId"),
-          redirect_uri:
-            this.config.get("general.appUrl") + "/api/oauth/callback/github",
+          redirect_uri: buildOAuthCallbackUri(
+            this.config.get("general.appUrl"),
+            "github",
+          ),
           state: state,
           scope: "user:email",
         }).toString(),
