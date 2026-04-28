@@ -25,7 +25,15 @@ export class UserSevice {
   ) {}
 
   async list() {
-    return await this.prisma.user.findMany();
+    return await this.prisma.user.findMany({
+      include: {
+        oAuthUsers: {
+          select: {
+            provider: true,
+          },
+        },
+      },
+    });
   }
 
   async get(id: string) {

@@ -1,6 +1,5 @@
 import { forwardRef, Inject, Injectable, Logger } from "@nestjs/common";
 import { User } from "@prisma/client";
-import { nanoid } from "nanoid";
 import { AuthService } from "../auth/auth.service";
 import { ConfigService } from "../config/config.service";
 import { PrismaService } from "../prisma/prisma.service";
@@ -122,22 +121,26 @@ export class OAuthService {
     }
   }
 
-  private async getAvailableUsername(preferredUsername: string) {
-    // Only keep letters, numbers, dots, and underscores. Truncate to 20 characters.
-    let username = preferredUsername
-      .replace(/[^a-zA-Z0-9._]/g, "")
-      .substring(0, 20);
+  private async getAvailableUsername(email: string, preferredUsername: string) {
+    // Prefer the local-part of email (before "@"), fallback to provider username.
+    const localPart = email.split("@")[0] || preferredUsername || "user";
+    const sanitizedBase = localPart.replace(/[^a-zA-Z0-9._]/g, "") || "user";
+    const base = sanitizedBase.substring(0, 30);
+
+    let suffix = 0;
     while (true) {
+      const suffixString = suffix === 0 ? "" : `${suffix}`;
+      const maxBaseLength = Math.max(1, 30 - suffixString.length);
+      const candidate = `${base.substring(0, maxBaseLength)}${suffixString}`;
+
       const user = await this.prisma.user.findFirst({
         where: {
-          username: username,
+          username: candidate,
         },
       });
-      if (user) {
-        username = username + "_" + nanoid(10).replaceAll("-", "");
-      } else {
-        return username;
-      }
+
+      if (!user) return candidate;
+      suffix++;
     }
   }
 
@@ -177,7 +180,10 @@ export class OAuthService {
     const result = await this.auth.signUp(
       {
         email: user.email,
-        username: await this.getAvailableUsername(user.providerUsername),
+        username: await this.getAvailableUsername(
+          user.email,
+          user.providerUsername,
+        ),
         password: null,
       },
       ip,

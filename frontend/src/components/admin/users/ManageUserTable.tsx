@@ -4,6 +4,7 @@ import showUpdateUserModal from "./showUpdateUserModal";
 import { FormattedMessage } from "react-intl";
 import { Table, Badge } from "../../../components/ui";
 import { useModals } from "../../../contexts/ModalContext";
+import useTranslate from "../../../hooks/useTranslate.hook";
 
 const ManageUserTable = ({
   users,
@@ -19,6 +20,15 @@ const ManageUserTable = ({
   showBillingStatus: boolean;
 }) => {
   const modals = useModals();
+  const t = useTranslate();
+
+  const getProviderLabel = (provider: string) => {
+    const normalized = provider.toLowerCase();
+    const key = `error.param.provider_${normalized}`;
+    const translated = t(key);
+    // If translation key doesn't exist, return uppercase provider fallback.
+    return translated === key ? normalized.toUpperCase() : translated;
+  };
 
   return (
     <div className="overflow-x-auto">
@@ -53,6 +63,11 @@ const ManageUserTable = ({
                       {user.isLdap && (
                         <Badge variant="secondary">LDAP</Badge>
                       )}
+                      {(user.oauthProviders || []).map((provider) => (
+                        <Badge key={`${user.id}-${provider}`} variant="secondary">
+                          {getProviderLabel(provider)}
+                        </Badge>
+                      ))}
                     </div>
                   </Table.Cell>
                   <Table.Cell>{user.email}</Table.Cell>

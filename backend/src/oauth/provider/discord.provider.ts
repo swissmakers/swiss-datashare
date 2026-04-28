@@ -4,6 +4,7 @@ import { OAuthCallbackDto } from "../dto/oauthCallback.dto";
 import { OAuthSignInDto } from "../dto/oauthSignIn.dto";
 import { ErrorPageException } from "../exceptions/errorPage.exception";
 import { OAuthProvider, OAuthToken } from "./oauthProvider.interface";
+import { buildOAuthCallbackUri } from "./oauthCallbackUri.util";
 @Injectable()
 export class DiscordProvider implements OAuthProvider<DiscordToken> {
   constructor(private config: ConfigService) {}
@@ -17,8 +18,10 @@ export class DiscordProvider implements OAuthProvider<DiscordToken> {
       "https://discord.com/api/oauth2/authorize?" +
         new URLSearchParams({
           client_id: this.config.get("oauth.discord-clientId"),
-          redirect_uri:
-            this.config.get("general.appUrl") + "/api/oauth/callback/discord",
+          redirect_uri: buildOAuthCallbackUri(
+            this.config.get("general.appUrl"),
+            "discord",
+          ),
           response_type: "code",
           state,
           scope,
@@ -47,8 +50,10 @@ export class DiscordProvider implements OAuthProvider<DiscordToken> {
       body: new URLSearchParams({
         code: query.code,
         grant_type: "authorization_code",
-        redirect_uri:
-          this.config.get("general.appUrl") + "/api/oauth/callback/discord",
+        redirect_uri: buildOAuthCallbackUri(
+          this.config.get("general.appUrl"),
+          "discord",
+        ),
       }),
     });
     const token = (await res.json()) as DiscordToken;
