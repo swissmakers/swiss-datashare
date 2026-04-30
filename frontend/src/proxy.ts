@@ -100,10 +100,6 @@ export async function proxy(request: NextRequest) {
     user = null;
   }
 
-  if (!getConfig("share.allowRegistration")) {
-    routes.disabled.routes.push("/auth/signUp");
-  }
-
   if (getConfig("share.allowUnauthenticatedShares")) {
     routes.public.routes = ["*"];
   }

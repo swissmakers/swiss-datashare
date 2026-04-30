@@ -41,6 +41,11 @@ export const configVariables = {
       defaultValue: "http://localhost:3000",
       secret: false,
     },
+    contactEmail: {
+      type: "string",
+      defaultValue: "",
+      secret: false,
+    },
     poweredByText: {
       type: "string",
       defaultValue: "Swiss DataShare",
