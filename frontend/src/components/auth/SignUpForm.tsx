@@ -14,6 +14,9 @@ const SignUpForm = () => {
   const config = useConfig();
   const t = useTranslate();
   const { refreshUser } = useUser();
+  const allowRegistration = config.get("share.allowRegistration");
+  const appName = config.get("general.appName") || "Swiss DataShare";
+  const contactEmail = (config.get("general.contactEmail") || "").trim();
 
   const validationSchema = yup.object().shape({
     email: yup.string().email(t("common.error.invalid-email")).required(),
@@ -56,7 +59,7 @@ const SignUpForm = () => {
         <h2 className="text-3xl font-black text-center text-text dark:text-text-dark mb-2">
           <FormattedMessage id="signup.title" />
         </h2>
-        {config.get("share.allowRegistration") && (
+        {allowRegistration && (
           <p className="text-sm text-gray-600 dark:text-gray-400 text-center mb-8">
             <FormattedMessage id="signup.description" />{" "}
             <Link
@@ -68,35 +71,62 @@ const SignUpForm = () => {
           </p>
         )}
         <Card padding="lg">
-          <form
-            onSubmit={form.onSubmit((values) =>
-              signUp(values.email, values.username, values.password),
-            )}
-            className="space-y-4"
-          >
-            <Input
-              label={t("signup.input.username")}
-              placeholder={t("signup.input.username.placeholder")}
-              autoComplete="username"
-              {...form.getInputProps("username")}
-            />
-            <Input
-              label={t("signup.input.email")}
-              placeholder={t("signup.input.email.placeholder")}
-              type="email"
-              autoComplete="email"
-              {...form.getInputProps("email")}
-            />
-            <PasswordInput
-              label={t("signin.input.password")}
-              placeholder={t("signin.input.password.placeholder")}
-              autoComplete="new-password"
-              {...form.getInputProps("password")}
-            />
-            <Button fullWidth type="submit" className="mt-6">
-              <FormattedMessage id="signup.button.submit" />
-            </Button>
-          </form>
+          {allowRegistration ? (
+            <form
+              onSubmit={form.onSubmit((values) =>
+                signUp(values.email, values.username, values.password),
+              )}
+              className="space-y-4"
+            >
+              <Input
+                label={t("signup.input.username")}
+                placeholder={t("signup.input.username.placeholder")}
+                autoComplete="username"
+                {...form.getInputProps("username")}
+              />
+              <Input
+                label={t("signup.input.email")}
+                placeholder={t("signup.input.email.placeholder")}
+                type="email"
+                autoComplete="email"
+                {...form.getInputProps("email")}
+              />
+              <PasswordInput
+                label={t("signin.input.password")}
+                placeholder={t("signin.input.password.placeholder")}
+                autoComplete="new-password"
+                {...form.getInputProps("password")}
+              />
+              <Button fullWidth type="submit" className="mt-6">
+                <FormattedMessage id="signup.button.submit" />
+              </Button>
+            </form>
+          ) : (
+            <div className="space-y-4">
+              <h3 className="text-xl font-semibold text-text dark:text-text-dark">
+                <FormattedMessage id="signup.disabled.title" />
+              </h3>
+              <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                {contactEmail ? (
+                  <FormattedMessage
+                    id="signup.disabled.description.with-email"
+                    values={{ appName, contactEmail }}
+                  />
+                ) : (
+                  <FormattedMessage
+                    id="signup.disabled.description.no-email"
+                    values={{ appName }}
+                  />
+                )}
+              </p>
+              <Link
+                href="/auth/signIn"
+                className="inline-flex text-sm text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 font-medium"
+              >
+                <FormattedMessage id="signup.button.signin" />
+              </Link>
+            </div>
+          )}
         </Card>
       </div>
     </Container>
